@@ -2,9 +2,9 @@
 
 ## 一句话
 
-业务只认 **`@vijimlabs/ui`**。  
-**Mantine 是包内实现细节，不是业务依赖。**  
-**旧 `@vijimlabs/design-system` 在 Studio 已下线**（不再是运行时真源）。  
+业务只认 **`@vijimlabs/ui`**。
+**Mantine 是包内实现细节，不是业务依赖。**
+**旧 `@vijimlabs/design-system` 在 Studio 已下线**（不再是运行时真源）。
 不是重画全站：点状换控件，页面 IA / 路由 / 业务 API 沿用现网 Studio。
 
 ---
@@ -48,45 +48,45 @@
 `VijimProvider` · `vijimTheme` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `FONT` · `CONTROL_HEIGHT` · `CONTROL_PADDING_X`
 
 ### 录入
-`Button` · `TextInput` · `Textarea` · `SearchInput`  
-`Select` · `SearchableSelect`  
-`DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）  
+`Button` · `TextInput` · `Textarea` · `SearchInput`
+`Select` · `SearchableSelect`
+`DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）
 `Checkbox` · `Switch`
 
 ### 筛选（唯一壳）
-`FilterBar` · `FilterBatchBar` · `FilterRow` · `FilterField`  
-`FilterSegment`（二态外框）· `FilterTerm`（无边框分面）· `FilterFacet` · `FilterActive`  
+`FilterBar` · `FilterBatchBar` · `FilterRow` · `FilterField`
+`FilterSegment`（二态外框）· `FilterTerm`（无边框分面）· `FilterFacet` · `FilterActive`
 ~~`FilterToolbar`~~ 仅兼容，新代码不要用
 
 ### 浮层 / 导航
-`Modal` · `Drawer` · `Menu` · `Popover` · `Tooltip`  
+`Modal` · `Drawer` · `Menu` · `Popover` · `Tooltip`
 `Tabs` · `SegmentedControl`（仅表单口径；列表互斥用 FilterSegment）· `Pagination`
 
 ### 数据
-`DataTable`（列表唯一）  
-`Table`（极少数手写表头 / 对照页；**新列表禁止**）  
+`DataTable`（列表唯一）
+`Table`（极少数手写表头 / 对照页；**新列表禁止**）
 `AreaChart` · `BarChart`（仅这两种图）
 
 ### 反馈
 `Empty` · `Skeleton` · `Spinner` · `notify` · `Alert` · `SpotlightSearch`
 
 ### 布局 / 字
-`Stack` · `Group` · `Box` · `SimpleGrid` · `Divider` · `Paper` · `Card`  
+`Stack` · `Group` · `Box` · `SimpleGrid` · `Divider` · `Paper` · `Card`
 `Text` · `Title` · `Anchor` · `Badge` · `ActionIcon`
 
 ### 壳
 `AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
 
 ### 钩子
-`useForm` · `isNotEmpty` · `isEmail` · `hasLength`  
+`useForm` · `isNotEmpty` · `isEmail` · `hasLength`
 `useDisclosure` · `useMediaQuery` · `useDebouncedValue`
 
 ### 高级（少用）
-`Combobox` + `useCombobox` — 自由输入+候选；常规选值用 Select  
+`Combobox` + `useCombobox` — 自由输入+候选；常规选值用 Select
 `DefaultThemeProvider` / `IconSearch` — **仅** theme-compare
 
 ### 明确不做（防再漂）
-StatCard / KpiRow / ChartCard / AssetCard / ClickableCard / FilterChip / FilterPill /  
+StatCard / KpiRow / ChartCard / AssetCard / ClickableCard / FilterChip / FilterPill /
 MoreMenu / DropdownMenu 第二名 / 十种布局别名 / 业务直连 recharts·tabler
 
 ---
@@ -106,14 +106,14 @@ MoreMenu / DropdownMenu 第二名 / 十种布局别名 / 业务直连 recharts·
 
 ## 4. 颜色（短）
 
-真源：`COLORS` / 注入的 CSS 变量。与 GTM 同值便于全平台一致。  
+真源：`COLORS` / 注入的 CSS 变量。与 GTM 同值便于全平台一致。
 详见 [`COLOR.md`](./COLOR.md)。品牌 **`#3370FF` 唯一**。
 
 ---
 
 ## 5. 闸门
 
-1. ESLint：业务禁 `@mantine/*`、禁原生表单标签、禁并行 UI 库。  
-2. 新 PR：新增组件名必须改本包 + 更新本节白名单。  
-3. 合入 main 后，Studio `design-system/` 文档可后续同步；**运行时以本包为准**。  
+1. ESLint：业务禁 `@mantine/*`、禁原生表单标签、禁并行 UI 库。
+2. 新 PR：新增组件名必须改本包 + 更新本节白名单。
+3. 合入 main 后，Studio `design-system/` 文档可后续同步；**运行时以本包为准**。
 4. 默认不上线；交付 = 构建通过 + 预览 URL +（分支上）commit/push。

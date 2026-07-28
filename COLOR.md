@@ -1,6 +1,6 @@
 # 颜色短名单
 
-**运行真源只有 `@vijimlabs/ui` 的 `COLORS` / `STUDIO_CSS_VARS`。**  
+**运行真源只有 `@vijimlabs/ui` 的 `COLORS` / `STUDIO_CSS_VARS`。**
 色值与 GTM 现网对齐（便于全平台一致），但业务与 Agent **只认本包**，不另引 GTM 主题包、不另开 skill 色表。
 
 ## 根色（只这些）
@@ -33,7 +33,7 @@
 | 中性选中底 | `selectedBg` | ink @ 7% |
 | 叠层 hover | `overlayHover` | ink @ 6% |
 
-词条选中：**底 = brandMuted，字 = brand**，无边框。  
+词条选中：**底 = brandMuted，字 = brand**，无边框。
 不要再用 `#1456F0` 或其它「看起来像飞书」的平行蓝。
 
 ## 形 / 动 / 触（同一令牌表，不是第二源）
