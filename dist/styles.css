@@ -1,0 +1,139 @@
+/* @vijimlabs/ui — 触感与交互态（不 @import Mantine，由 provider 加载） */
+
+:root {
+  --vijim-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --vijim-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --vijim-press-ms: 100ms;
+  --vijim-press-scale: 0.97;
+}
+
+/* ── 按钮按压 ───────────────────────────────────────── */
+.mantine-Button-root {
+  transition:
+    background-color var(--duration-fast, 160ms) var(--ease-out, var(--vijim-ease-out)),
+    color var(--duration-fast, 160ms) var(--ease-out, var(--vijim-ease-out)),
+    transform var(--duration-press, 100ms) var(--ease-out, var(--vijim-ease-out));
+}
+.mantine-Button-root:active:not(:disabled):not([data-disabled]) {
+  transform: scale(var(--press-scale, var(--vijim-press-scale, 0.97)));
+}
+
+/* ── 录入 / 下拉触发器 hover·focus ─────────────────── */
+.mantine-Input-input,
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-Select-input,
+.mantine-PasswordInput-input,
+.mantine-NumberInput-input,
+.mantine-DatePickerInput-input,
+.mantine-DateInput-input {
+  transition: background-color var(--duration-fast, 160ms) var(--ease-out, var(--vijim-ease-out));
+}
+.mantine-Input-input:hover,
+.mantine-TextInput-input:hover,
+.mantine-Textarea-input:hover,
+.mantine-Select-input:hover,
+.mantine-PasswordInput-input:hover,
+.mantine-NumberInput-input:hover {
+  background-color: var(--field-hover-bg, rgba(18, 19, 23, 0.035));
+}
+.mantine-Input-input:focus,
+.mantine-TextInput-input:focus,
+.mantine-Textarea-input:focus,
+.mantine-Select-input:focus,
+.mantine-Select-input[data-expanded],
+.mantine-PasswordInput-input:focus,
+.mantine-NumberInput-input:focus {
+  background-color: var(--field-focus-bg, rgba(18, 19, 23, 0.05));
+  border-color: transparent;
+}
+.mantine-Input-input[data-error],
+.mantine-TextInput-input[data-error],
+.mantine-Textarea-input[data-error] {
+  background-color: var(--color-input-error-bg, rgba(224, 55, 66, 0.06));
+}
+.mantine-Input-input::placeholder,
+.mantine-TextInput-input::placeholder,
+.mantine-Textarea-input::placeholder,
+.mantine-Select-input::placeholder {
+  color: var(--faint, #a6aab2);
+}
+
+/* ── 下拉选项选中（品牌浅蓝 + 蓝字） ───────────────── */
+.mantine-Combobox-option[data-combobox-selected],
+.mantine-Select-option[data-combobox-selected] {
+  background-color: var(--term-selected-bg, rgba(51, 112, 255, 0.08)) !important;
+  color: var(--term-selected-ink, var(--brand, #3370ff)) !important;
+  font-weight: 600;
+}
+.mantine-Combobox-option[data-combobox-active]:not([data-combobox-selected]) {
+  background-color: var(--muted, #f6f7f9);
+}
+
+/* ── Segmented / Tabs 激活 ─────────────────────────── */
+.mantine-SegmentedControl-root {
+  /* 产品规划阶段多，允许换行，避免 overflow 裁没 */
+  flex-wrap: wrap;
+  height: auto !important;
+  min-height: 32px;
+}
+.mantine-SegmentedControl-label {
+  white-space: nowrap;
+}
+.mantine-SegmentedControl-label[data-active] {
+  font-weight: 600;
+  color: var(--ink, #121317);
+}
+.mantine-Tabs-tab[data-active] {
+  color: var(--ink, #121317);
+  border-color: var(--brand, #3370ff);
+}
+
+/* 筛选壳可见性兜底 */
+.vijim-filter-bar {
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, rgba(18, 19, 23, 0.085));
+  border-radius: var(--radius-panel, 12px);
+  box-shadow: var(--shadow-sm, var(--shadow-low, none));
+}
+
+/* ── 标题字距 ─────────────────────────────────────── */
+h1, .mantine-Title-root[data-order="1"] {
+  letter-spacing: var(--tracking-display, -0.022em);
+}
+h2, h3,
+.mantine-Title-root[data-order="2"],
+.mantine-Title-root[data-order="3"] {
+  letter-spacing: var(--tracking-title, -0.015em);
+}
+
+[data-vijim-press]:active:not(:disabled):not([data-disabled]) {
+  transform: scale(var(--vijim-press-scale, 0.97));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --vijim-press-ms: 1ms;
+    --duration-fast: 1ms;
+    --duration-normal: 1ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .mantine-Button-root:active:not(:disabled):not([data-disabled]),
+  [data-vijim-press]:active:not(:disabled):not([data-disabled]) {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .vijim-material {
+    backdrop-filter: none !important;
+    background-color: var(--surface, #fff) !important;
+  }
+}

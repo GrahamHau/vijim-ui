@@ -1,0 +1,119 @@
+# `@vijimlabs/ui` 封闭面（唯一业务 UI 系统）
+
+## 一句话
+
+业务只认 **`@vijimlabs/ui`**。  
+**Mantine 是包内实现细节，不是业务依赖。**  
+**旧 `@vijimlabs/design-system` 在 Studio 已下线**（不再是运行时真源）。  
+不是重画全站：点状换控件，页面 IA / 路由 / 业务 API 沿用现网 Studio。
+
+---
+
+## 0. Mantine 边界（硬）
+
+| 层 | 允许 | 禁止 |
+|---|---|---|
+| `packages/ui` 内部 | `@mantine/*`、theme、适配 | 把 Mantine 名字/API 原样推给业务 |
+| Studio / GTM / 业务 app | 只 `import { … } from '@vijimlabs/ui'` | `@mantine/*`、`createTheme`、`MantineProvider`、直连 hooks/form/charts |
+| 迁移适配 `components/ds/*` | 可 re-export 本包，保持旧 API | 再包一层 antd / radix / 手搓皮 |
+
+**原则（Purpose / Simplicity）**
+
+1. 同类能力 **一个名字**（表→DataTable，日→DatePicker，搜→SearchInput，筛壳→FilterBar）。
+2. 业务 **不写** hex / 圆角 / 控件高度 / duration；只读 `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `CONTROL_HEIGHT`。
+3. 新能力先拼 ≤3 个现成组件；不能拼再进本包加 **一个** 名字。
+4. **禁止** 业务为「更像 Mantine 文档」再开第二套 props 方言。
+
+---
+
+## 1. 触感与简洁（本包内建，非外部手册）
+
+落地在 `tokens` + `vijimTheme` + `styles.css`，验收看组件而不是再引文档。
+
+| 规则 | 做法 |
+|---|---|
+| 按下即反馈 | 可点控件 `scale(0.97)` + 100ms ease-out |
+| 默认不弹 | 浮层 `springish`，无 overshoot |
+| 圆角按尺寸 | term 6 · 控件 8 · 面板 12 · 弹层 16 |
+| 阴影按厚度 | 小滑块 xs · 卡片 sm · 浮层 md · 模态 lg |
+| 选中语义 | 中性选中 / 品牌词条选中两套，不另开色 |
+| 减动效 | `prefers-reduced-motion` 全局收短 |
+| 克制 | 无双层毛玻璃、无 confetti、无页面魔数动画 |
+
+---
+
+## 2. 导出白名单（刻意短）
+
+### 主题
+`VijimProvider` · `vijimTheme` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `FONT` · `CONTROL_HEIGHT` · `CONTROL_PADDING_X`
+
+### 录入
+`Button` · `TextInput` · `Textarea` · `SearchInput`  
+`Select` · `SearchableSelect`  
+`DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）  
+`Checkbox` · `Switch`
+
+### 筛选（唯一壳）
+`FilterBar` · `FilterBatchBar` · `FilterRow` · `FilterField`  
+`FilterSegment`（二态外框）· `FilterTerm`（无边框分面）· `FilterFacet` · `FilterActive`  
+~~`FilterToolbar`~~ 仅兼容，新代码不要用
+
+### 浮层 / 导航
+`Modal` · `Drawer` · `Menu` · `Popover` · `Tooltip`  
+`Tabs` · `SegmentedControl`（仅表单口径；列表互斥用 FilterSegment）· `Pagination`
+
+### 数据
+`DataTable`（列表唯一）  
+`Table`（极少数手写表头 / 对照页；**新列表禁止**）  
+`AreaChart` · `BarChart`（仅这两种图）
+
+### 反馈
+`Empty` · `Skeleton` · `Spinner` · `notify` · `Alert` · `SpotlightSearch`
+
+### 布局 / 字
+`Stack` · `Group` · `Box` · `SimpleGrid` · `Divider` · `Paper` · `Card`  
+`Text` · `Title` · `Anchor` · `Badge` · `ActionIcon`
+
+### 壳
+`AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
+
+### 钩子
+`useForm` · `isNotEmpty` · `isEmail` · `hasLength`  
+`useDisclosure` · `useMediaQuery` · `useDebouncedValue`
+
+### 高级（少用）
+`Combobox` + `useCombobox` — 自由输入+候选；常规选值用 Select  
+`DefaultThemeProvider` / `IconSearch` — **仅** theme-compare
+
+### 明确不做（防再漂）
+StatCard / KpiRow / ChartCard / AssetCard / ClickableCard / FilterChip / FilterPill /  
+MoreMenu / DropdownMenu 第二名 / 十种布局别名 / 业务直连 recharts·tabler
+
+---
+
+## 3. 语义对照（别混）
+
+| 场景 | 用 | 别用 |
+|---|---|---|
+| 公共/个人、画廊/列表 | `FilterSegment` | FilterTerm 铺一排、SegmentedControl |
+| 平台/品类等多选项 | `FilterTerm` | 套大外框 |
+| 筛选可搜下拉 | `SearchableSelect` density=compact | 页面 styles 写 height |
+| 表单单选 | `Select` density=default | 原生 select、手搓 Menu |
+| 列表数据 | `DataTable` | 拼 Table、手写 grid 表 |
+| 主按钮 | `Button` variant filled color brand | 页面涂 `#3370FF` |
+
+---
+
+## 4. 颜色（短）
+
+真源：`COLORS` / 注入的 CSS 变量。与 GTM 同值便于全平台一致。  
+详见 [`COLOR.md`](./COLOR.md)。品牌 **`#3370FF` 唯一**。
+
+---
+
+## 5. 闸门
+
+1. ESLint：业务禁 `@mantine/*`、禁原生表单标签、禁并行 UI 库。  
+2. 新 PR：新增组件名必须改本包 + 更新本节白名单。  
+3. 合入 main 后，Studio `design-system/` 文档可后续同步；**运行时以本包为准**。  
+4. 默认不上线；交付 = 构建通过 + 预览 URL +（分支上）commit/push。
