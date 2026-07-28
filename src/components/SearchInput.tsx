@@ -7,7 +7,12 @@
  */
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { ActionIcon, Box } from "@mantine/core";
-import { forwardRef, type ChangeEvent, type KeyboardEvent } from "react";
+import {
+  forwardRef,
+  type ChangeEvent,
+  type ChangeEventHandler,
+  type KeyboardEvent,
+} from "react";
 import { COLORS, CONTROL_HEIGHT, RADIUS, SECTION_OFFSET } from "../theme/tokens";
 import { TextInput, type TextInputProps } from "./TextInput";
 
@@ -17,6 +22,7 @@ export type SearchInputProps = Omit<
   TextInputProps,
   "leftSection" | "type" | "variant" | "size"
 > & {
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onClear?: () => void;
   clearable?: boolean;
   /** Studio 双面：默认 filter（列表筛选） */
@@ -154,7 +160,11 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         rightSection={clearBtn}
         value={value}
         defaultValue={defaultValue}
-        onChange={onChange}
+        onChange={(next) =>
+          onChange?.({
+            currentTarget: { value: next },
+          } as ChangeEvent<HTMLInputElement>)
+        }
         onFocus={onFocus}
         onKeyDown={onKeyDown}
         spellCheck={spellCheck}

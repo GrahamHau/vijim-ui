@@ -1,8 +1,8 @@
 import * as _mantine_core from '@mantine/core';
-import { MantineThemeOverride, ButtonProps as ButtonProps$1, ElementProps, TextInputProps as TextInputProps$1, TextareaProps as TextareaProps$1, SelectProps as SelectProps$1, DrawerProps as DrawerProps$1, ModalProps as ModalProps$1, MenuProps, PaginationProps, PopoverProps, SegmentedControlProps, TabsProps, TooltipProps, TableProps as TableProps$1, SkeletonProps as SkeletonProps$1 } from '@mantine/core';
-export { ActionIcon, Alert, Anchor, Badge, BadgeProps, Box, Card, CardProps, Checkbox, Combobox, ComboboxProps, ComboboxStore, Divider, Group, GroupProps, MenuProps, PaginationProps, Paper, PaperProps, PopoverProps, SegmentedControlProps, SimpleGrid, Stack, StackProps, Switch, TabsProps, Text, TextProps, Title, TitleProps, TooltipProps, useCombobox } from '@mantine/core';
+import { MantineThemeOverride, ButtonProps as ButtonProps$1, ElementProps, TextInputProps as TextInputProps$1, TextareaProps as TextareaProps$1, SelectProps as SelectProps$1, DrawerProps as DrawerProps$1, ModalProps as ModalProps$1, MenuProps, PaginationProps, PopoverProps, SegmentedControlProps, TabsProps, TooltipProps, CardProps as CardProps$1, StackProps as StackProps$1, TableProps as TableProps$1, SkeletonProps as SkeletonProps$1 } from '@mantine/core';
+export { ActionIcon, Alert, Anchor, Box, Checkbox, Combobox, ComboboxProps, ComboboxStore, Divider, Group, GroupProps, MenuProps, PaginationProps, Paper, PaperProps, PopoverProps, SegmentedControlProps, SimpleGrid, Switch, TabsProps, Text, TextProps, Title, TitleProps, TooltipProps, useCombobox } from '@mantine/core';
 import * as react from 'react';
-import { ReactNode, KeyboardEvent, CSSProperties } from 'react';
+import { ReactNode, ChangeEventHandler, KeyboardEvent, CSSProperties, ReactElement, MouseEventHandler } from 'react';
 import { DateInputProps as DateInputProps$1, DatePickerInputProps as DatePickerInputProps$1 } from '@mantine/dates';
 import * as node_modules__mantine_core_lib_components_Menu_MenuDivider_MenuDivider from 'node_modules/@mantine/core/lib/components/Menu/MenuDivider/MenuDivider';
 import * as node_modules__mantine_core_lib_components_Menu_MenuLabel_MenuLabel from 'node_modules/@mantine/core/lib/components/Menu/MenuLabel/MenuLabel';
@@ -207,7 +207,15 @@ declare function VijimProvider({ children, theme, withNotifications, withModals,
  * ghost 为 subtle 别名（兼容旧 Studio API）。
  * 高度默认 sm=32，不跟 Mantine 默认偏大。
  */
-type ButtonVariant = "filled" | "light" | "outline" | "subtle" | "default" | "ghost";
+type ButtonVariant = "filled" | "light" | "outline" | "subtle" | "default" | "ghost"
+/** @deprecated Admin 迁移兼容：用 filled */
+ | "primary"
+/** @deprecated Admin 迁移兼容：用 light */
+ | "secondary"
+/** @deprecated Admin 迁移兼容：用 filled + color=red */
+ | "danger"
+/** @deprecated Admin 迁移兼容：用 subtle */
+ | "link";
 type ButtonSize = "xs" | "sm" | "md" | "lg";
 /** brand=主蓝；red=危险；其余中性/语义 */
 type ButtonColor = "brand" | "neutral" | "gray" | "red" | "green" | "yellow";
@@ -215,12 +223,20 @@ type ButtonProps = Omit<ButtonProps$1, "variant" | "size" | "color"> & ElementPr
     variant?: ButtonVariant;
     size?: ButtonSize;
     color?: ButtonColor;
+    label?: string;
+    icon?: ReactNode;
+    iconPosition?: "start" | "end";
+    fullWidth?: boolean;
     children?: ReactNode;
 };
 declare const Button: react.ForwardRefExoticComponent<Omit<ButtonProps, "ref"> & react.RefAttributes<HTMLButtonElement>>;
 
-type TextInputProps = Omit<TextInputProps$1, "size"> & ElementProps<"input", keyof TextInputProps$1> & {
+type TextInputProps = Omit<TextInputProps$1, "size" | "onChange"> & ElementProps<"input", keyof TextInputProps$1> & {
     size?: "xs" | "sm" | "md" | "lg";
+    onChange?: (value: string) => void;
+    onInputChange?: ChangeEventHandler<HTMLInputElement>;
+    /** @deprecated 用 aria-label */
+    ariaLabel?: string;
 };
 /**
  * 统一录入框：默认 sm、中性浅底；有 left/right section 时加大内容内边距，图标不贴边。
@@ -234,6 +250,7 @@ declare const Textarea: react.ForwardRefExoticComponent<Omit<TextareaProps, "ref
 
 type SearchInputVariant = "filter" | "lookup";
 type SearchInputProps = Omit<TextInputProps, "leftSection" | "type" | "variant" | "size"> & {
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     onClear?: () => void;
     clearable?: boolean;
     /** Studio 双面：默认 filter（列表筛选） */
@@ -259,6 +276,10 @@ type SelectProps = Omit<SelectProps$1, "size" | "data"> & {
     /** compact → 高度走 CONTROL_HEIGHT.sm，筛选条用 */
     density?: SelectDensity;
     data?: SelectProps$1["data"];
+    /** @deprecated Admin/Studio 迁移兼容；新代码用 data */
+    options?: readonly SelectOption[];
+    /** @deprecated 用 aria-label */
+    ariaLabel?: string;
 };
 declare const Select: react.ForwardRefExoticComponent<Omit<SelectProps, "ref"> & react.RefAttributes<HTMLInputElement>>;
 type SearchableSelectOption = string | {
@@ -267,6 +288,7 @@ type SearchableSelectOption = string | {
     disabled?: boolean;
 };
 type SearchableSelectProps = {
+    id?: string;
     name?: string;
     /** 无障碍标签；筛选条可不展示可见 label */
     label: string;
@@ -274,12 +296,12 @@ type SearchableSelectProps = {
     value?: string | null;
     /** 非受控初始值（表单 GET 场景） */
     defaultValue?: string | null;
-    options: SearchableSelectOption[];
+    options: readonly SearchableSelectOption[];
     placeholder?: string;
     /** 空值时的占位文案（如「全部品牌」） */
     emptyLabel?: string;
     onPick?: (value: string) => void;
-    onChange?: (value: string | null) => void;
+    onChange?: (value: string) => void;
     disabled?: boolean;
     clearable?: boolean;
     /** 默认 compact（筛选条）；表单用 default */
@@ -294,7 +316,7 @@ type SearchableSelectProps = {
 /**
  * 可搜索下拉：筛选用 compact；与 Select 同一皮，禁止页面再写 height 魔数。
  */
-declare function SearchableSelect({ name, label, value, defaultValue, options, placeholder, emptyLabel, onPick, onChange, disabled, clearable, density, size, searchable, nothingFoundMessage, style, className, minWidth, }: SearchableSelectProps): react.JSX.Element;
+declare function SearchableSelect({ name, id, label, value, defaultValue, options, placeholder, emptyLabel, onPick, onChange, disabled, clearable, density, size, searchable, nothingFoundMessage, style, className, minWidth, }: SearchableSelectProps): react.JSX.Element;
 
 /** 业务日期契约：YYYY-MM-DD 或 null */
 type DateString = string | null;
@@ -319,7 +341,19 @@ type DrawerProps = DrawerProps$1;
 declare function Modal(props: ModalProps): react.JSX.Element;
 declare function Drawer(props: DrawerProps): react.JSX.Element;
 
-declare function Tabs(props: TabsProps): react.JSX.Element;
+type LegacyTabOption = {
+    value: string;
+    label: string;
+    disabled?: boolean;
+};
+type LegacyTabsProps = {
+    value: string;
+    onChange: (value: string) => void;
+    options: readonly LegacyTabOption[];
+    ariaLabel: string;
+};
+declare function Tabs(props: LegacyTabsProps): ReactNode;
+declare function Tabs(props: TabsProps): ReactNode;
 declare namespace Tabs {
     var List: _mantine_core.MantineComponent<{
         props: _mantine_core.TabsListProps;
@@ -340,8 +374,15 @@ declare namespace Tabs {
         compound: true;
     }>;
 }
-declare function SegmentedControl(props: SegmentedControlProps): react.JSX.Element;
-declare function Pagination(props: PaginationProps): react.JSX.Element;
+declare function SegmentedControl(props: LegacyTabsProps): ReactNode;
+declare function SegmentedControl(props: SegmentedControlProps): ReactNode;
+type LegacyPaginationProps = {
+    page: number;
+    pageCount: number;
+    onChange: (page: number) => void;
+    ariaLabel?: string;
+};
+declare function Pagination(props: PaginationProps | LegacyPaginationProps): react.JSX.Element;
 /** 下拉菜单（含 Target/Dropdown/Item）；不做 MoreMenu / DropdownMenu 第二套名字 */
 declare function Menu(props: MenuProps): react.JSX.Element;
 declare namespace Menu {
@@ -392,7 +433,15 @@ declare namespace Menu {
         compound: true;
     }>;
 }
-declare function Popover(props: PopoverProps): react.JSX.Element;
+type LegacyPopoverProps = {
+    trigger: ReactNode;
+    triggerLabel: string;
+    children?: ReactNode;
+    placement?: "start" | "end";
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
+};
+declare function Popover(props: PopoverProps | LegacyPopoverProps): react.JSX.Element;
 declare namespace Popover {
     var Target: _mantine_core.MantineComponent<{
         props: _mantine_core.PopoverTargetProps;
@@ -406,12 +455,368 @@ declare namespace Popover {
         compound: true;
     }>;
 }
-declare function Tooltip(props: TooltipProps): react.JSX.Element;
+type LegacyTooltipProps = {
+    trigger: ReactNode;
+    triggerLabel: string;
+    content: string;
+    placement?: "top" | "bottom";
+};
+declare function Tooltip(props: TooltipProps | LegacyTooltipProps): react.JSX.Element;
 
-type DataTableColumn<T> = ColumnDef<T, unknown>;
-type DataTableProps<T> = {
+type Tone = "neutral" | "accent" | "info" | "success" | "warning" | "danger" | "error";
+type CardProps = CardProps$1 & {
+    bodyPadding?: "none" | "sm" | "md" | "lg";
+    footer?: ReactNode;
+    header?: ReactNode;
+    scrollBody?: boolean;
+};
+declare function Card({ children, padding, bodyPadding, header, footer, scrollBody, ...props }: CardProps): react.JSX.Element;
+type BadgeProps = {
+    label?: string;
+    children?: ReactNode;
+    tone?: Tone;
+    size?: "xs" | "sm" | "md" | "lg";
+    dot?: boolean;
+};
+declare function Badge({ label, children, tone }: BadgeProps): react.JSX.Element;
+type StatusDotProps = {
+    label: string;
+    tone?: Tone;
+};
+declare function StatusDot({ label, tone }: StatusDotProps): react.JSX.Element;
+type TrendBadgeProps = {
+    direction: "up" | "down" | "flat";
+    value: string;
+    positiveDirection?: "up" | "down";
+};
+declare function TrendBadge({ direction, value, positiveDirection, }: TrendBadgeProps): react.JSX.Element;
+type FormFieldProps = {
+    label: string;
+    children: ReactElement<{
+        id?: string;
+        "aria-describedby"?: string;
+        "aria-invalid"?: boolean;
+        required?: boolean;
+    }>;
+    description?: string;
+    error?: string;
+    required?: boolean;
+};
+declare function FormField({ label, children, description, error, required, }: FormFieldProps): react.JSX.Element;
+type TextAreaProps = {
+    value?: string;
+    defaultValue?: string;
+    onChange?: (value: string) => void;
+    placeholder?: string;
+    rows?: 3 | 5 | 8 | number;
+    disabled?: boolean;
+    name?: string;
+    id?: string;
+    ariaLabel?: string;
+    required?: boolean;
+    "aria-describedby"?: string;
+    "aria-invalid"?: boolean;
+};
+declare function TextArea({ value, defaultValue, onChange, placeholder, rows, disabled, name, id, ariaLabel, required, "aria-describedby": describedBy, "aria-invalid": invalid, }: TextAreaProps): react.JSX.Element;
+type NumberInputProps = {
+    value?: number | null;
+    onChange?: (value: number | null) => void;
+    min?: number;
+    max?: number;
+    step?: number;
+    placeholder?: string;
+    disabled?: boolean;
+    name?: string;
+    id?: string;
+    ariaLabel?: string;
+    required?: boolean;
+    "aria-describedby"?: string;
+    "aria-invalid"?: boolean;
+};
+declare function NumberInput({ value, onChange, min, max, step, placeholder, disabled, name, id, ariaLabel, required, "aria-describedby": describedBy, "aria-invalid": invalid, }: NumberInputProps): react.JSX.Element;
+type ListProps = {
+    children?: ReactNode;
+    density?: "comfortable" | "compact";
+    dividers?: boolean;
+    ariaLabel: string;
+};
+declare function List({ children, density, dividers, ariaLabel, }: ListProps): react.JSX.Element;
+type ListItemProps = {
+    label: ReactNode;
+    description?: ReactNode;
+    startContent?: ReactNode;
+    endContent?: ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+};
+declare function ListItem({ label, description, startContent, endContent, onClick, disabled, }: ListItemProps): react.JSX.Element;
+type LegacyDataTableColumn<Row> = {
+    key: keyof Row & string;
+    header: string;
+    align?: "start" | "end";
+    render?: (row: Row) => ReactNode;
+};
+type LegacyDataTableProps<Row extends object> = {
+    columns: readonly LegacyDataTableColumn<Row>[];
+    data: readonly Row[];
+    rowKey: keyof Row & string;
+    ariaLabel: string;
+    density?: "compact" | "default";
+    emptyLabel?: string;
+};
+type DialogProps = {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    title: string;
+    description?: string;
+    children?: ReactNode;
+    footer?: ReactNode;
+};
+declare function Dialog({ open, onOpenChange, title, description, children, footer, }: DialogProps): react.JSX.Element;
+type AlertDialogProps = {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    title: string;
+    description: string;
+    confirmLabel: string;
+    cancelLabel?: string;
+    onConfirm: () => void;
+    loading?: boolean;
+};
+declare function AlertDialog({ open, onOpenChange, title, description, confirmLabel, cancelLabel, onConfirm, loading, }: AlertDialogProps): react.JSX.Element;
+type Space = "1" | "2" | "3" | "4" | "6";
+type StackProps = StackProps$1 & {
+    gap?: StackProps$1["gap"] | Space;
+};
+declare const Stack: react.ForwardRefExoticComponent<Omit<StackProps, "ref"> & react.RefAttributes<HTMLDivElement>>;
+type HStackProps = {
+    children?: ReactNode;
+    gap?: Space | number | string;
+    justify?: "start" | "between" | "center" | "end";
+    align?: "start" | "center" | "end";
+    wrap?: boolean;
+};
+declare function HStack({ children, gap, justify, align, wrap, }: HStackProps): react.JSX.Element;
+type GridProps = {
+    children?: ReactNode;
+    gap?: Space | number | string;
+    columns?: 1 | 2 | 3 | 4;
+};
+declare function Grid({ children, gap, columns }: GridProps): react.JSX.Element;
+type PageCanvasProps = {
+    children?: ReactNode;
+};
+declare function PageCanvas({ children }: PageCanvasProps): react.JSX.Element;
+type PageHeaderProps = {
+    title: string;
+    scope?: ReactNode;
+    context?: string;
+    actions?: ReactNode;
+};
+declare function PageHeader({ title, scope, context, actions }: PageHeaderProps): react.JSX.Element;
+type SectionHeaderProps = {
+    title: string;
+    description?: string;
+    subtitle?: string;
+    actions?: ReactNode;
+};
+declare function SectionHeader({ title, description, subtitle, actions, }: SectionHeaderProps): react.JSX.Element;
+type PagePatternProps = PageHeaderProps & {
+    children?: ReactNode;
+};
+declare function DashboardPage({ title, scope, context, actions, children, }: PagePatternProps): react.JSX.Element;
+declare const ListPage: typeof DashboardPage;
+declare const DetailPage: typeof DashboardPage;
+declare const SettingsPage: typeof DashboardPage;
+type EmptyStateProps = {
+    title: string;
+    description: string;
+    action?: ReactNode;
+};
+declare function EmptyState({ title, description, action }: EmptyStateProps): react.JSX.Element;
+declare function PermissionDeniedState({ action }: {
+    action?: ReactNode;
+}): react.JSX.Element;
+declare function ErrorState({ action }: {
+    action?: ReactNode;
+}): react.JSX.Element;
+declare function FilterWorkspace({ filters, children, filterLabel, }: {
+    filters: ReactNode;
+    children?: ReactNode;
+    filterLabel?: string;
+}): react.JSX.Element;
+declare function DataSection({ title, description, actions, children, bodyPadding, }: {
+    title: string;
+    description?: string;
+    actions?: ReactNode;
+    children?: ReactNode;
+    bodyPadding?: "none" | "sm" | "md" | "lg";
+}): react.JSX.Element;
+type FormSectionProps = {
+    title: string;
+    description?: string;
+    children?: ReactNode;
+    footer?: ReactNode;
+};
+declare function FormSection({ title, description, children, footer, }: FormSectionProps): react.JSX.Element;
+type NavigationItem = {
+    id: string;
+    label: string;
+    icon?: ReactNode;
+    active?: boolean;
+    disabled?: boolean;
+    onSelect?: () => void;
+};
+type NavigationSection = {
+    label?: string;
+    items: readonly NavigationItem[];
+};
+type AppShellProps = {
+    product: "STUDIO" | "GTM" | "ADMIN" | "PORTAL" | string;
+    brand: ReactNode;
+    navigation: readonly NavigationSection[];
+    user?: ReactNode;
+    header?: ReactNode;
+    children?: ReactNode;
+};
+declare function AppShell({ product, brand, navigation, user, header, children, }: AppShellProps): react.JSX.Element;
+declare function SideNav({ product, brand, navigation, user, }: Omit<AppShellProps, "children" | "header">): react.JSX.Element;
+declare function MobileNav({ product, navigation, user, }: {
+    product: string;
+    navigation?: readonly NavigationSection[];
+    user?: ReactNode;
+}): react.JSX.Element;
+declare function KpiGrid({ children, columns, }: {
+    children?: ReactNode;
+    columns?: 2 | 3 | 4;
+}): react.JSX.Element;
+declare function StatCard({ value, label, hint, trend, tone, }: {
+    value: ReactNode;
+    label: string;
+    hint?: string;
+    trend?: ReactNode;
+    tone?: Extract<Tone, "neutral" | "info" | "error">;
+}): react.JSX.Element;
+declare function DashboardGrid({ children }: {
+    children?: ReactNode;
+}): react.JSX.Element;
+declare function DashboardGridItem({ children, span, }: {
+    children?: ReactNode;
+    span?: 4 | 6 | 8 | 12;
+}): react.JSX.Element;
+type IconButtonProps = {
+    label: string;
+    icon: ReactNode;
+    variant?: "secondary" | "ghost" | "danger";
+    size?: "sm" | "md" | "lg";
+    disabled?: boolean;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+};
+declare const IconButton: react.ForwardRefExoticComponent<IconButtonProps & react.RefAttributes<HTMLButtonElement>>;
+declare function ProgressBar({ value, max, label, showValue, tone, }: {
+    value: number;
+    max?: number;
+    label: string;
+    showValue?: boolean;
+    tone?: "info" | "success" | "warning" | "error";
+}): react.JSX.Element;
+declare function ThemeProvider({ theme, children, }: {
+    theme?: "light" | "dark";
+    children: ReactNode;
+}): react.JSX.Element;
+type Theme = "light" | "dark";
+declare function BrandLockup({ product, background, alt, }: {
+    product: "STUDIO" | "GTM";
+    background?: "light" | "dark";
+    alt?: string;
+}): react.JSX.Element;
+type BrandProduct = "STUDIO" | "GTM";
+declare const publicComponents: readonly ["Button", "IconButton", "Card", "Badge", "StatusDot", "TrendBadge", "FormField", "TextInput", "Tabs", "SegmentedControl", "List", "ListItem", "DataTable", "Dialog", "Stack", "HStack", "Grid", "PageCanvas", "PageHeader", "SectionHeader", "AppShell"];
+declare function ToastRegion(): null;
+declare function ChartCard({ title, description, children, footer, }: {
+    title: string;
+    description?: string;
+    children?: ReactNode;
+    footer?: ReactNode;
+}): react.JSX.Element;
+declare function Avatar({ src, alt, fallback, size, }: {
+    src?: string;
+    alt: string;
+    fallback: string;
+    size?: "sm" | "md" | "lg";
+}): react.JSX.Element;
+declare function Thumbnail({ src, alt, size, fallbackLabel, }: {
+    src?: string;
+    alt: string;
+    size?: "sm" | "md" | "lg";
+    fallbackLabel?: string;
+}): react.JSX.Element;
+declare function MetadataList({ items, columns, ariaLabel, }: {
+    items: readonly {
+        label: string;
+        value: ReactNode;
+    }[];
+    columns?: 1 | 2;
+    ariaLabel: string;
+}): react.JSX.Element;
+declare function MultiSelector({ values, onChange, options, label, disabled, }: {
+    values: readonly string[];
+    onChange: (values: string[]) => void;
+    options: readonly {
+        value: string;
+        label: string;
+        disabled?: boolean;
+    }[];
+    label: string;
+    disabled?: boolean;
+}): react.JSX.Element;
+declare function Tag({ label, tone, onRemove, removeLabel, }: {
+    label: string;
+    tone?: "neutral" | "info";
+    onRemove?: () => void;
+    removeLabel?: string;
+}): react.JSX.Element;
+declare function InputGroup({ value, onChange, placeholder, prefix, suffix, disabled, id, ariaLabel, required, "aria-describedby": describedBy, "aria-invalid": invalid, }: {
+    value?: string;
+    onChange?: (value: string) => void;
+    placeholder?: string;
+    prefix?: ReactNode;
+    suffix?: ReactNode;
+    disabled?: boolean;
+    id?: string;
+    ariaLabel?: string;
+    required?: boolean;
+    "aria-describedby"?: string;
+    "aria-invalid"?: boolean;
+}): react.JSX.Element;
+declare function Slider({ value, onChange, label, min, max, step, showValue, disabled, }: {
+    value: number;
+    onChange: (value: number) => void;
+    label: string;
+    min?: number;
+    max?: number;
+    step?: number;
+    showValue?: boolean;
+    disabled?: boolean;
+}): react.JSX.Element;
+declare function DatePicker({ value, onChange, min, max, disabled, id, ariaLabel, required, "aria-describedby": describedBy, "aria-invalid": invalid, }: {
+    value?: string;
+    onChange?: (value: string) => void;
+    min?: string;
+    max?: string;
+    disabled?: boolean;
+    id?: string;
+    ariaLabel?: string;
+    required?: boolean;
+    "aria-describedby"?: string;
+    "aria-invalid"?: boolean;
+}): react.JSX.Element;
+
+type ModernDataTableColumn<T> = ColumnDef<T, unknown>;
+type DataTableColumn<T extends object> = LegacyDataTableColumn<T>;
+type ModernDataTableProps<T> = {
     data: T[];
-    columns: DataTableColumn<T>[];
+    columns: ModernDataTableColumn<T>[];
     /** 行唯一 id 字段或函数 */
     getRowId?: (row: T, index: number) => string;
     /** 启用多选 */
@@ -429,7 +834,8 @@ type DataTableProps<T> = {
     loading?: boolean;
     maxHeight?: number | string;
 };
-declare function DataTable<T>({ data, columns, getRowId, selectable, rowSelection: controlledSelection, onRowSelectionChange, pageSize, onRowClick, emptyTitle, emptyDescription, toolbar, loading, maxHeight, }: DataTableProps<T>): react.JSX.Element;
+type DataTableProps<T extends object> = ModernDataTableProps<T> | LegacyDataTableProps<T>;
+declare function DataTable<T extends object>(props: DataTableProps<T>): react.JSX.Element;
 
 type TableProps = TableProps$1;
 /** 基础表格原语；列表页请优先用 DataTable */
@@ -592,16 +998,6 @@ type FilterActiveProps = {
 };
 declare function FilterActive({ items, onClearAll, emptyText, }: FilterActiveProps): react.JSX.Element;
 
-type FormSectionProps = {
-    title: string;
-    description?: string;
-    children: ReactNode;
-    /** 字段栅格列数 */
-    cols?: number;
-};
-/** 复杂表单分区：标题 + 说明 + 字段栅格 */
-declare function FormSection({ title, description, children, cols, }: FormSectionProps): react.JSX.Element;
-
 type TopBarProps = {
     title: string;
     context?: ReactNode;
@@ -613,26 +1009,6 @@ type TopBarProps = {
     onBack?: () => void;
 };
 declare function TopBar({ title, context, badge, actions, backHref, backLabel, sticky, onBack, }: TopBarProps): react.JSX.Element;
-type AppShellNavItem = {
-    key: string;
-    label: string;
-    href?: string;
-    active?: boolean;
-    onClick?: () => void;
-    icon?: ReactNode;
-    section?: string;
-};
-type VijimAppShellProps = {
-    brand?: ReactNode;
-    brandHint?: string;
-    navItems?: AppShellNavItem[];
-    headerRight?: ReactNode;
-    headerCenter?: ReactNode;
-    children: ReactNode;
-    navbarWidth?: number;
-    withHeader?: boolean;
-};
-declare function AppShell({ brand, brandHint, navItems, headerRight, headerCenter, children, navbarWidth, withHeader, }: VijimAppShellProps): react.JSX.Element;
 type PageShellProps = {
     title: string;
     description?: string;
@@ -664,8 +1040,11 @@ type EmptyProps = {
     icon?: ReactNode;
 };
 declare function Empty({ title, description, action, icon, }: EmptyProps): react.JSX.Element;
-type SkeletonProps = SkeletonProps$1;
-declare function Skeleton(props: SkeletonProps): react.JSX.Element;
+type SkeletonProps = SkeletonProps$1 & {
+    variant?: "text" | "block" | "avatar";
+    lines?: 1 | 2 | 3 | 4;
+};
+declare function Skeleton({ variant, lines, ...props }: SkeletonProps): react.JSX.Element;
 type SpinnerProps = {
     label?: string;
     size?: "xs" | "sm" | "md" | "lg" | "xl";
@@ -710,4 +1089,4 @@ declare function IconSearch(props: {
     stroke?: number;
 }): react.JSX.Element;
 
-export { AppShell, type AppShellNavItem, Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, Drawer, type DrawerProps, Empty, type EmptyProps, FONT, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FormSection, type FormSectionProps, IconSearch, MOTION, Menu, Modal, type ModalProps, type NotifyOptions, PageShell, type PageShellProps, Pagination, Popover, RADIUS, SHADOWS, SearchInput, type SearchInputProps, SearchableSelect, type SearchableSelectOption, type SearchableSelectProps, SegmentedControl, Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, type ShellTabItem, ShellTabs, type ShellTabsProps, Skeleton, type SkeletonProps, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Table, type TableProps, Tabs, TextInput, type TextInputProps, Textarea, type TextareaProps, Tooltip, TopBar, type TopBarProps, type VijimAppShellProps, VijimProvider, type VijimProviderProps, notify, vijimTheme };
+export { AlertDialog, type AlertDialogProps, AppShell, type AppShellProps, Avatar, Badge, type BadgeProps, BrandLockup, type BrandProduct, Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, Card, type CardProps, ChartCard, DashboardGrid, DashboardGridItem, DashboardPage, DataSection, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePicker, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, DetailPage, Dialog, type DialogProps, Drawer, type DrawerProps, Empty, type EmptyProps, EmptyState, ErrorState, FONT, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FilterWorkspace, FormField, type FormFieldProps, FormSection, type FormSectionProps, Grid, type GridProps, HStack, type HStackProps, IconButton, IconSearch, InputGroup, KpiGrid, List, ListItem, type ListItemProps, ListPage, type ListProps, MOTION, Menu, MetadataList, MobileNav, Modal, type ModalProps, MultiSelector, type NavigationItem, type NavigationSection, type NotifyOptions, NumberInput, type NumberInputProps, PageCanvas, type PageCanvasProps, PageHeader, type PageHeaderProps, PageShell, type PageShellProps, Pagination, PermissionDeniedState, Popover, ProgressBar, RADIUS, SHADOWS, SearchInput, type SearchInputProps, SearchableSelect, type SearchableSelectOption, type SearchableSelectProps, SectionHeader, type SectionHeaderProps, SegmentedControl, Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, SettingsPage, type ShellTabItem, ShellTabs, type ShellTabsProps, SideNav, Skeleton, type SkeletonProps, Slider, type Space, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Stack, type StackProps, StatCard, StatusDot, type StatusDotProps, Table, type TableProps, Tabs, Tag, TextArea, type TextAreaProps, TextInput, type TextInputProps, Textarea, type TextareaProps, type Theme, ThemeProvider, Thumbnail, ToastRegion, type Tone, Tooltip, TopBar, type TopBarProps, TrendBadge, type TrendBadgeProps, VijimProvider, type VijimProviderProps, notify, publicComponents, vijimTheme };

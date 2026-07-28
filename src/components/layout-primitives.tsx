@@ -8,28 +8,35 @@
 
 export {
   Group,
-  Stack,
   Box,
   SimpleGrid,
   Divider,
   Paper,
-  Card,
   Text,
   Title,
   Anchor,
-  Badge,
   Checkbox,
   Switch,
   Alert,
   ActionIcon,
   type GroupProps,
-  type StackProps,
   type PaperProps,
-  type CardProps,
   type TextProps,
   type TitleProps,
-  type BadgeProps,
 } from "@mantine/core";
+
+export {
+  Badge,
+  Card,
+  Grid,
+  HStack,
+  Stack,
+  type BadgeProps,
+  type CardProps,
+  type GridProps,
+  type HStackProps,
+  type StackProps,
+} from "./AdminCompat";
 
 export {
   useDisclosure,

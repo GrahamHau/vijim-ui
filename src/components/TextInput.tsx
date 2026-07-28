@@ -5,12 +5,16 @@ import {
   type TextInputProps as MantineTextInputProps,
   type ElementProps,
 } from "@mantine/core";
-import { forwardRef } from "react";
+import { forwardRef, type ChangeEventHandler } from "react";
 import { SECTION_OFFSET } from "../theme/tokens";
 
-export type TextInputProps = Omit<MantineTextInputProps, "size"> &
+export type TextInputProps = Omit<MantineTextInputProps, "size" | "onChange"> &
   ElementProps<"input", keyof MantineTextInputProps> & {
     size?: "xs" | "sm" | "md" | "lg";
+    onChange?: (value: string) => void;
+    onInputChange?: ChangeEventHandler<HTMLInputElement>;
+    /** @deprecated 用 aria-label */
+    ariaLabel?: string;
   };
 
 /**
@@ -18,7 +22,16 @@ export type TextInputProps = Omit<MantineTextInputProps, "size"> &
  */
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   function TextInput(
-    { size = "md", leftSection, rightSection, styles, ...props },
+    {
+      size = "md",
+      leftSection,
+      rightSection,
+      styles,
+      ariaLabel,
+      onChange,
+      onInputChange,
+      ...props
+    },
     ref,
   ) {
     const hasLeft = Boolean(leftSection);
@@ -57,7 +70,12 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             },
           };
         }}
+        onChange={(event) => {
+          onChange?.(event.currentTarget.value);
+          onInputChange?.(event);
+        }}
         {...props}
+        aria-label={props["aria-label"] ?? ariaLabel}
       />
     );
   },

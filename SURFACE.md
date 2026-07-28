@@ -77,6 +77,14 @@
 ### 壳
 `AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
 
+### ADMIN 迁移兼容
+Admin 旧控制台模式仍从 **同一个 `@vijimlabs/ui` root 出口**取用，不再依赖
+`@vijimlabs/design-system`。这些名字用于保持 Admin 页面 IA / 业务流不动：
+`DashboardPage` · `ListPage` · `SettingsPage` · `DataSection` · `KpiGrid` · `StatCard`
+`StatusDot` · `FormField` · `TextArea` · `Dialog` · `AlertDialog`
+`List` · `ListItem` · `HStack` · `Grid`。
+新业务优先使用上方短清单；迁移完成后再逐步收敛这些兼容名。
+
 ### 钩子
 `useForm` · `isNotEmpty` · `isEmail` · `hasLength`
 `useDisclosure` · `useMediaQuery` · `useDebouncedValue`
@@ -86,8 +94,8 @@
 `DefaultThemeProvider` / `IconSearch` — **仅** theme-compare
 
 ### 明确不做（防再漂）
-StatCard / KpiRow / ChartCard / AssetCard / ClickableCard / FilterChip / FilterPill /
-MoreMenu / DropdownMenu 第二名 / 十种布局别名 / 业务直连 recharts·tabler
+KpiRow / AssetCard / ClickableCard / FilterChip / FilterPill /
+业务直连 Mantine·recharts·tabler / 在业务 app 里新增第二套视觉组件
 
 ---
 

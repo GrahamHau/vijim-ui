@@ -24,7 +24,15 @@ export type ButtonVariant =
   | "outline"
   | "subtle"
   | "default"
-  | "ghost";
+  | "ghost"
+  /** @deprecated Admin 迁移兼容：用 filled */
+  | "primary"
+  /** @deprecated Admin 迁移兼容：用 light */
+  | "secondary"
+  /** @deprecated Admin 迁移兼容：用 filled + color=red */
+  | "danger"
+  /** @deprecated Admin 迁移兼容：用 subtle */
+  | "link";
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg";
 /** brand=主蓝；red=危险；其余中性/语义 */
@@ -44,29 +52,53 @@ export type ButtonProps = Omit<
     variant?: ButtonVariant;
     size?: ButtonSize;
     color?: ButtonColor;
+    label?: string;
+    icon?: ReactNode;
+    iconPosition?: "start" | "end";
+    fullWidth?: boolean;
     children?: ReactNode;
   };
 
 function mapVariant(v: ButtonVariant): MantineButtonProps["variant"] {
   if (v === "ghost") return "subtle";
+  if (v === "primary") return "filled";
+  if (v === "secondary") return "light";
+  if (v === "danger") return "filled";
+  if (v === "link") return "subtle";
   return v;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
-    { variant = "filled", size = "sm", color = "brand", ...props },
+    {
+      variant = "filled",
+      size = "sm",
+      color = "brand",
+      label,
+      icon,
+      iconPosition = "start",
+      fullWidth,
+      children,
+      ...props
+    },
     ref,
   ) {
+    const mappedColor = variant === "danger" ? "red" : color;
     const isDestructive =
-      color === "red" && (variant === "filled" || variant === "light");
+      mappedColor === "red" && (variant === "filled" || variant === "light" || variant === "danger");
     return (
       <MantineButton
         ref={ref}
         variant={mapVariant(variant)}
         size={size}
-        color={isDestructive ? "red" : color}
+        color={isDestructive ? "red" : mappedColor}
         {...props}
-      />
+        leftSection={icon && iconPosition === "start" ? icon : props.leftSection}
+        rightSection={icon && iconPosition === "end" ? icon : props.rightSection}
+        fullWidth={fullWidth}
+      >
+        {label ?? children}
+      </MantineButton>
     );
   },
 );

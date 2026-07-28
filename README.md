@@ -34,9 +34,10 @@ VIJIM Labs **唯一业务 UI 出口**。
 
 ```bash
 cd packages/ui && npm run build
-# Studio 用 vendor tgz 时：
+# 子系统用 vendor tgz 时（示例）：
 cd studio/app && npm pack ../../packages/ui --pack-destination ./vendor \
   && npm install ./vendor/vijimlabs-ui-0.2.0.tgz
+cd ../../admin && npm install ./vendor/vijimlabs-ui-0.2.0.tgz --force
 ```
 
 预览：总仓 `node scripts/dev-preview.mjs up studio`。

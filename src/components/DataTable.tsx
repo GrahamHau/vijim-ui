@@ -19,12 +19,18 @@ import { useMemo, useState, type ReactNode } from "react";
 import { Table } from "./Table";
 import { Pagination } from "./Navigation";
 import { Empty } from "./Feedback";
+import {
+  LegacyDataTable,
+  type LegacyDataTableColumn,
+  type LegacyDataTableProps,
+} from "./AdminCompat";
 
-export type DataTableColumn<T> = ColumnDef<T, unknown>;
+export type ModernDataTableColumn<T> = ColumnDef<T, unknown>;
+export type DataTableColumn<T extends object> = LegacyDataTableColumn<T>;
 
-export type DataTableProps<T> = {
+export type ModernDataTableProps<T> = {
   data: T[];
-  columns: DataTableColumn<T>[];
+  columns: ModernDataTableColumn<T>[];
   /** 行唯一 id 字段或函数 */
   getRowId?: (row: T, index: number) => string;
   /** 启用多选 */
@@ -42,8 +48,18 @@ export type DataTableProps<T> = {
   loading?: boolean;
   maxHeight?: number | string;
 };
+export type DataTableProps<T extends object> =
+  | ModernDataTableProps<T>
+  | LegacyDataTableProps<T>;
 
-export function DataTable<T>({
+export function DataTable<T extends object>(props: DataTableProps<T>) {
+  if ("rowKey" in props) {
+    return <LegacyDataTable {...props} />;
+  }
+  return <ModernDataTable {...props} />;
+}
+
+function ModernDataTable<T>({
   data,
   columns,
   getRowId,
@@ -57,7 +73,7 @@ export function DataTable<T>({
   toolbar,
   loading = false,
   maxHeight,
-}: DataTableProps<T>) {
+}: ModernDataTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [internalSelection, setInternalSelection] = useState<RowSelectionState>(
     {},
