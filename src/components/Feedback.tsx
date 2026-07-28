@@ -43,9 +43,24 @@ export function Empty({
   );
 }
 
-export type SkeletonProps = MantineSkeletonProps;
+export type SkeletonProps = MantineSkeletonProps & {
+  variant?: "text" | "block" | "avatar";
+  lines?: 1 | 2 | 3 | 4;
+};
 
-export function Skeleton(props: SkeletonProps) {
+export function Skeleton({ variant, lines, ...props }: SkeletonProps) {
+  if (variant) {
+    return (
+      <div className="vj-skeleton" data-variant={variant} aria-hidden="true">
+        {Array.from(
+          { length: variant === "text" ? lines ?? 1 : 1 },
+          (_, index) => (
+            <span key={index} />
+          ),
+        )}
+      </div>
+    );
+  }
   return <MantineSkeleton {...props} />;
 }
 

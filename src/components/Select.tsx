@@ -45,6 +45,10 @@ export type SelectProps = Omit<MantineSelectProps, "size" | "data"> & {
   /** compact → 高度走 CONTROL_HEIGHT.sm，筛选条用 */
   density?: SelectDensity;
   data?: MantineSelectProps["data"];
+  /** @deprecated Admin/Studio 迁移兼容；新代码用 data */
+  options?: readonly SelectOption[];
+  /** @deprecated 用 aria-label */
+  ariaLabel?: string;
 };
 
 function heightFor(size: SelectSize, density: SelectDensity): number {
@@ -91,6 +95,9 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
       comboboxProps,
       clearable = true,
       nothingFoundMessage = "无匹配",
+      data,
+      options,
+      ariaLabel,
       ...props
     },
     ref,
@@ -178,6 +185,8 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
           };
         }}
         {...props}
+        data={data ?? options?.map((option) => ({ ...option }))}
+        aria-label={props["aria-label"] ?? ariaLabel}
       />
     );
   },
@@ -190,6 +199,7 @@ export type SearchableSelectOption =
   | { value: string; label: string; disabled?: boolean };
 
 export type SearchableSelectProps = {
+  id?: string;
   name?: string;
   /** 无障碍标签；筛选条可不展示可见 label */
   label: string;
@@ -197,12 +207,12 @@ export type SearchableSelectProps = {
   value?: string | null;
   /** 非受控初始值（表单 GET 场景） */
   defaultValue?: string | null;
-  options: SearchableSelectOption[];
+  options: readonly SearchableSelectOption[];
   placeholder?: string;
   /** 空值时的占位文案（如「全部品牌」） */
   emptyLabel?: string;
   onPick?: (value: string) => void;
-  onChange?: (value: string | null) => void;
+  onChange?: (value: string) => void;
   disabled?: boolean;
   clearable?: boolean;
   /** 默认 compact（筛选条）；表单用 default */
@@ -216,7 +226,7 @@ export type SearchableSelectProps = {
 };
 
 function normalizeOptions(
-  options: SearchableSelectOption[],
+  options: readonly SearchableSelectOption[],
 ): SelectOption[] {
   return options.map((o) =>
     typeof o === "string" ? { value: o, label: o } : o,
@@ -228,6 +238,7 @@ function normalizeOptions(
  */
 export function SearchableSelect({
   name,
+  id,
   label,
   value,
   defaultValue,
@@ -252,6 +263,7 @@ export function SearchableSelect({
   return (
     <Select
       name={name}
+      id={id}
       aria-label={label}
       data={data}
       value={controlled ? value || null : undefined}
@@ -263,7 +275,7 @@ export function SearchableSelect({
           : undefined
       }
       onChange={(v) => {
-        onChange?.(v);
+        onChange?.(v ?? "");
         onPick?.(v ?? "");
       }}
       placeholder={emptyLabel || placeholder}

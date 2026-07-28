@@ -10,6 +10,7 @@ import { ActionIcon, Box } from "@mantine/core";
 import {
   forwardRef,
   type ChangeEvent,
+  type ChangeEventHandler,
   type InputHTMLAttributes,
   type KeyboardEvent,
 } from "react";
@@ -20,8 +21,9 @@ export type SearchInputVariant = "filter" | "lookup";
 
 export type SearchInputProps = Omit<
   TextInputProps,
-  "leftSection" | "type" | "variant" | "size"
+  "leftSection" | "type" | "variant" | "size" | "onChange"
 > & {
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onClear?: () => void;
   clearable?: boolean;
   /** Studio 双面：默认 filter（列表筛选） */
@@ -32,6 +34,12 @@ export type SearchInputProps = Omit<
   spellCheck?: boolean;
   "aria-label"?: string;
 };
+
+function eventFromValue(value: string): ChangeEvent<HTMLInputElement> {
+  return {
+    currentTarget: { value },
+  } as ChangeEvent<HTMLInputElement>;
+}
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
   function SearchInput(
@@ -64,9 +72,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           aria-label="清空"
           onClick={() => {
             onClear?.();
-            onChange?.({
-              currentTarget: { value: "" },
-            } as ChangeEvent<HTMLInputElement>);
+            onChange?.(eventFromValue(""));
           }}
         >
           <IconX size={14} stroke={1.5} />
@@ -122,7 +128,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             placeholder={placeholder}
             value={value as string | undefined}
             defaultValue={defaultValue}
-            onChange={onChange as ((e: ChangeEvent<HTMLInputElement>) => void) | undefined}
+            onChange={onChange}
             onFocus={onFocus}
             onKeyDown={onKeyDown}
             spellCheck={spellCheck}
@@ -161,7 +167,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         rightSection={clearBtn}
         value={value}
         defaultValue={defaultValue}
-        onChange={onChange}
+        onChange={(next) => onChange?.(eventFromValue(next))}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
         spellCheck={spellCheck}

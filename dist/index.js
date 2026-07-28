@@ -411,7 +411,93 @@ var STUDIO_CSS_VARS = {
   "--font-mono": FONT.mono,
   "--font-family-mono": FONT.mono,
   "--tracking-title": FONT.tracking.title,
-  "--tracking-display": FONT.tracking.display
+  "--tracking-display": FONT.tracking.display,
+  // ADMIN 迁移兼容：旧 @vijimlabs/ui@0.1 的 .vj-* 组件令牌。
+  "--vijim-background-canvas": COLORS.background,
+  "--vijim-surface-default": COLORS.surface,
+  "--vijim-surface-subtle": COLORS.muted,
+  "--vijim-surface-muted": COLORS.surface2,
+  "--vijim-surface-popover": COLORS.surface,
+  "--vijim-text-primary": COLORS.ink,
+  "--vijim-text-secondary": COLORS.ink2,
+  "--vijim-text-muted": COLORS.mutedForeground,
+  "--vijim-text-disabled": COLORS.faint,
+  "--vijim-icon-primary": COLORS.ink2,
+  "--vijim-icon-secondary": COLORS.mutedForeground,
+  "--vijim-icon-disabled": COLORS.faint,
+  "--vijim-border-default": COLORS.border,
+  "--vijim-border-emphasized": COLORS.line2,
+  "--vijim-accent-default": COLORS.brand,
+  "--vijim-accent-hover": COLORS.brandHover,
+  "--vijim-accent-subtle": COLORS.brandMuted,
+  "--vijim-on-accent": COLORS.brandForeground,
+  "--vijim-success-default": COLORS.success,
+  "--vijim-success-subtle": "rgba(24, 151, 76, 0.12)",
+  "--vijim-warning-default": COLORS.warning,
+  "--vijim-warning-subtle": "rgba(238, 168, 0, 0.12)",
+  "--vijim-error-default": COLORS.danger,
+  "--vijim-error-subtle": "rgba(224, 55, 66, 0.12)",
+  "--vijim-overlay": "rgba(18, 19, 23, 0.42)",
+  "--vijim-selection": COLORS.brandMuted,
+  "--vijim-focus": COLORS.brand,
+  "--vijim-input-error": COLORS.errorFieldBg,
+  "--vijim-data-main": "#3471EB",
+  "--vijim-data-attention": "rgba(238, 168, 0, 0.82)",
+  "--vijim-data-risk": "rgba(224, 55, 66, 0.82)",
+  "--vijim-data-reference": "#2B8FCB",
+  "--vijim-data-positive": COLORS.success,
+  "--vijim-0": "0px",
+  "--vijim-1": "4px",
+  "--vijim-2": "8px",
+  "--vijim-3": "12px",
+  "--vijim-4": "16px",
+  "--vijim-5": "20px",
+  "--vijim-6": "24px",
+  "--vijim-8": "32px",
+  "--vijim-10": "40px",
+  "--vijim-12": "48px",
+  "--vijim-radius-none": "0px",
+  "--vijim-radius-inner": RADIUS.xs,
+  "--vijim-radius-element": RADIUS.element,
+  "--vijim-radius-container": RADIUS.overlay,
+  "--vijim-radius-page": RADIUS.overlay,
+  "--vijim-radius-full": "999px",
+  "--vijim-shadow-none": SHADOWS.none,
+  "--vijim-shadow-low": SHADOWS.xs,
+  "--vijim-shadow-medium": SHADOWS.md,
+  "--vijim-shadow-high": SHADOWS.lg,
+  "--vijim-shadow-overlay": SHADOWS.xl,
+  "--vijim-fast": "120ms",
+  "--vijim-medium": "180ms",
+  "--vijim-slow": "280ms",
+  "--vijim-easing": MOTION.easeOut,
+  "--vijim-element-sm": `${CONTROL_HEIGHT.sm}px`,
+  "--vijim-element-md": `${CONTROL_HEIGHT.md}px`,
+  "--vijim-element-lg": "48px",
+  "--vijim-icon-sm": "14px",
+  "--vijim-icon-md": "18px",
+  "--vijim-icon-lg": "22px",
+  "--vijim-sidebar-expanded": "244px",
+  "--vijim-sidebar-collapsed": "64px",
+  "--vijim-content-min": "320px",
+  "--vijim-font-body": FONT.family,
+  "--vijim-font-code": FONT.mono,
+  "--vijim-body-size": FONT.sizes.md,
+  "--vijim-body-line": "1.55",
+  "--vijim-body-weight": FONT.bodyWeight,
+  "--vijim-label-size": FONT.sizes.sm,
+  "--vijim-label-line": "1.4",
+  "--vijim-label-weight": "500",
+  "--vijim-supporting-size": FONT.sizes.xs,
+  "--vijim-supporting-line": "1.45",
+  "--vijim-supporting-weight": "400",
+  "--vijim-heading-size": FONT.sizes.h4,
+  "--vijim-heading-line": "1.35",
+  "--vijim-heading-weight": FONT.headingWeight,
+  "--vijim-display-size": FONT.sizes.h1,
+  "--vijim-display-line": "1.2",
+  "--vijim-display-weight": "650",
+  "--vijim-tracking": "-0.01em"
 };
 
 // src/theme/vijim-theme.ts
@@ -1021,7 +1107,18 @@ import { jsx as jsx2 } from "react/jsx-runtime";
 function mapVariant(v) {
   if (v === "destructive") return "filled";
   if (v === "ghost") return "subtle";
+  if (v === "primary") return "filled";
+  if (v === "secondary") return "light";
+  if (v === "danger") return "filled";
+  if (v === "link") return "subtle";
   return v;
+}
+function mapColor(variant, color) {
+  if (variant === "destructive" || variant === "danger") return "red";
+  return color;
+}
+function isDestructiveButton(variant, color) {
+  return color === "red" && (variant === "filled" || variant === "light" || variant === "destructive" || variant === "danger");
 }
 function splitAsChild(children) {
   if (!isValidElement(children)) return null;
@@ -1034,37 +1131,44 @@ function splitAsChild(children) {
   };
 }
 var Button = forwardRef(
-  function Button2({ variant = "filled", size = "sm", color = "brand", asChild = false, children, ...props }, ref) {
+  function Button2({
+    variant = "filled",
+    size = "sm",
+    color = "brand",
+    asChild = false,
+    label,
+    icon,
+    iconPosition = "start",
+    fullWidth,
+    children,
+    ...props
+  }, ref) {
     const child = asChild ? splitAsChild(children) : null;
-    const resolvedColor = variant === "destructive" ? "red" : color;
-    const isDestructive = resolvedColor === "red" && (variant === "filled" || variant === "light" || variant === "destructive");
+    const mappedColor = mapColor(variant, color);
+    const buttonChildren = label ?? (child ? child.childChildren : children);
+    const commonProps = {
+      ref,
+      variant: mapVariant(variant),
+      size,
+      color: isDestructiveButton(variant, mappedColor) ? "red" : mappedColor,
+      leftSection: icon && iconPosition === "start" ? icon : props.leftSection,
+      rightSection: icon && iconPosition === "end" ? icon : props.rightSection,
+      fullWidth,
+      ...props
+    };
     if (child) {
       const AnyMantineButton = MantineButton;
       return /* @__PURE__ */ jsx2(
         AnyMantineButton,
         {
-          ref,
           component: child.component,
-          variant: mapVariant(variant),
-          size,
-          color: isDestructive ? "red" : resolvedColor,
           ...child.childProps,
-          ...props,
-          children: child.childChildren
+          ...commonProps,
+          children: buttonChildren
         }
       );
     }
-    return /* @__PURE__ */ jsx2(
-      MantineButton,
-      {
-        ref,
-        variant: mapVariant(variant),
-        size,
-        color: isDestructive ? "red" : resolvedColor,
-        ...props,
-        children
-      }
-    );
+    return /* @__PURE__ */ jsx2(MantineButton, { ...commonProps, children: buttonChildren });
   }
 );
 
@@ -1075,7 +1179,16 @@ import {
 import { forwardRef as forwardRef2 } from "react";
 import { jsx as jsx3 } from "react/jsx-runtime";
 var TextInput = forwardRef2(
-  function TextInput2({ size = "md", leftSection, rightSection, styles, ...props }, ref) {
+  function TextInput2({
+    size = "md",
+    leftSection,
+    rightSection,
+    styles,
+    ariaLabel,
+    onChange,
+    onInputChange,
+    ...props
+  }, ref) {
     const hasLeft = Boolean(leftSection);
     const hasRight = Boolean(rightSection);
     return /* @__PURE__ */ jsx3(
@@ -1101,7 +1214,12 @@ var TextInput = forwardRef2(
             }
           };
         },
-        ...props
+        onChange: (event) => {
+          onChange?.(event.currentTarget.value);
+          onInputChange?.(event);
+        },
+        ...props,
+        "aria-label": props["aria-label"] ?? ariaLabel
       }
     );
   }
@@ -1126,6 +1244,11 @@ import {
   forwardRef as forwardRef4
 } from "react";
 import { jsx as jsx5, jsxs as jsxs2 } from "react/jsx-runtime";
+function eventFromValue(value) {
+  return {
+    currentTarget: { value }
+  };
+}
 var SearchInput = forwardRef4(
   function SearchInput2({
     placeholder = "\u641C\u7D22\u2026",
@@ -1152,9 +1275,7 @@ var SearchInput = forwardRef4(
         "aria-label": "\u6E05\u7A7A",
         onClick: () => {
           onClear?.();
-          onChange?.({
-            currentTarget: { value: "" }
-          });
+          onChange?.(eventFromValue(""));
         },
         children: /* @__PURE__ */ jsx5(IconX, { size: 14, stroke: 1.5 })
       }
@@ -1242,7 +1363,7 @@ var SearchInput = forwardRef4(
         rightSection: clearBtn,
         value,
         defaultValue,
-        onChange,
+        onChange: (next) => onChange?.(eventFromValue(next)),
         onFocus,
         onKeyDown,
         spellCheck,
@@ -1699,6 +1820,9 @@ var Select = forwardRef5(
     comboboxProps,
     clearable = true,
     nothingFoundMessage = "\u65E0\u5339\u914D",
+    data,
+    options,
+    ariaLabel,
     ...props
   }, ref) {
     const hasLeft = Boolean(leftSection);
@@ -1760,7 +1884,9 @@ var Select = forwardRef5(
             }
           };
         },
-        ...props
+        ...props,
+        data: data ?? options?.map((option) => ({ ...option })),
+        "aria-label": props["aria-label"] ?? ariaLabel
       }
     );
   }
@@ -1772,6 +1898,7 @@ function normalizeOptions(options) {
 }
 function SearchableSelect({
   name,
+  id,
   label,
   value,
   defaultValue,
@@ -1796,12 +1923,13 @@ function SearchableSelect({
     Select,
     {
       name,
+      id,
       "aria-label": label,
       data,
       value: controlled ? value || null : void 0,
       defaultValue: !controlled ? defaultValue != null && defaultValue !== "" ? defaultValue : null : void 0,
       onChange: (v) => {
-        onChange?.(v);
+        onChange?.(v ?? "");
         onPick?.(v ?? "");
       },
       placeholder: emptyLabel || placeholder,
@@ -1977,17 +2105,107 @@ import {
   Popover as MantinePopover,
   Tooltip as MantineTooltip
 } from "@mantine/core";
-import { jsx as jsx10 } from "react/jsx-runtime";
+import {
+  useEffect,
+  useId,
+  useRef as useRef2,
+  useState as useState2
+} from "react";
+import { jsx as jsx10, jsxs as jsxs4 } from "react/jsx-runtime";
 function Tabs(props) {
+  if ("options" in props) {
+    let onKeyDown2 = function(event, index) {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      const delta = event.key === "ArrowRight" ? 1 : -1;
+      let next = index;
+      do {
+        next = (next + delta + legacyProps.options.length) % legacyProps.options.length;
+      } while (legacyProps.options[next]?.disabled && next !== index);
+      refs.current[next]?.focus();
+      const option = legacyProps.options[next];
+      if (option) legacyProps.onChange(option.value);
+    };
+    var onKeyDown = onKeyDown2;
+    const legacyProps = props;
+    const refs = useRef2([]);
+    return /* @__PURE__ */ jsx10("div", { className: "vj-tabs", role: "tablist", "aria-label": legacyProps.ariaLabel, children: legacyProps.options.map((option, index) => /* @__PURE__ */ jsx10(
+      "button",
+      {
+        ref: (node) => {
+          refs.current[index] = node;
+        },
+        className: "vj-tab",
+        role: "tab",
+        "aria-selected": legacyProps.value === option.value,
+        tabIndex: legacyProps.value === option.value ? 0 : -1,
+        disabled: option.disabled,
+        onClick: () => legacyProps.onChange(option.value),
+        onKeyDown: (event) => onKeyDown2(event, index),
+        children: option.label
+      },
+      option.value
+    )) });
+  }
   return /* @__PURE__ */ jsx10(MantineTabs, { ...props });
 }
 Tabs.List = MantineTabs.List;
 Tabs.Tab = MantineTabs.Tab;
 Tabs.Panel = MantineTabs.Panel;
 function SegmentedControl(props) {
+  if ("options" in props) {
+    return /* @__PURE__ */ jsx10("div", { className: "vj-segmented", role: "radiogroup", "aria-label": props.ariaLabel, children: props.options.map((option) => /* @__PURE__ */ jsx10(
+      "button",
+      {
+        className: "vj-segmented__item",
+        role: "radio",
+        "aria-checked": props.value === option.value,
+        disabled: option.disabled,
+        onClick: () => props.onChange(option.value),
+        children: option.label
+      },
+      option.value
+    )) });
+  }
   return /* @__PURE__ */ jsx10(MantineSegmentedControl, { size: props.size ?? "sm", ...props });
 }
 function Pagination(props) {
+  if ("page" in props) {
+    const total = Math.max(1, props.pageCount);
+    const current = Math.min(total, Math.max(1, props.page));
+    const start = Math.max(1, Math.min(current - 2, total - 4));
+    const pages = Array.from({ length: Math.min(5, total) }, (_, index) => start + index);
+    return /* @__PURE__ */ jsxs4("nav", { className: "vj-pagination", "aria-label": props.ariaLabel ?? "\u5206\u9875", children: [
+      /* @__PURE__ */ jsx10(
+        "button",
+        {
+          type: "button",
+          disabled: current <= 1,
+          onClick: () => props.onChange(current - 1),
+          children: "\u4E0A\u4E00\u9875"
+        }
+      ),
+      pages.map((item) => /* @__PURE__ */ jsx10(
+        "button",
+        {
+          type: "button",
+          "aria-current": item === current ? "page" : void 0,
+          onClick: () => props.onChange(item),
+          children: item
+        },
+        item
+      )),
+      /* @__PURE__ */ jsx10(
+        "button",
+        {
+          type: "button",
+          disabled: current >= total,
+          onClick: () => props.onChange(current + 1),
+          children: "\u4E0B\u4E00\u9875"
+        }
+      )
+    ] });
+  }
   return /* @__PURE__ */ jsx10(MantinePagination, { size: props.size ?? "sm", ...props });
 }
 function Menu(props) {
@@ -1999,11 +2217,78 @@ Menu.Item = MantineMenu.Item;
 Menu.Label = MantineMenu.Label;
 Menu.Divider = MantineMenu.Divider;
 function Popover(props) {
+  if ("trigger" in props) {
+    const [internalOpen, setInternalOpen] = useState2(false);
+    const controlled = props.open !== void 0;
+    const visible = controlled ? props.open : internalOpen;
+    const rootRef = useRef2(null);
+    const contentId = useId();
+    const setVisible = (next) => {
+      if (!controlled) setInternalOpen(next);
+      props.onOpenChange?.(next);
+    };
+    useEffect(() => {
+      if (!visible) return;
+      const onPointerDown = (event) => {
+        if (!rootRef.current?.contains(event.target)) setVisible(false);
+      };
+      const onKeyDown = (event) => {
+        if (event.key === "Escape") setVisible(false);
+      };
+      document.addEventListener("mousedown", onPointerDown);
+      document.addEventListener("keydown", onKeyDown);
+      return () => {
+        document.removeEventListener("mousedown", onPointerDown);
+        document.removeEventListener("keydown", onKeyDown);
+      };
+    }, [visible]);
+    return /* @__PURE__ */ jsxs4("div", { className: "vj-popover", ref: rootRef, children: [
+      /* @__PURE__ */ jsx10(
+        "button",
+        {
+          className: "vj-popover__trigger",
+          type: "button",
+          "aria-label": props.triggerLabel,
+          "aria-expanded": visible,
+          "aria-controls": contentId,
+          onClick: () => setVisible(!visible),
+          children: props.trigger
+        }
+      ),
+      visible ? /* @__PURE__ */ jsx10(
+        "div",
+        {
+          className: "vj-popover__content",
+          "data-placement": props.placement,
+          id: contentId,
+          "data-vj-popover-content": true,
+          tabIndex: -1,
+          children: props.children
+        }
+      ) : null
+    ] });
+  }
   return /* @__PURE__ */ jsx10(MantinePopover, { ...props });
 }
 Popover.Target = MantinePopover.Target;
 Popover.Dropdown = MantinePopover.Dropdown;
 function Tooltip(props) {
+  if ("trigger" in props) {
+    const id = useId();
+    return /* @__PURE__ */ jsxs4("span", { className: "vj-tooltip", children: [
+      /* @__PURE__ */ jsx10("button", { type: "button", "aria-label": props.triggerLabel, "aria-describedby": id, children: props.trigger }),
+      /* @__PURE__ */ jsx10(
+        "span",
+        {
+          className: "vj-tooltip__content",
+          "data-placement": props.placement,
+          role: "tooltip",
+          id,
+          children: props.content
+        }
+      )
+    ] });
+  }
   return /* @__PURE__ */ jsx10(MantineTooltip, { ...props });
 }
 
@@ -2016,8 +2301,8 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { Checkbox, Group, Text as Text2 } from "@mantine/core";
-import { useMemo as useMemo4, useState as useState2 } from "react";
+import { Checkbox, Group as Group2, Text as Text3 } from "@mantine/core";
+import { useMemo as useMemo5, useState as useState4 } from "react";
 
 // src/components/Table.tsx
 import {
@@ -2044,33 +2329,885 @@ import {
   Stack,
   Text
 } from "@mantine/core";
-import { jsx as jsx12, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx12, jsxs as jsxs5 } from "react/jsx-runtime";
 function Empty({
   title = "\u6682\u65E0\u5185\u5BB9",
   description,
   action,
   icon
 }) {
-  return /* @__PURE__ */ jsx12(Center, { py: 40, px: "md", children: /* @__PURE__ */ jsxs4(Stack, { align: "center", gap: "sm", maw: 360, children: [
+  return /* @__PURE__ */ jsx12(Center, { py: 40, px: "md", children: /* @__PURE__ */ jsxs5(Stack, { align: "center", gap: "sm", maw: 360, children: [
     icon,
     /* @__PURE__ */ jsx12(Text, { fw: 600, size: "sm", c: COLORS.ink, children: title }),
     description ? /* @__PURE__ */ jsx12(Text, { size: "sm", c: "dimmed", ta: "center", children: description }) : null,
     action
   ] }) });
 }
-function Skeleton(props) {
+function Skeleton({ variant, lines, ...props }) {
+  if (variant) {
+    return /* @__PURE__ */ jsx12("div", { className: "vj-skeleton", "data-variant": variant, "aria-hidden": "true", children: Array.from(
+      { length: variant === "text" ? lines ?? 1 : 1 },
+      (_, index) => /* @__PURE__ */ jsx12("span", {}, index)
+    ) });
+  }
   return /* @__PURE__ */ jsx12(MantineSkeleton, { ...props });
 }
 function Spinner({ label, size = "sm" }) {
-  return /* @__PURE__ */ jsx12(Center, { py: "xl", children: /* @__PURE__ */ jsxs4(Stack, { align: "center", gap: "sm", children: [
+  return /* @__PURE__ */ jsx12(Center, { py: "xl", children: /* @__PURE__ */ jsxs5(Stack, { align: "center", gap: "sm", children: [
     /* @__PURE__ */ jsx12(Loader, { size, color: "brand", type: "dots" }),
     label ? /* @__PURE__ */ jsx12(Text, { size: "sm", c: "dimmed", children: label }) : null
   ] }) });
 }
 
+// src/components/AdminCompat.tsx
+import {
+  Card as MantineCard,
+  Group,
+  SimpleGrid,
+  Stack as MantineStack
+} from "@mantine/core";
+import {
+  cloneElement,
+  forwardRef as forwardRef7,
+  isValidElement as isValidElement2,
+  useEffect as useEffect2,
+  useId as useId2,
+  useRef as useRef3,
+  useState as useState3
+} from "react";
+import { Fragment, jsx as jsx13, jsxs as jsxs6 } from "react/jsx-runtime";
+function normalizeTone(tone = "neutral") {
+  if (tone === "accent") return "info";
+  if (tone === "danger") return "error";
+  return tone;
+}
+var PAD = { sm: 12, md: 16, lg: 24 };
+function Card({
+  children,
+  padding = "md",
+  bodyPadding,
+  header,
+  footer,
+  scrollBody = false,
+  ...props
+}) {
+  if (header == null && footer == null && bodyPadding == null && !scrollBody) {
+    return /* @__PURE__ */ jsx13(MantineCard, { padding, ...props, children });
+  }
+  const outerPad = typeof padding === "string" && padding in PAD ? PAD[padding] : typeof padding === "number" ? padding : PAD.md;
+  const innerPad = bodyPadding === "none" ? 0 : bodyPadding && bodyPadding in PAD ? PAD[bodyPadding] : outerPad;
+  return /* @__PURE__ */ jsxs6(
+    MantineCard,
+    {
+      padding: 0,
+      radius: "md",
+      withBorder: true,
+      ...props,
+      style: {
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        height: scrollBody ? "100%" : void 0,
+        ...props.style
+      },
+      children: [
+        header != null ? /* @__PURE__ */ jsx13("div", { className: "vj-card__header", style: { padding: outerPad }, children: typeof header === "string" ? /* @__PURE__ */ jsx13("div", { className: "vj-card__title", children: header }) : header }) : null,
+        /* @__PURE__ */ jsx13(
+          "div",
+          {
+            className: "vj-card__body",
+            style: {
+              padding: innerPad,
+              flex: scrollBody ? 1 : void 0,
+              minHeight: 0,
+              overflow: scrollBody ? "auto" : void 0
+            },
+            children
+          }
+        ),
+        footer != null ? /* @__PURE__ */ jsx13("div", { className: "vj-card__footer", style: { padding: outerPad }, children: footer }) : null
+      ]
+    }
+  );
+}
+function Badge({ label, children, tone = "neutral" }) {
+  return /* @__PURE__ */ jsx13("span", { className: "vj-badge", "data-tone": normalizeTone(tone), children: label ?? children });
+}
+function StatusDot({ label, tone = "neutral" }) {
+  return /* @__PURE__ */ jsx13("span", { className: "vj-status-dot", "data-tone": normalizeTone(tone), children: label });
+}
+function TrendBadge({
+  direction,
+  value,
+  positiveDirection = "up"
+}) {
+  const tone = direction === "flat" ? "neutral" : direction === positiveDirection ? "success" : "error";
+  const marker = direction === "up" ? "\u2191" : direction === "down" ? "\u2193" : "\u2014";
+  return /* @__PURE__ */ jsxs6(Badge, { tone, children: [
+    /* @__PURE__ */ jsx13("span", { "aria-hidden": true, children: marker }),
+    value,
+    /* @__PURE__ */ jsxs6("span", { className: "vj-visually-hidden", children: [
+      "\uFF0C\u8D8B\u52BF",
+      direction === "up" ? "\u4E0A\u5347" : direction === "down" ? "\u4E0B\u964D" : "\u6301\u5E73"
+    ] })
+  ] });
+}
+function FormField({
+  label,
+  children,
+  description,
+  error,
+  required = false
+}) {
+  const generated = useId2();
+  const inputId = children.props.id ?? `${generated}-control`;
+  const messageId = `${generated}-message`;
+  const controlProps = {
+    id: inputId,
+    required,
+    "aria-invalid": Boolean(error)
+  };
+  if (description || error) controlProps["aria-describedby"] = messageId;
+  const control = isValidElement2(children) ? cloneElement(children, controlProps) : children;
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-field", children: [
+    /* @__PURE__ */ jsxs6("label", { className: "vj-field__label", htmlFor: inputId, children: [
+      label,
+      required ? /* @__PURE__ */ jsxs6("span", { className: "vj-field__required", "aria-hidden": true, children: [
+        " ",
+        "*"
+      ] }) : null
+    ] }),
+    control,
+    error || description ? /* @__PURE__ */ jsx13(
+      "p",
+      {
+        className: "vj-field__message",
+        "data-error": Boolean(error) || void 0,
+        id: messageId,
+        children: error ?? description
+      }
+    ) : null
+  ] });
+}
+function TextArea({
+  value,
+  defaultValue,
+  onChange,
+  placeholder,
+  rows = 5,
+  disabled,
+  name,
+  id,
+  ariaLabel,
+  required,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid
+}) {
+  return /* @__PURE__ */ jsx13(
+    "textarea",
+    {
+      className: "vj-textarea",
+      "data-rows": rows,
+      value,
+      defaultValue,
+      onChange: (event) => onChange?.(event.currentTarget.value),
+      placeholder,
+      disabled,
+      name,
+      id,
+      "aria-label": ariaLabel,
+      required,
+      "aria-describedby": describedBy,
+      "aria-invalid": invalid,
+      rows: typeof rows === "number" ? rows : void 0
+    }
+  );
+}
+function NumberInput({
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  placeholder,
+  disabled,
+  name,
+  id,
+  ariaLabel,
+  required,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid
+}) {
+  return /* @__PURE__ */ jsx13(
+    "input",
+    {
+      className: "vj-input",
+      type: "number",
+      value: value ?? "",
+      onChange: (event) => onChange?.(
+        event.currentTarget.value === "" ? null : event.currentTarget.valueAsNumber
+      ),
+      min,
+      max,
+      step,
+      placeholder,
+      disabled,
+      name,
+      id,
+      "aria-label": ariaLabel,
+      required,
+      "aria-describedby": describedBy,
+      "aria-invalid": invalid
+    }
+  );
+}
+function List({
+  children,
+  density = "comfortable",
+  dividers = false,
+  ariaLabel
+}) {
+  return /* @__PURE__ */ jsx13(
+    "div",
+    {
+      className: "vj-list",
+      "data-density": density,
+      "data-dividers": dividers || void 0,
+      role: "list",
+      "aria-label": ariaLabel,
+      children
+    }
+  );
+}
+function ListItem({
+  label,
+  description,
+  startContent,
+  endContent,
+  onClick,
+  disabled
+}) {
+  const content = /* @__PURE__ */ jsxs6(Fragment, { children: [
+    startContent ? /* @__PURE__ */ jsx13("span", { className: "vj-list-item__side", children: startContent }) : null,
+    /* @__PURE__ */ jsxs6("span", { className: "vj-list-item__body", children: [
+      /* @__PURE__ */ jsx13("span", { className: "vj-list-item__label", children: label }),
+      description ? /* @__PURE__ */ jsx13("span", { className: "vj-list-item__desc", children: description }) : null
+    ] }),
+    endContent ? /* @__PURE__ */ jsx13("span", { className: "vj-list-item__side", children: endContent }) : null
+  ] });
+  return onClick ? /* @__PURE__ */ jsx13(
+    "button",
+    {
+      className: "vj-list-item",
+      role: "listitem",
+      type: "button",
+      disabled,
+      onClick,
+      children: content
+    }
+  ) : /* @__PURE__ */ jsx13("div", { className: "vj-list-item", role: "listitem", children: content });
+}
+function LegacyDataTable({
+  columns,
+  data,
+  rowKey,
+  ariaLabel,
+  density = "default",
+  emptyLabel = "\u6682\u65E0\u6570\u636E"
+}) {
+  return /* @__PURE__ */ jsx13("div", { className: "vj-table-wrap", children: /* @__PURE__ */ jsxs6("table", { className: "vj-table", "data-density": density, children: [
+    /* @__PURE__ */ jsx13("caption", { children: ariaLabel }),
+    /* @__PURE__ */ jsx13("thead", { children: /* @__PURE__ */ jsx13("tr", { children: columns.map((column) => /* @__PURE__ */ jsx13("th", { scope: "col", "data-align": column.align, children: column.header }, column.key)) }) }),
+    /* @__PURE__ */ jsx13("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx13("tr", { children: /* @__PURE__ */ jsx13("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : data.map((row) => /* @__PURE__ */ jsx13("tr", { children: columns.map((column) => /* @__PURE__ */ jsx13("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
+  ] }) });
+}
+function Dialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  footer
+}) {
+  const ref = useRef3(null);
+  useEffect2(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
+  return /* @__PURE__ */ jsxs6(
+    "dialog",
+    {
+      ref,
+      className: "vj-dialog",
+      onCancel: (event) => {
+        event.preventDefault();
+        onOpenChange(false);
+      },
+      onClose: () => onOpenChange(false),
+      "aria-labelledby": "vj-dialog-title",
+      "aria-describedby": description ? "vj-dialog-description" : void 0,
+      children: [
+        /* @__PURE__ */ jsxs6("header", { className: "vj-dialog__header", children: [
+          /* @__PURE__ */ jsx13("h2", { className: "vj-dialog__title", id: "vj-dialog-title", children: title }),
+          description ? /* @__PURE__ */ jsx13("p", { className: "vj-dialog__description", id: "vj-dialog-description", children: description }) : null
+        ] }),
+        /* @__PURE__ */ jsx13("div", { className: "vj-dialog__body", children }),
+        /* @__PURE__ */ jsx13("footer", { className: "vj-dialog__footer", children: footer ?? /* @__PURE__ */ jsx13(Button, { variant: "secondary", label: "\u5173\u95ED", onClick: () => onOpenChange(false) }) })
+      ]
+    }
+  );
+}
+function AlertDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  confirmLabel,
+  cancelLabel = "\u53D6\u6D88",
+  onConfirm,
+  loading = false
+}) {
+  return /* @__PURE__ */ jsx13(
+    Dialog,
+    {
+      open,
+      onOpenChange,
+      title,
+      description,
+      footer: /* @__PURE__ */ jsxs6(Fragment, { children: [
+        /* @__PURE__ */ jsx13(
+          Button,
+          {
+            variant: "secondary",
+            label: cancelLabel,
+            onClick: () => onOpenChange(false)
+          }
+        ),
+        /* @__PURE__ */ jsx13(
+          Button,
+          {
+            variant: "danger",
+            label: confirmLabel,
+            loading,
+            onClick: onConfirm
+          }
+        )
+      ] })
+    }
+  );
+}
+function mapGap(gap) {
+  if (gap === "1") return 4;
+  if (gap === "2") return 8;
+  if (gap === "3") return 12;
+  if (gap === "4") return 16;
+  if (gap === "6") return 24;
+  return gap;
+}
+var Stack2 = forwardRef7(function Stack3({ gap = "md", ...props }, ref) {
+  return /* @__PURE__ */ jsx13(MantineStack, { ref, gap: mapGap(gap), ...props });
+});
+function HStack({
+  children,
+  gap = "3",
+  justify = "start",
+  align = "center",
+  wrap = false
+}) {
+  return /* @__PURE__ */ jsx13(
+    Group,
+    {
+      gap: mapGap(gap),
+      justify: justify === "between" ? "space-between" : justify,
+      align: align === "start" ? "flex-start" : align === "end" ? "flex-end" : align,
+      wrap: wrap ? "wrap" : "nowrap",
+      children
+    }
+  );
+}
+function Grid({ children, gap = "4", columns = 2 }) {
+  return /* @__PURE__ */ jsx13(SimpleGrid, { cols: { base: 1, sm: columns }, spacing: mapGap(gap), children });
+}
+function PageCanvas({ children }) {
+  return /* @__PURE__ */ jsx13("main", { className: "vj-page-canvas", children });
+}
+function PageHeader({ title, scope, context, actions }) {
+  return /* @__PURE__ */ jsxs6("header", { className: "vj-page-header", children: [
+    /* @__PURE__ */ jsxs6("div", { className: "vj-page-header__main", children: [
+      /* @__PURE__ */ jsx13("h1", { className: "vj-page-header__title", children: title }),
+      scope,
+      context ? /* @__PURE__ */ jsxs6("span", { className: "vj-page-header__context", children: [
+        "\xB7 ",
+        context
+      ] }) : null
+    ] }),
+    actions
+  ] });
+}
+function SectionHeader({
+  title,
+  description,
+  subtitle,
+  actions
+}) {
+  const copy = description ?? subtitle;
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-section-header", children: [
+    /* @__PURE__ */ jsxs6("div", { children: [
+      /* @__PURE__ */ jsx13("h2", { children: title }),
+      copy ? /* @__PURE__ */ jsx13("p", { children: copy }) : null
+    ] }),
+    actions
+  ] });
+}
+function DashboardPage({
+  title,
+  scope,
+  context,
+  actions,
+  children
+}) {
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-pattern", children: [
+    /* @__PURE__ */ jsx13(PageHeader, { title, scope, context, actions }),
+    /* @__PURE__ */ jsx13(PageCanvas, { children })
+  ] });
+}
+var ListPage = DashboardPage;
+var DetailPage = DashboardPage;
+var SettingsPage = DashboardPage;
+function EmptyState({ title, description, action }) {
+  return /* @__PURE__ */ jsx13("section", { className: "vj-empty-state", children: /* @__PURE__ */ jsxs6("div", { children: [
+    /* @__PURE__ */ jsx13("h2", { children: title }),
+    /* @__PURE__ */ jsx13("p", { children: description }),
+    action
+  ] }) });
+}
+function PermissionDeniedState({ action }) {
+  return /* @__PURE__ */ jsx13(
+    EmptyState,
+    {
+      title: "\u6CA1\u6709\u8BBF\u95EE\u6743\u9650",
+      description: "\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458\u5F00\u901A\u6B64\u9875\u9762\u6240\u9700\u6743\u9650\u3002",
+      action
+    }
+  );
+}
+function ErrorState({ action }) {
+  return /* @__PURE__ */ jsx13(
+    EmptyState,
+    {
+      title: "\u5185\u5BB9\u6682\u65F6\u65E0\u6CD5\u52A0\u8F7D",
+      description: "\u8BF7\u7A0D\u540E\u91CD\u8BD5\uFF1B\u5982\u679C\u95EE\u9898\u6301\u7EED\u5B58\u5728\uFF0C\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458\u3002",
+      action
+    }
+  );
+}
+function FilterWorkspace({
+  filters,
+  children,
+  filterLabel = "\u7B5B\u9009\u6761\u4EF6"
+}) {
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-filter-workspace", children: [
+    /* @__PURE__ */ jsx13("aside", { "aria-label": filterLabel, children: filters }),
+    /* @__PURE__ */ jsx13("section", { children })
+  ] });
+}
+function DataSection({
+  title,
+  description,
+  actions,
+  children,
+  bodyPadding = "none"
+}) {
+  return /* @__PURE__ */ jsx13(
+    Card,
+    {
+      header: /* @__PURE__ */ jsx13(SectionHeader, { title, description, actions }),
+      bodyPadding,
+      children
+    }
+  );
+}
+function FormSection({
+  title,
+  description,
+  children,
+  footer
+}) {
+  return /* @__PURE__ */ jsx13(Card, { header: /* @__PURE__ */ jsx13(SectionHeader, { title, description }), footer, children });
+}
+function AppShell({
+  product,
+  brand,
+  navigation,
+  user,
+  header,
+  children
+}) {
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-app-shell", children: [
+    /* @__PURE__ */ jsx13(SideNav, { product, brand, navigation, user }),
+    /* @__PURE__ */ jsxs6("div", { className: "vj-app-shell__main", children: [
+      /* @__PURE__ */ jsx13(MobileNav, { product, navigation, user }),
+      header,
+      children
+    ] })
+  ] });
+}
+function SideNav({
+  product,
+  brand,
+  navigation,
+  user
+}) {
+  return /* @__PURE__ */ jsxs6("aside", { className: "vj-sidebar", "aria-label": `${product} \u4E3B\u5BFC\u822A`, children: [
+    /* @__PURE__ */ jsx13("div", { className: "vj-sidebar__brand", children: brand }),
+    navigation.map((section, index) => /* @__PURE__ */ jsxs6(
+      "nav",
+      {
+        className: "vj-sidebar__section",
+        "aria-label": section.label,
+        children: [
+          section.label ? /* @__PURE__ */ jsx13("div", { className: "vj-sidebar__section-label", children: section.label }) : null,
+          section.items.map((item) => /* @__PURE__ */ jsxs6(
+            "button",
+            {
+              className: "vj-sidebar__item",
+              type: "button",
+              "aria-current": item.active ? "page" : void 0,
+              disabled: item.disabled,
+              onClick: item.onSelect,
+              children: [
+                item.icon,
+                item.label
+              ]
+            },
+            item.id
+          ))
+        ]
+      },
+      section.label ?? index
+    )),
+    user ? /* @__PURE__ */ jsx13("div", { children: user }) : null
+  ] });
+}
+function MobileNav({
+  product,
+  navigation,
+  user
+}) {
+  const items = navigation?.flatMap((section) => section.items).filter((item) => !item.disabled) ?? [];
+  const active = items.find((item) => item.active)?.id ?? items[0]?.id ?? "";
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-mobile-nav", children: [
+    /* @__PURE__ */ jsx13("strong", { children: product }),
+    items.length > 0 ? /* @__PURE__ */ jsx13(
+      "select",
+      {
+        "aria-label": "\u9875\u9762\u5BFC\u822A",
+        value: active,
+        onChange: (event) => items.find((item) => item.id === event.currentTarget.value)?.onSelect?.(),
+        children: items.map((item) => /* @__PURE__ */ jsx13("option", { value: item.id, children: item.label }, item.id))
+      }
+    ) : null,
+    user
+  ] });
+}
+function KpiGrid({
+  children,
+  columns = 4
+}) {
+  return /* @__PURE__ */ jsx13("div", { className: "vj-kpi-grid", "data-columns": columns, children });
+}
+function StatCard({
+  value,
+  label,
+  hint,
+  trend,
+  tone = "neutral"
+}) {
+  return /* @__PURE__ */ jsxs6("article", { className: "vj-stat", "data-tone": normalizeTone(tone), children: [
+    /* @__PURE__ */ jsxs6("div", { className: "vj-stat__value", children: [
+      value,
+      trend
+    ] }),
+    /* @__PURE__ */ jsx13("div", { className: "vj-stat__label", children: label }),
+    hint ? /* @__PURE__ */ jsx13("div", { className: "vj-stat__hint", children: hint }) : null
+  ] });
+}
+function DashboardGrid({ children }) {
+  return /* @__PURE__ */ jsx13("div", { className: "vj-dashboard-grid", children });
+}
+function DashboardGridItem({
+  children,
+  span = 6
+}) {
+  return /* @__PURE__ */ jsx13("div", { className: "vj-dashboard-grid__item", "data-span": span, children });
+}
+var IconButton = forwardRef7(
+  function IconButton2({ label, icon, variant = "ghost", size = "md", disabled, onClick }, ref) {
+    return /* @__PURE__ */ jsx13(
+      "button",
+      {
+        ref,
+        className: "vj-button vj-icon-button",
+        "data-variant": variant,
+        "data-size": size,
+        type: "button",
+        "aria-label": label,
+        disabled,
+        onClick,
+        children: icon
+      }
+    );
+  }
+);
+function ProgressBar({
+  value,
+  max = 100,
+  label,
+  showValue = false,
+  tone = "info"
+}) {
+  const safeMax = Math.max(1, max);
+  const percent = Math.min(100, Math.max(0, value / safeMax * 100));
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-progress", children: [
+    /* @__PURE__ */ jsxs6("div", { className: "vj-progress__meta", children: [
+      /* @__PURE__ */ jsx13("span", { children: label }),
+      showValue ? /* @__PURE__ */ jsxs6("span", { children: [
+        Math.round(percent),
+        "%"
+      ] }) : null
+    ] }),
+    /* @__PURE__ */ jsxs6(
+      "progress",
+      {
+        className: "vj-progress__native",
+        "data-tone": tone,
+        value,
+        max: safeMax,
+        children: [
+          Math.round(percent),
+          "%"
+        ]
+      }
+    )
+  ] });
+}
+function ThemeProvider({
+  theme = "light",
+  children
+}) {
+  return /* @__PURE__ */ jsx13("div", { className: "vijim-root", "data-vijim-theme": theme, children });
+}
+function BrandLockup({
+  product,
+  background = "light",
+  alt = `VIJIM ${product}`
+}) {
+  return /* @__PURE__ */ jsx13(
+    "img",
+    {
+      src: `/brand/vijimlabs-${product.toLowerCase()}-lockup${background === "dark" ? "-dark" : ""}.svg`,
+      alt
+    }
+  );
+}
+var publicComponents = [
+  "Button",
+  "IconButton",
+  "Card",
+  "Badge",
+  "StatusDot",
+  "TrendBadge",
+  "FormField",
+  "TextInput",
+  "Tabs",
+  "SegmentedControl",
+  "List",
+  "ListItem",
+  "DataTable",
+  "Dialog",
+  "Stack",
+  "HStack",
+  "Grid",
+  "PageCanvas",
+  "PageHeader",
+  "SectionHeader",
+  "AppShell"
+];
+function ToastRegion() {
+  return null;
+}
+function ChartCard({
+  title,
+  description,
+  children,
+  footer
+}) {
+  return /* @__PURE__ */ jsx13(Card, { header: /* @__PURE__ */ jsx13(SectionHeader, { title, description }), footer, children });
+}
+function Avatar({
+  src,
+  alt,
+  fallback,
+  size = "md"
+}) {
+  const [failed, setFailed] = useState3(false);
+  return /* @__PURE__ */ jsx13("span", { className: "vj-avatar", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx13("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx13("span", { "aria-label": alt, children: fallback.slice(0, 2) }) });
+}
+function Thumbnail({
+  src,
+  alt,
+  size = "md",
+  fallbackLabel = "\u6682\u65E0\u56FE\u7247"
+}) {
+  const [failed, setFailed] = useState3(false);
+  return /* @__PURE__ */ jsx13("span", { className: "vj-thumbnail", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx13("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx13("span", { role: "img", "aria-label": `${alt}\uFF1A${fallbackLabel}`, children: fallbackLabel }) });
+}
+function MetadataList({
+  items,
+  columns = 1,
+  ariaLabel
+}) {
+  return /* @__PURE__ */ jsx13("dl", { className: "vj-metadata", "data-columns": columns, "aria-label": ariaLabel, children: items.map((item) => /* @__PURE__ */ jsxs6("div", { children: [
+    /* @__PURE__ */ jsx13("dt", { children: item.label }),
+    /* @__PURE__ */ jsx13("dd", { children: item.value })
+  ] }, item.label)) });
+}
+function MultiSelector({
+  values,
+  onChange,
+  options,
+  label,
+  disabled
+}) {
+  const toggle = (value) => onChange(
+    values.includes(value) ? values.filter((item) => item !== value) : [...values, value]
+  );
+  return /* @__PURE__ */ jsx13("div", { className: "vj-multi-selector", role: "group", "aria-label": label, children: options.map((option) => /* @__PURE__ */ jsx13(
+    "button",
+    {
+      type: "button",
+      "aria-pressed": values.includes(option.value),
+      disabled: disabled || option.disabled,
+      onClick: () => toggle(option.value),
+      children: option.label
+    },
+    option.value
+  )) });
+}
+function Tag({
+  label,
+  tone = "neutral",
+  onRemove,
+  removeLabel = `\u79FB\u9664${label}`
+}) {
+  return /* @__PURE__ */ jsxs6("span", { className: "vj-tag", "data-tone": tone, children: [
+    /* @__PURE__ */ jsx13("span", { children: label }),
+    onRemove ? /* @__PURE__ */ jsx13("button", { type: "button", "aria-label": removeLabel, onClick: onRemove, children: "\xD7" }) : null
+  ] });
+}
+function InputGroup({
+  value,
+  onChange,
+  placeholder,
+  prefix,
+  suffix,
+  disabled,
+  id,
+  ariaLabel,
+  required,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid
+}) {
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-input-group", "data-invalid": invalid || void 0, children: [
+    prefix ? /* @__PURE__ */ jsx13("span", { children: prefix }) : null,
+    /* @__PURE__ */ jsx13(
+      "input",
+      {
+        value,
+        onChange: (event) => onChange?.(event.currentTarget.value),
+        placeholder,
+        disabled,
+        id,
+        "aria-label": ariaLabel,
+        required,
+        "aria-describedby": describedBy,
+        "aria-invalid": invalid
+      }
+    ),
+    suffix ? /* @__PURE__ */ jsx13("span", { children: suffix }) : null
+  ] });
+}
+function Slider({
+  value,
+  onChange,
+  label,
+  min = 0,
+  max = 100,
+  step = 1,
+  showValue = true,
+  disabled
+}) {
+  return /* @__PURE__ */ jsxs6("label", { className: "vj-slider", children: [
+    /* @__PURE__ */ jsxs6("span", { className: "vj-slider__meta", children: [
+      /* @__PURE__ */ jsx13("span", { children: label }),
+      showValue ? /* @__PURE__ */ jsx13("strong", { children: value }) : null
+    ] }),
+    /* @__PURE__ */ jsx13(
+      "input",
+      {
+        type: "range",
+        value,
+        onChange: (event) => onChange(event.currentTarget.valueAsNumber),
+        min,
+        max,
+        step,
+        disabled
+      }
+    )
+  ] });
+}
+function DatePicker({
+  value,
+  onChange,
+  min,
+  max,
+  disabled,
+  id,
+  ariaLabel,
+  required,
+  "aria-describedby": describedBy,
+  "aria-invalid": invalid
+}) {
+  return /* @__PURE__ */ jsx13(
+    "input",
+    {
+      className: "vj-input vj-date",
+      type: "date",
+      value,
+      onChange: (event) => onChange?.(event.currentTarget.value),
+      min,
+      max,
+      disabled,
+      id,
+      "aria-label": ariaLabel,
+      required,
+      "aria-describedby": describedBy,
+      "aria-invalid": invalid
+    }
+  );
+}
+
 // src/components/DataTable.tsx
-import { jsx as jsx13, jsxs as jsxs5 } from "react/jsx-runtime";
-function DataTable({
+import { jsx as jsx14, jsxs as jsxs7 } from "react/jsx-runtime";
+function DataTable(props) {
+  if ("rowKey" in props) {
+    return /* @__PURE__ */ jsx14(LegacyDataTable, { ...props });
+  }
+  return /* @__PURE__ */ jsx14(ModernDataTable, { ...props });
+}
+function ModernDataTable({
   data,
   columns,
   getRowId,
@@ -2085,22 +3222,22 @@ function DataTable({
   loading = false,
   maxHeight
 }) {
-  const [sorting, setSorting] = useState2([]);
-  const [internalSelection, setInternalSelection] = useState2(
+  const [sorting, setSorting] = useState4([]);
+  const [internalSelection, setInternalSelection] = useState4(
     {}
   );
-  const [pagination, setPagination] = useState2({
+  const [pagination, setPagination] = useState4({
     pageIndex: 0,
     pageSize: pageSize ?? 20
   });
   const selection = controlledSelection ?? internalSelection;
   const setSelection = onRowSelectionChange ?? setInternalSelection;
-  const cols = useMemo4(() => {
+  const cols = useMemo5(() => {
     if (!selectable) return columns;
     const selectCol = {
       id: "__select",
       size: 40,
-      header: ({ table: table2 }) => /* @__PURE__ */ jsx13(
+      header: ({ table: table2 }) => /* @__PURE__ */ jsx14(
         Checkbox,
         {
           "aria-label": "\u5168\u9009",
@@ -2109,7 +3246,7 @@ function DataTable({
           onChange: table2.getToggleAllPageRowsSelectedHandler()
         }
       ),
-      cell: ({ row }) => /* @__PURE__ */ jsx13(
+      cell: ({ row }) => /* @__PURE__ */ jsx14(
         Checkbox,
         {
           "aria-label": "\u9009\u62E9\u884C",
@@ -2142,9 +3279,9 @@ function DataTable({
   });
   const rows = table.getRowModel().rows;
   const pageCount = table.getPageCount();
-  return /* @__PURE__ */ jsxs5("div", { children: [
-    toolbar ? /* @__PURE__ */ jsx13("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
-    /* @__PURE__ */ jsx13(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs7("div", { children: [
+    toolbar ? /* @__PURE__ */ jsx14("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
+    /* @__PURE__ */ jsx14(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs7(
       Table,
       {
         highlightOnHover: true,
@@ -2152,7 +3289,7 @@ function DataTable({
         verticalSpacing: "sm",
         stickyHeader: Boolean(maxHeight),
         children: [
-          /* @__PURE__ */ jsx13(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx13(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs5(
+          /* @__PURE__ */ jsx14(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx14(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs7(
             Table.Th,
             {
               style: {
@@ -2174,7 +3311,7 @@ function DataTable({
             },
             header.id
           )) }, hg.id)) }),
-          /* @__PURE__ */ jsx13(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx13(Table.Tr, { children: /* @__PURE__ */ jsx13(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx13(Text2, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx13(Table.Tr, { children: /* @__PURE__ */ jsx13(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx13(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx13(
+          /* @__PURE__ */ jsx14(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx14(Table.Tr, { children: /* @__PURE__ */ jsx14(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx14(Text3, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx14(Table.Tr, { children: /* @__PURE__ */ jsx14(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx14(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx14(
             Table.Tr,
             {
               "data-selected": row.getIsSelected() || void 0,
@@ -2183,7 +3320,7 @@ function DataTable({
                 backgroundColor: row.getIsSelected() ? "rgba(51, 112, 255, 0.06)" : void 0
               },
               onClick: () => onRowClick?.(row.original),
-              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx13(Table.Td, { children: flexRender(
+              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx14(Table.Td, { children: flexRender(
                 cell.column.columnDef.cell,
                 cell.getContext()
               ) }, cell.id))
@@ -2193,13 +3330,13 @@ function DataTable({
         ]
       }
     ) }),
-    pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs5(Group, { justify: "space-between", mt: "md", children: [
-      /* @__PURE__ */ jsxs5(Text2, { size: "sm", c: "dimmed", children: [
+    pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs7(Group2, { justify: "space-between", mt: "md", children: [
+      /* @__PURE__ */ jsxs7(Text3, { size: "sm", c: "dimmed", children: [
         "\u5171 ",
         data.length,
         " \u6761"
       ] }),
-      /* @__PURE__ */ jsx13(
+      /* @__PURE__ */ jsx14(
         Pagination,
         {
           total: pageCount,
@@ -2212,8 +3349,8 @@ function DataTable({
 }
 
 // src/components/FilterBar.tsx
-import { Box as Box2, Group as Group2, Stack as Stack2, Text as Text3, UnstyledButton } from "@mantine/core";
-import { jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
+import { Box as Box2, Group as Group3, Stack as Stack4, Text as Text4, UnstyledButton } from "@mantine/core";
+import { jsx as jsx15, jsxs as jsxs8 } from "react/jsx-runtime";
 var PANEL = {
   bg: COLORS.surface,
   border: `1px solid ${COLORS.border}`,
@@ -2239,7 +3376,7 @@ function FilterBar({
   onClear,
   clearLabel = "\u6E05\u9664\u7B5B\u9009"
 }) {
-  return /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs8(
     Box2,
     {
       className: "vijim-filter-bar",
@@ -2251,8 +3388,8 @@ function FilterBar({
         marginBottom: 16
       },
       children: [
-        /* @__PURE__ */ jsx14(Box2, { px: "md", py: "md", children }),
-        active != null || onClear ? /* @__PURE__ */ jsx14(
+        /* @__PURE__ */ jsx15(Box2, { px: "md", py: "md", children }),
+        active != null || onClear ? /* @__PURE__ */ jsx15(
           Box2,
           {
             px: "md",
@@ -2262,9 +3399,9 @@ function FilterBar({
               backgroundColor: COLORS.surface2,
               borderRadius: `0 0 ${PANEL.radius} ${PANEL.radius}`
             },
-            children: /* @__PURE__ */ jsxs6(Group2, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
-              /* @__PURE__ */ jsx14(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
-              onClear ? /* @__PURE__ */ jsx14(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
+            children: /* @__PURE__ */ jsxs8(Group3, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
+              /* @__PURE__ */ jsx15(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
+              onClear ? /* @__PURE__ */ jsx15(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
             ] })
           }
         ) : null
@@ -2279,11 +3416,11 @@ function FilterToolbar({
   resultText,
   extras
 }) {
-  return /* @__PURE__ */ jsxs6(Stack2, { gap: "sm", children: [
-    /* @__PURE__ */ jsxs6(Group2, { align: "center", gap: "md", wrap: "wrap", children: [
-      /* @__PURE__ */ jsx14(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
-      /* @__PURE__ */ jsxs6(Group2, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
-        resultText ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
+  return /* @__PURE__ */ jsxs8(Stack4, { gap: "sm", children: [
+    /* @__PURE__ */ jsxs8(Group3, { align: "center", gap: "md", wrap: "wrap", children: [
+      /* @__PURE__ */ jsx15(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
+      /* @__PURE__ */ jsxs8(Group3, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
+        resultText ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
         actions
       ] })
     ] }),
@@ -2296,8 +3433,8 @@ function FilterBatchBar({
   children
 }) {
   if (selectedCount <= 0) return null;
-  return /* @__PURE__ */ jsxs6(
-    Group2,
+  return /* @__PURE__ */ jsxs8(
+    Group3,
     {
       gap: "sm",
       px: "md",
@@ -2309,21 +3446,21 @@ function FilterBatchBar({
         borderRadius: PANEL.radius
       },
       children: [
-        /* @__PURE__ */ jsxs6(Text3, { size: "sm", c: COLORS.inkSecondary, children: [
+        /* @__PURE__ */ jsxs8(Text4, { size: "sm", c: COLORS.inkSecondary, children: [
           "\u5DF2\u9009",
           " ",
-          /* @__PURE__ */ jsx14(Text3, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
+          /* @__PURE__ */ jsx15(Text4, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
           " ",
           "\u9879"
         ] }),
-        /* @__PURE__ */ jsx14(Group2, { gap: "xs", children })
+        /* @__PURE__ */ jsx15(Group3, { gap: "xs", children })
       ]
     }
   );
 }
 function FilterRow({ children, label }) {
-  return /* @__PURE__ */ jsxs6(Group2, { gap: 6, align: "center", wrap: "wrap", children: [
-    label ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+  return /* @__PURE__ */ jsxs8(Group3, { gap: 6, align: "center", wrap: "wrap", children: [
+    label ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
     children
   ] });
 }
@@ -2335,21 +3472,21 @@ function FilterField({
   layout = "inline"
 }) {
   if (layout === "stack") {
-    return /* @__PURE__ */ jsxs6(Stack2, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
-      label ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
+    return /* @__PURE__ */ jsxs8(Stack4, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
+      label ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
       children
     ] });
   }
-  return /* @__PURE__ */ jsxs6(
-    Group2,
+  return /* @__PURE__ */ jsxs8(
+    Group3,
     {
       gap: 6,
       align: "center",
       wrap: "nowrap",
       style: { flex: grow ? "1 1 200px" : void 0, minWidth },
       children: [
-        label ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
-        /* @__PURE__ */ jsx14(Box2, { style: { flex: 1, minWidth: 0 }, children })
+        label ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+        /* @__PURE__ */ jsx15(Box2, { style: { flex: 1, minWidth: 0 }, children })
       ]
     }
   );
@@ -2361,8 +3498,8 @@ function FilterSegment({
   disabled = false,
   "aria-label": ariaLabel
 }) {
-  return /* @__PURE__ */ jsx14(
-    Group2,
+  return /* @__PURE__ */ jsx15(
+    Group3,
     {
       gap: 2,
       align: "center",
@@ -2380,7 +3517,7 @@ function FilterSegment({
       children: options.map((opt) => {
         const selected = opt.value === value;
         const press = pressHandlers(disabled);
-        return /* @__PURE__ */ jsxs6(
+        return /* @__PURE__ */ jsxs8(
           UnstyledButton,
           {
             type: "button",
@@ -2430,8 +3567,8 @@ function FilterSegment({
             onMouseUp: press.onMouseUp,
             children: [
               opt.label,
-              opt.count !== void 0 ? /* @__PURE__ */ jsx14(
-                Text3,
+              opt.count !== void 0 ? /* @__PURE__ */ jsx15(
+                Text4,
                 {
                   component: "span",
                   ff: "monospace",
@@ -2461,7 +3598,7 @@ function FilterTerm({
   disabled = false
 }) {
   const press = pressHandlers(disabled);
-  return /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs8(
     UnstyledButton,
     {
       type: "button",
@@ -2508,8 +3645,8 @@ function FilterTerm({
       onMouseUp: press.onMouseUp,
       children: [
         label,
-        count !== void 0 ? /* @__PURE__ */ jsx14(
-          Text3,
+        count !== void 0 ? /* @__PURE__ */ jsx15(
+          Text4,
           {
             component: "span",
             ff: "monospace",
@@ -2537,9 +3674,9 @@ function FilterFacet({
   showAll = true,
   allLabel = "\u5168\u90E8"
 }) {
-  return /* @__PURE__ */ jsxs6(Group2, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
-    /* @__PURE__ */ jsx14(
-      Text3,
+  return /* @__PURE__ */ jsxs8(Group3, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
+    /* @__PURE__ */ jsx15(
+      Text4,
       {
         size: "xs",
         c: "dimmed",
@@ -2552,8 +3689,8 @@ function FilterFacet({
         children: nested ? `\u2514 ${label}` : label
       }
     ),
-    /* @__PURE__ */ jsxs6(Group2, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
-      showAll ? /* @__PURE__ */ jsx14(
+    /* @__PURE__ */ jsxs8(Group3, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
+      showAll ? /* @__PURE__ */ jsx15(
         FilterTerm,
         {
           label: allLabel,
@@ -2561,7 +3698,7 @@ function FilterFacet({
           onClick: () => onChange(null)
         }
       ) : null,
-      options.map((opt) => /* @__PURE__ */ jsx14(
+      options.map((opt) => /* @__PURE__ */ jsx15(
         FilterTerm,
         {
           label: opt.label,
@@ -2580,12 +3717,12 @@ function FilterActive({
   emptyText = "\u672A\u8BBE\u7F6E\u7B5B\u9009"
 }) {
   if (items.length === 0) {
-    return /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", children: emptyText });
+    return /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", children: emptyText });
   }
-  return /* @__PURE__ */ jsxs6(Group2, { gap: "sm", align: "center", wrap: "wrap", children: [
-    /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
-    items.map((item) => /* @__PURE__ */ jsxs6(
-      Group2,
+  return /* @__PURE__ */ jsxs8(Group3, { gap: "sm", align: "center", wrap: "wrap", children: [
+    /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
+    items.map((item) => /* @__PURE__ */ jsxs8(
+      Group3,
       {
         gap: 4,
         align: "center",
@@ -2600,8 +3737,8 @@ function FilterActive({
           boxShadow: "0 1px 2px rgba(18,19,23,0.03)"
         },
         children: [
-          /* @__PURE__ */ jsx14(Text3, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
-          item.onRemove ? /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx15(Text4, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
+          item.onRemove ? /* @__PURE__ */ jsx15(
             UnstyledButton,
             {
               type: "button",
@@ -2625,7 +3762,7 @@ function FilterActive({
       },
       item.key
     )),
-    onClearAll ? /* @__PURE__ */ jsx14(
+    onClearAll ? /* @__PURE__ */ jsx15(
       UnstyledButton,
       {
         type: "button",
@@ -2642,47 +3779,18 @@ function FilterActive({
   ] });
 }
 
-// src/components/FormSection.tsx
-import { Box as Box3, SimpleGrid, Stack as Stack3, Text as Text4, Title } from "@mantine/core";
-import { jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
-function FormSection({
-  title,
-  description,
-  children,
-  cols = 2
-}) {
-  return /* @__PURE__ */ jsx15(
-    Box3,
-    {
-      p: "lg",
-      style: {
-        backgroundColor: COLORS.surface,
-        border: `1px solid ${COLORS.border}`,
-        borderRadius: 10
-      },
-      children: /* @__PURE__ */ jsxs7(Stack3, { gap: "md", children: [
-        /* @__PURE__ */ jsxs7("div", { children: [
-          /* @__PURE__ */ jsx15(Title, { order: 4, children: title }),
-          description ? /* @__PURE__ */ jsx15(Text4, { size: "sm", c: "dimmed", mt: 4, children: description }) : null
-        ] }),
-        /* @__PURE__ */ jsx15(SimpleGrid, { cols: { base: 1, sm: cols }, spacing: "md", children })
-      ] })
-    }
-  );
-}
-
 // src/components/Shell.tsx
 import {
   AppShell as MantineAppShell,
-  Box as Box4,
+  Box as Box3,
   Burger,
-  Group as Group3,
-  Stack as Stack4,
+  Group as Group4,
+  Stack as Stack5,
   Text as Text5,
   UnstyledButton as UnstyledButton2
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Fragment, jsx as jsx16, jsxs as jsxs8 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
 var SHELL = {
   headerH: 60,
   brandH: 76,
@@ -2702,8 +3810,8 @@ function TopBar({
   sticky = true,
   onBack
 }) {
-  return /* @__PURE__ */ jsxs8(
-    Box4,
+  return /* @__PURE__ */ jsxs9(
+    Box3,
     {
       component: "header",
       style: {
@@ -2722,8 +3830,8 @@ function TopBar({
         background: COLORS.surface
       },
       children: [
-        backHref != null || onBack ? /* @__PURE__ */ jsxs8(Fragment, { children: [
-          /* @__PURE__ */ jsxs8(
+        backHref != null || onBack ? /* @__PURE__ */ jsxs9(Fragment2, { children: [
+          /* @__PURE__ */ jsxs9(
             UnstyledButton2,
             {
               component: backHref ? "a" : "button",
@@ -2749,7 +3857,7 @@ function TopBar({
             }
           ),
           /* @__PURE__ */ jsx16(
-            Box4,
+            Box3,
             {
               "aria-hidden": true,
               style: {
@@ -2761,7 +3869,7 @@ function TopBar({
             }
           )
         ] }) : null,
-        /* @__PURE__ */ jsxs8(Group3, { gap: 8, align: "center", style: { flex: 1, minWidth: 0 }, wrap: "nowrap", children: [
+        /* @__PURE__ */ jsxs9(Group4, { gap: 8, align: "center", style: { flex: 1, minWidth: 0 }, wrap: "nowrap", children: [
           /* @__PURE__ */ jsx16(
             Text5,
             {
@@ -2779,7 +3887,7 @@ function TopBar({
             }
           ),
           badge,
-          context != null ? /* @__PURE__ */ jsxs8(Fragment, { children: [
+          context != null ? /* @__PURE__ */ jsxs9(Fragment2, { children: [
             /* @__PURE__ */ jsx16(Text5, { c: "dimmed", size: "xs", style: { flex: "none" }, children: "\xB7" }),
             /* @__PURE__ */ jsx16(
               Text5,
@@ -2797,191 +3905,7 @@ function TopBar({
             )
           ] }) : null
         ] }),
-        actions != null ? /* @__PURE__ */ jsx16(Group3, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
-      ]
-    }
-  );
-}
-function AppShell({
-  brand = "VIJIM STUDIO",
-  brandHint,
-  navItems = [],
-  headerRight,
-  headerCenter,
-  children,
-  navbarWidth = SHELL.navbarW,
-  withHeader = true
-}) {
-  const [opened, { toggle }] = useDisclosure();
-  return /* @__PURE__ */ jsxs8(
-    MantineAppShell,
-    {
-      header: withHeader ? { height: SHELL.headerH } : void 0,
-      navbar: {
-        width: navbarWidth,
-        breakpoint: "sm",
-        collapsed: { mobile: !opened }
-      },
-      padding: 0,
-      styles: {
-        root: { minHeight: "100vh", background: COLORS.body },
-        main: {
-          background: COLORS.body,
-          minHeight: withHeader ? `calc(100vh - ${SHELL.headerH}px)` : "100vh"
-        },
-        header: {
-          background: COLORS.surface,
-          borderBottom: `1px solid ${COLORS.border}`,
-          boxShadow: "none"
-        },
-        navbar: {
-          background: COLORS.surface,
-          borderRight: `1px solid ${COLORS.border}`
-        }
-      },
-      children: [
-        withHeader ? /* @__PURE__ */ jsx16(MantineAppShell.Header, { px: SHELL.contentPadX, children: /* @__PURE__ */ jsxs8(Group3, { h: "100%", justify: "space-between", wrap: "nowrap", gap: "md", children: [
-          /* @__PURE__ */ jsxs8(Group3, { gap: "sm", wrap: "nowrap", children: [
-            /* @__PURE__ */ jsx16(
-              Burger,
-              {
-                opened,
-                onClick: toggle,
-                hiddenFrom: "sm",
-                size: "sm",
-                color: COLORS.inkSecondary
-              }
-            ),
-            /* @__PURE__ */ jsx16(
-              Text5,
-              {
-                fw: 650,
-                size: "sm",
-                c: COLORS.ink,
-                style: { letterSpacing: "-0.01em", whiteSpace: "nowrap" },
-                hiddenFrom: "sm",
-                children: brand
-              }
-            )
-          ] }),
-          headerCenter ? /* @__PURE__ */ jsx16(
-            Box4,
-            {
-              style: {
-                flex: 1,
-                minWidth: 0,
-                display: "flex",
-                justifyContent: "flex-start"
-              },
-              children: headerCenter
-            }
-          ) : /* @__PURE__ */ jsx16(Box4, { style: { flex: 1 } }),
-          headerRight
-        ] }) }) : null,
-        /* @__PURE__ */ jsxs8(
-          MantineAppShell.Navbar,
-          {
-            p: 0,
-            style: { display: "flex", flexDirection: "column" },
-            children: [
-              /* @__PURE__ */ jsx16(
-                Box4,
-                {
-                  style: {
-                    height: SHELL.brandH,
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "0 12px 0 26px",
-                    flex: "none"
-                  },
-                  children: /* @__PURE__ */ jsxs8(Stack4, { gap: 2, children: [
-                    /* @__PURE__ */ jsx16(
-                      Text5,
-                      {
-                        fw: 650,
-                        size: "sm",
-                        c: COLORS.ink,
-                        style: { letterSpacing: "-0.01em" },
-                        children: brand
-                      }
-                    ),
-                    brandHint ? /* @__PURE__ */ jsx16(Text5, { size: "xs", c: "dimmed", lineClamp: 1, children: brandHint }) : null
-                  ] })
-                }
-              ),
-              /* @__PURE__ */ jsx16(Stack4, { gap: 0, style: { flex: 1, padding: "12px 12px 18px" }, children: navItems.map((item) => {
-                if (item.section) {
-                  return /* @__PURE__ */ jsx16(
-                    Text5,
-                    {
-                      style: {
-                        display: "flex",
-                        alignItems: "center",
-                        minHeight: 28,
-                        margin: "0 6px 5px",
-                        padding: "7px 0 6px",
-                        borderBottom: `1px solid ${COLORS.border}`,
-                        color: COLORS.faint,
-                        fontSize: 11.5,
-                        fontWeight: 650,
-                        letterSpacing: "0.2px",
-                        marginTop: 10
-                      },
-                      children: item.section
-                    },
-                    item.key
-                  );
-                }
-                return /* @__PURE__ */ jsxs8(
-                  Box4,
-                  {
-                    component: item.href ? "a" : "button",
-                    href: item.href,
-                    onClick: item.onClick,
-                    style: {
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      minHeight: SHELL.sideItemMinH,
-                      padding: "8px 13px",
-                      marginBottom: 3,
-                      border: "1px solid transparent",
-                      width: "100%",
-                      textAlign: "left",
-                      textDecoration: "none",
-                      cursor: "pointer",
-                      borderRadius: SHELL.sideItemRadius,
-                      backgroundColor: item.active ? COLORS.selectedBg : "transparent",
-                      color: item.active ? COLORS.selectedInk : COLORS.inkSecondary,
-                      fontWeight: item.active ? 600 : 500,
-                      fontSize: 13.5,
-                      lineHeight: 1.35,
-                      fontFamily: FONT.family,
-                      transition: "background-color 0.15s ease, color 0.15s ease"
-                    },
-                    onMouseEnter: (e) => {
-                      if (item.active) return;
-                      e.currentTarget.style.backgroundColor = COLORS.surface2;
-                      e.currentTarget.style.color = COLORS.ink;
-                    },
-                    onMouseLeave: (e) => {
-                      if (item.active) return;
-                      e.currentTarget.style.backgroundColor = "transparent";
-                      e.currentTarget.style.color = COLORS.inkSecondary;
-                    },
-                    children: [
-                      item.icon,
-                      item.label
-                    ]
-                  },
-                  item.key
-                );
-              }) })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsx16(MantineAppShell.Main, { children })
+        actions != null ? /* @__PURE__ */ jsx16(Group4, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
       ]
     }
   );
@@ -2997,7 +3921,7 @@ function PageShell({
   children,
   maxWidth
 }) {
-  return /* @__PURE__ */ jsxs8(Box4, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
+  return /* @__PURE__ */ jsxs9(Box3, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
     /* @__PURE__ */ jsx16(
       TopBar,
       {
@@ -3010,7 +3934,7 @@ function PageShell({
       }
     ),
     /* @__PURE__ */ jsx16(
-      Box4,
+      Box3,
       {
         style: {
           flex: 1,
@@ -3019,14 +3943,14 @@ function PageShell({
           width: "100%",
           boxSizing: "border-box"
         },
-        children: /* @__PURE__ */ jsx16(Stack4, { gap: "md", children })
+        children: /* @__PURE__ */ jsx16(Stack5, { gap: "md", children })
       }
     )
   ] });
 }
 function ShellTabs({ items }) {
-  return /* @__PURE__ */ jsx16(Group3, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx16(
-    Box4,
+  return /* @__PURE__ */ jsx16(Group4, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx16(
+    Box3,
     {
       component: item.href ? "a" : "button",
       href: item.href,
@@ -3123,17 +4047,14 @@ function SpotlightSearch({
 
 // src/components/layout-primitives.tsx
 import {
-  Group as Group4,
-  Stack as Stack5,
-  Box as Box5,
+  Group as Group5,
+  Box as Box4,
   SimpleGrid as SimpleGrid2,
   Divider,
   Paper,
-  Card,
   Text as Text6,
-  Title as Title2,
+  Title,
   Anchor,
-  Badge,
   Checkbox as Checkbox2,
   Switch,
   Alert,
@@ -3171,26 +4092,39 @@ function IconSearch3(props) {
 export {
   ActionIcon2 as ActionIcon,
   Alert,
+  AlertDialog,
   Anchor,
   AppShell,
   AreaChart,
+  Avatar,
   Badge,
   BarChart,
-  Box5 as Box,
+  Box4 as Box,
+  BrandLockup,
   Button,
   COLORS,
   CONTROL_HEIGHT,
   CONTROL_PADDING_X,
   Card,
+  ChartCard,
   Checkbox2 as Checkbox,
   Combobox,
+  DashboardGrid,
+  DashboardGridItem,
+  DashboardPage,
+  DataSection,
   DataTable,
   DateInput,
+  DatePicker,
   DatePickerInput,
   DefaultThemeProvider,
+  DetailPage,
+  Dialog,
   Divider,
   Drawer,
   Empty,
+  EmptyState,
+  ErrorState,
   FONT,
   FilterActive,
   FilterBar,
@@ -3201,43 +4135,74 @@ export {
   FilterSegment,
   FilterTerm,
   FilterToolbar,
+  FilterWorkspace,
+  FormField,
   FormSection,
-  Group4 as Group,
+  Grid,
+  Group5 as Group,
+  HStack,
+  IconButton,
   IconSearch3 as IconSearch,
   ImageGalleryUpload,
+  InputGroup,
+  KpiGrid,
+  List,
+  ListItem,
+  ListPage,
   MOTION,
   Menu,
+  MetadataList,
+  MobileNav,
   Modal,
+  MultiSelector,
+  NumberInput,
+  PageCanvas,
+  PageHeader,
   PageShell,
   Pagination,
   Paper,
+  PermissionDeniedState,
   Popover,
+  ProgressBar,
   RADIUS,
   SHADOWS,
   SearchInput,
   SearchableSelect,
+  SectionHeader,
   SegmentedControl,
   Select,
+  SettingsPage,
   ShellTabs,
+  SideNav,
   SimpleGrid2 as SimpleGrid,
   Skeleton,
+  Slider,
   Spinner,
   SpotlightSearch,
-  Stack5 as Stack,
+  Stack2 as Stack,
+  StatCard,
+  StatusDot,
   Switch,
   Table,
   Tabs,
+  Tag,
   Text6 as Text,
+  TextArea,
   TextInput,
   Textarea,
-  Title2 as Title,
+  ThemeProvider,
+  Thumbnail,
+  Title,
+  ToastRegion,
   Tooltip,
   TopBar,
+  TrendBadge,
   VijimProvider,
   hasLength,
   isEmail,
   isNotEmpty,
   notify,
+  publicComponents,
   spotlight,
   useCombobox,
   useDebouncedValue,

@@ -8,6 +8,8 @@ import "@mantine/dropzone/styles.css";
 import "@mantine/spotlight/styles.css";
 /** 本包触感层：按压变量 + reduced-motion */
 import "./styles.css";
+/** ADMIN 旧 .vj-* 控制台组件兼容层 */
+import "./admin-compat.css";
 
 import { MantineProvider, type MantineThemeOverride } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
