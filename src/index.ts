@@ -30,6 +30,11 @@ export { TextInput, type TextInputProps } from "./components/TextInput";
 export { Textarea, type TextareaProps } from "./components/Textarea";
 export { SearchInput, type SearchInputProps } from "./components/SearchInput";
 export {
+  ImageGalleryUpload,
+  type ImageGalleryUploadProps,
+  type ImageGalleryUploadResult,
+} from "./components/ImageGalleryUpload";
+export {
   Select,
   SearchableSelect,
   type SelectProps,

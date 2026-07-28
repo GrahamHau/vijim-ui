@@ -1013,23 +1013,56 @@ function VijimProvider({
 import {
   Button as MantineButton
 } from "@mantine/core";
-import { forwardRef } from "react";
+import {
+  forwardRef,
+  isValidElement
+} from "react";
 import { jsx as jsx2 } from "react/jsx-runtime";
 function mapVariant(v) {
+  if (v === "destructive") return "filled";
   if (v === "ghost") return "subtle";
   return v;
 }
+function splitAsChild(children) {
+  if (!isValidElement(children)) return null;
+  const child = children;
+  const { children: childChildren, ...childProps } = child.props;
+  return {
+    component: child.type,
+    childProps,
+    childChildren
+  };
+}
 var Button = forwardRef(
-  function Button2({ variant = "filled", size = "sm", color = "brand", ...props }, ref) {
-    const isDestructive = color === "red" && (variant === "filled" || variant === "light");
+  function Button2({ variant = "filled", size = "sm", color = "brand", asChild = false, children, ...props }, ref) {
+    const child = asChild ? splitAsChild(children) : null;
+    const resolvedColor = variant === "destructive" ? "red" : color;
+    const isDestructive = resolvedColor === "red" && (variant === "filled" || variant === "light" || variant === "destructive");
+    if (child) {
+      const AnyMantineButton = MantineButton;
+      return /* @__PURE__ */ jsx2(
+        AnyMantineButton,
+        {
+          ref,
+          component: child.component,
+          variant: mapVariant(variant),
+          size,
+          color: isDestructive ? "red" : resolvedColor,
+          ...child.childProps,
+          ...props,
+          children: child.childChildren
+        }
+      );
+    }
     return /* @__PURE__ */ jsx2(
       MantineButton,
       {
         ref,
         variant: mapVariant(variant),
         size,
-        color: isDestructive ? "red" : color,
-        ...props
+        color: isDestructive ? "red" : resolvedColor,
+        ...props,
+        children
       }
     );
   }
@@ -1089,7 +1122,9 @@ var Textarea = forwardRef3(
 // src/components/SearchInput.tsx
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { ActionIcon, Box } from "@mantine/core";
-import { forwardRef as forwardRef4 } from "react";
+import {
+  forwardRef as forwardRef4
+} from "react";
 import { jsx as jsx5, jsxs as jsxs2 } from "react/jsx-runtime";
 var SearchInput = forwardRef4(
   function SearchInput2({
@@ -1130,7 +1165,8 @@ var SearchInput = forwardRef4(
         name,
         id,
         "aria-label": ariaLabel,
-        autoFocus
+        autoFocus,
+        ...inputProps
       } = props;
       return /* @__PURE__ */ jsxs2(
         Box,
@@ -1175,6 +1211,7 @@ var SearchInput = forwardRef4(
                 id,
                 "aria-label": ariaLabel,
                 autoFocus,
+                ...inputProps,
                 style: {
                   flex: 1,
                   minWidth: 0,
@@ -1231,6 +1268,389 @@ var SearchInput = forwardRef4(
   }
 );
 
+// src/components/ImageGalleryUpload.tsx
+import {
+  useRef,
+  useState
+} from "react";
+import { jsx as jsx6, jsxs as jsxs3 } from "react/jsx-runtime";
+var DEFAULT_MAX_SIZE = 6 * 1024 * 1024;
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(new Error("\u56FE\u7247\u8BFB\u53D6\u5931\u8D25"));
+    reader.readAsDataURL(file);
+  });
+}
+async function defaultUpload(file) {
+  try {
+    return { ok: true, url: await readFileAsDataUrl(file) };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "\u4E0A\u4F20\u5931\u8D25"
+    };
+  }
+}
+function validateImageFile(file, maxSize) {
+  if (!file.type.startsWith("image/")) return `${file.name} \u4E0D\u662F\u56FE\u7247\u6587\u4EF6`;
+  if (file.size > maxSize) return `${file.name} \u8D85\u8FC7 ${Math.round(maxSize / 1024 / 1024)}MB`;
+  return null;
+}
+function isFileDrag(event) {
+  return Array.from(event.dataTransfer.types).includes("Files");
+}
+function ImageGalleryUpload({
+  values,
+  onAdd,
+  onRemove,
+  onReorder,
+  upload = defaultUpload,
+  accept = "image/*",
+  maxSize = DEFAULT_MAX_SIZE,
+  maxItems = Number.POSITIVE_INFINITY,
+  multiple = false,
+  replaceable = false,
+  reorderable = false,
+  coverBadge = false,
+  removable = true,
+  addLabel = "+ \u4E0A\u4F20\u56FE\u7247",
+  hint,
+  paste = true,
+  drop = true,
+  aspectRatio = "1 / 1",
+  frameless = false,
+  disabled = false,
+  readOnly = false
+}) {
+  const fileRef = useRef(null);
+  const dragDepthRef = useRef(0);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [hoverIndex, setHoverIndex] = useState(null);
+  const [draggingIndex, setDraggingIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [droppingFiles, setDroppingFiles] = useState(false);
+  const canReplace = replaceable && maxItems === 1 && values.length === 1;
+  const canAdd = !readOnly && !disabled && !busy && (values.length < maxItems || canReplace);
+  const canReorder = reorderable && typeof onReorder === "function" && !readOnly && !disabled;
+  const busyOrDisabled = busy || disabled;
+  async function uploadFiles(files) {
+    if (!canAdd) return;
+    const remaining = canReplace ? 1 : Math.max(0, maxItems - values.length);
+    const list = (multiple ? files : files.slice(0, 1)).slice(0, remaining);
+    if (!list.length) return;
+    setError(files.length > remaining ? `\u6700\u591A\u4E0A\u4F20 ${maxItems} \u5F20\u56FE\u7247` : null);
+    setBusy(true);
+    try {
+      for (const file of list) {
+        const invalid = validateImageFile(file, maxSize);
+        if (invalid) {
+          setError(invalid);
+          continue;
+        }
+        const result = await upload(file);
+        if (result.ok) onAdd(result.url, file);
+        else setError(result.message);
+      }
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : "\u4E0A\u4F20\u5931\u8D25");
+    } finally {
+      setBusy(false);
+    }
+  }
+  function pick(event) {
+    const files = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (files.length) void uploadFiles(files);
+  }
+  function pasteImages(event) {
+    if (!paste || !canAdd) return;
+    const files = Array.from(event.clipboardData.files).filter((file) => file.type.startsWith("image/"));
+    if (!files.length) return;
+    event.preventDefault();
+    void uploadFiles(files);
+  }
+  function enterDropZone(event) {
+    if (!drop || !canAdd || !isFileDrag(event)) return;
+    event.preventDefault();
+    dragDepthRef.current += 1;
+    setDroppingFiles(true);
+  }
+  function leaveDropZone(event) {
+    if (!drop || !isFileDrag(event)) return;
+    event.preventDefault();
+    dragDepthRef.current = Math.max(0, dragDepthRef.current - 1);
+    if (dragDepthRef.current === 0) setDroppingFiles(false);
+  }
+  function dropImages(event) {
+    if (!drop || !canAdd || !isFileDrag(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    dragDepthRef.current = 0;
+    setDroppingFiles(false);
+    const files = Array.from(event.dataTransfer.files);
+    if (files.length) void uploadFiles(files);
+  }
+  function reorder(fromIndex, toIndex) {
+    setDraggingIndex(null);
+    setDragOverIndex(null);
+    if (!canReorder || busy || fromIndex === null || fromIndex === toIndex) return;
+    const next = [...values];
+    const [moved] = next.splice(fromIndex, 1);
+    if (!moved) return;
+    next.splice(toIndex, 0, moved);
+    onReorder?.(next);
+  }
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: maxItems === 1 ? "minmax(0, 1fr)" : "repeat(auto-fill, minmax(108px, 1fr))",
+    gap: 10
+  };
+  const imageStyle = {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "block"
+  };
+  if (readOnly) {
+    if (!values.length) {
+      return /* @__PURE__ */ jsx6("span", { "data-slot": "image-gallery-upload", style: { fontSize: 11.5, color: COLORS.faint }, children: "\u65E0\u56FE" });
+    }
+    return /* @__PURE__ */ jsx6("div", { "data-slot": "image-gallery-upload", style: gridStyle, children: values.map((url, index) => /* @__PURE__ */ jsx6(
+      "a",
+      {
+        href: url,
+        target: "_blank",
+        rel: "noreferrer",
+        style: {
+          position: "relative",
+          aspectRatio,
+          borderRadius: frameless ? 0 : RADIUS.element,
+          overflow: "hidden",
+          border: frameless ? "none" : `1px solid ${COLORS.border}`,
+          background: COLORS.surfaceMuted
+        },
+        children: /* @__PURE__ */ jsx6("img", { src: url, alt: `\u56FE\u7247 ${index + 1}`, referrerPolicy: "no-referrer", loading: "lazy", style: imageStyle })
+      },
+      `${url}-${index}`
+    )) });
+  }
+  return /* @__PURE__ */ jsxs3(
+    "div",
+    {
+      "data-slot": "image-gallery-upload",
+      onPaste: pasteImages,
+      onDragEnter: enterDropZone,
+      onDragOver: (event) => {
+        if (!drop || !canAdd || !isFileDrag(event)) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "copy";
+      },
+      onDragLeave: leaveDropZone,
+      onDrop: dropImages,
+      style: {
+        position: "relative",
+        borderRadius: frameless ? 0 : RADIUS.element,
+        outline: droppingFiles ? `2px solid ${COLORS.brand}` : "2px solid transparent",
+        outlineOffset: droppingFiles ? 4 : 0,
+        background: droppingFiles ? COLORS.brandMuted : "transparent",
+        transition: `outline-color ${MOTION.fast}, background-color ${MOTION.fast}`
+      },
+      children: [
+        droppingFiles ? /* @__PURE__ */ jsx6(
+          "div",
+          {
+            "aria-hidden": "true",
+            style: {
+              position: "absolute",
+              inset: 0,
+              zIndex: 4,
+              display: "grid",
+              placeItems: "center",
+              borderRadius: RADIUS.element,
+              background: "color-mix(in oklab, var(--surface) 88%, transparent)",
+              color: COLORS.brand,
+              fontSize: 13,
+              fontWeight: 650,
+              pointerEvents: "none",
+              backdropFilter: "blur(3px)"
+            },
+            children: "\u677E\u5F00\u5373\u53EF\u4E0A\u4F20\u56FE\u7247"
+          }
+        ) : null,
+        error ? /* @__PURE__ */ jsx6("p", { style: { margin: "0 0 10px", fontSize: 11.5, color: COLORS.danger }, children: error }) : hint ? /* @__PURE__ */ jsx6("p", { style: { margin: "0 0 10px", fontSize: 11.5, color: COLORS.faint }, children: hint }) : null,
+        /* @__PURE__ */ jsxs3("div", { style: gridStyle, children: [
+          values.map((url, index) => /* @__PURE__ */ jsxs3(
+            "div",
+            {
+              draggable: canReorder && !busy,
+              onPointerEnter: () => setHoverIndex(index),
+              onPointerLeave: () => setHoverIndex((current) => current === index ? null : current),
+              onDragStart: (event) => {
+                if (!canReorder || busy) return;
+                setDraggingIndex(index);
+                event.dataTransfer.effectAllowed = "move";
+                event.dataTransfer.setData("text/plain", String(index));
+              },
+              onDragOver: (event) => {
+                if (!canReorder || busy || draggingIndex === index) return;
+                event.preventDefault();
+                event.dataTransfer.dropEffect = "move";
+                setDragOverIndex(index);
+              },
+              onDragLeave: () => setDragOverIndex((current) => current === index ? null : current),
+              onDrop: (event) => {
+                event.preventDefault();
+                const from = draggingIndex != null ? draggingIndex : Number(event.dataTransfer.getData("text/plain"));
+                reorder(Number.isFinite(from) ? from : null, index);
+              },
+              onDragEnd: () => {
+                setDraggingIndex(null);
+                setDragOverIndex(null);
+              },
+              style: {
+                position: "relative",
+                aspectRatio,
+                borderRadius: frameless ? 0 : RADIUS.element,
+                overflow: "hidden",
+                border: frameless ? "none" : `1px solid ${COLORS.border}`,
+                background: COLORS.surfaceMuted,
+                cursor: canReorder && !busy ? "grab" : canReplace && !busy ? "pointer" : "default",
+                outline: dragOverIndex === index ? `2px solid ${COLORS.brand}` : "none",
+                outlineOffset: dragOverIndex === index ? -2 : void 0,
+                opacity: draggingIndex === index ? 0.55 : 1
+              },
+              children: [
+                /* @__PURE__ */ jsx6("img", { src: url, alt: "", referrerPolicy: "no-referrer", loading: "lazy", style: imageStyle }),
+                canReplace ? /* @__PURE__ */ jsx6(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => canAdd && fileRef.current?.click(),
+                    disabled: !canAdd,
+                    "aria-label": "\u66F4\u6362\u56FE\u7247",
+                    style: {
+                      position: "absolute",
+                      inset: 0,
+                      zIndex: 1,
+                      padding: 0,
+                      border: "none",
+                      background: "transparent",
+                      color: "white",
+                      cursor: canAdd ? "pointer" : "default",
+                      display: "flex",
+                      alignItems: "end",
+                      justifyContent: "center",
+                      font: "inherit"
+                    },
+                    children: /* @__PURE__ */ jsx6(
+                      "span",
+                      {
+                        style: {
+                          marginBottom: 8,
+                          padding: "3px 9px",
+                          borderRadius: 999,
+                          background: "rgba(18, 19, 23, 0.58)",
+                          fontSize: 11,
+                          fontWeight: 600,
+                          opacity: hoverIndex === index ? 1 : 0,
+                          transition: `opacity ${MOTION.fast}`,
+                          backdropFilter: "blur(3px)"
+                        },
+                        children: "\u66F4\u6362\u56FE\u7247"
+                      }
+                    )
+                  }
+                ) : null,
+                coverBadge && index === 0 ? /* @__PURE__ */ jsx6(
+                  "span",
+                  {
+                    style: {
+                      position: "absolute",
+                      left: 8,
+                      top: 8,
+                      padding: "1px 8px",
+                      borderRadius: 999,
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                      background: "color-mix(in oklab, var(--surface) 86%, transparent)",
+                      border: `1px solid ${COLORS.border}`,
+                      color: COLORS.brand,
+                      backdropFilter: "blur(4px)"
+                    },
+                    children: "\u5C01\u9762"
+                  }
+                ) : null,
+                (typeof removable === "function" ? removable(url, index) : removable) ? /* @__PURE__ */ jsx6(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => !busyOrDisabled && onRemove(url),
+                    disabled: busyOrDisabled,
+                    "aria-label": "\u79FB\u9664",
+                    style: {
+                      position: "absolute",
+                      zIndex: 2,
+                      top: 1,
+                      right: 1,
+                      width: 28,
+                      height: 28,
+                      padding: 0,
+                      border: "none",
+                      background: "transparent",
+                      color: "white",
+                      display: "grid",
+                      placeItems: "center",
+                      cursor: busyOrDisabled ? "default" : "pointer",
+                      opacity: hoverIndex === index ? busyOrDisabled ? 0.4 : 1 : busyOrDisabled ? 0.35 : 0.8,
+                      transition: `opacity ${MOTION.fast}`,
+                      fontSize: 22,
+                      fontWeight: 400,
+                      lineHeight: 1,
+                      textShadow: "0 1px 8px rgba(0, 0, 0, 0.45)"
+                    },
+                    children: "\xD7"
+                  }
+                ) : null
+              ]
+            },
+            `${url}-${index}`
+          )),
+          values.length < maxItems ? /* @__PURE__ */ jsx6(
+            "button",
+            {
+              type: "button",
+              onClick: () => canAdd && fileRef.current?.click(),
+              disabled: !canAdd,
+              style: {
+                aspectRatio,
+                border: frameless ? "none" : `1px dashed ${COLORS.borderStrong}`,
+                borderRadius: frameless ? 0 : RADIUS.element,
+                outline: "none",
+                background: COLORS.surfaceMuted,
+                color: COLORS.ink2,
+                fontSize: 12.5,
+                fontWeight: 550,
+                padding: "0 6px",
+                display: "grid",
+                placeItems: "center",
+                textAlign: "center",
+                cursor: canAdd ? "pointer" : "default",
+                opacity: canAdd ? 1 : 0.6,
+                transition: `border-color ${MOTION.fast}, color ${MOTION.fast}, box-shadow ${MOTION.fast}`
+              },
+              children: busy ? "\u4E0A\u4F20\u4E2D\u2026" : addLabel
+            }
+          ) : null
+        ] }),
+        /* @__PURE__ */ jsx6("input", { ref: fileRef, type: "file", accept, multiple, hidden: true, onChange: pick, disabled: !canAdd })
+      ]
+    }
+  );
+}
+
 // src/components/Select.tsx
 import {
   Select as MantineSelect
@@ -1239,7 +1659,7 @@ import {
   forwardRef as forwardRef5,
   useMemo as useMemo2
 } from "react";
-import { jsx as jsx6 } from "react/jsx-runtime";
+import { jsx as jsx7 } from "react/jsx-runtime";
 function heightFor(size, density) {
   if (density === "compact" || size === "sm" || size === "xs") {
     return size === "xs" ? CONTROL_HEIGHT.xs : CONTROL_HEIGHT.sm;
@@ -1293,7 +1713,7 @@ var Select = forwardRef5(
       }),
       [comboboxProps]
     );
-    return /* @__PURE__ */ jsx6(
+    return /* @__PURE__ */ jsx7(
       MantineSelect,
       {
         ref,
@@ -1372,7 +1792,7 @@ function SearchableSelect({
 }) {
   const data = normalizeOptions(options);
   const controlled = value !== void 0;
-  return /* @__PURE__ */ jsx6(
+  return /* @__PURE__ */ jsx7(
     Select,
     {
       name,
@@ -1439,7 +1859,7 @@ function fromDateString(value) {
 }
 
 // src/components/DatePicker.tsx
-import { jsx as jsx7 } from "react/jsx-runtime";
+import { jsx as jsx8 } from "react/jsx-runtime";
 var DatePickerInput = forwardRef6(
   function DatePickerInput2({
     size = "md",
@@ -1458,7 +1878,7 @@ var DatePickerInput = forwardRef6(
       () => defaultValue === void 0 ? void 0 : fromDateString(defaultValue ?? null),
       [defaultValue]
     );
-    return /* @__PURE__ */ jsx7(
+    return /* @__PURE__ */ jsx8(
       MantineDatePickerInput,
       {
         ref,
@@ -1466,7 +1886,7 @@ var DatePickerInput = forwardRef6(
         valueFormat: "YYYY-MM-DD",
         value: dateValue,
         defaultValue: defaultDate,
-        leftSection: leftSection ?? /* @__PURE__ */ jsx7(IconCalendar, { size: 16, stroke: 1.5 }),
+        leftSection: leftSection ?? /* @__PURE__ */ jsx8(IconCalendar, { size: 16, stroke: 1.5 }),
         leftSectionPointerEvents: "none",
         onChange: (next) => {
           onChange?.(toDateString(next));
@@ -1505,7 +1925,7 @@ var DateInput = forwardRef6(
       () => defaultValue === void 0 ? void 0 : fromDateString(defaultValue ?? null),
       [defaultValue]
     );
-    return /* @__PURE__ */ jsx7(
+    return /* @__PURE__ */ jsx8(
       MantineDateInput,
       {
         ref,
@@ -1513,7 +1933,7 @@ var DateInput = forwardRef6(
         valueFormat: "YYYY-MM-DD",
         value: dateValue,
         defaultValue: defaultDate,
-        leftSection: leftSection ?? /* @__PURE__ */ jsx7(IconCalendar, { size: 16, stroke: 1.5 }),
+        leftSection: leftSection ?? /* @__PURE__ */ jsx8(IconCalendar, { size: 16, stroke: 1.5 }),
         leftSectionPointerEvents: "none",
         onChange: (next) => {
           onChange?.(toDateString(next));
@@ -1540,12 +1960,12 @@ import {
   Modal as MantineModal,
   Drawer as MantineDrawer
 } from "@mantine/core";
-import { jsx as jsx8 } from "react/jsx-runtime";
+import { jsx as jsx9 } from "react/jsx-runtime";
 function Modal(props) {
-  return /* @__PURE__ */ jsx8(MantineModal, { ...props });
+  return /* @__PURE__ */ jsx9(MantineModal, { ...props });
 }
 function Drawer(props) {
-  return /* @__PURE__ */ jsx8(MantineDrawer, { ...props });
+  return /* @__PURE__ */ jsx9(MantineDrawer, { ...props });
 }
 
 // src/components/Navigation.tsx
@@ -1557,21 +1977,21 @@ import {
   Popover as MantinePopover,
   Tooltip as MantineTooltip
 } from "@mantine/core";
-import { jsx as jsx9 } from "react/jsx-runtime";
+import { jsx as jsx10 } from "react/jsx-runtime";
 function Tabs(props) {
-  return /* @__PURE__ */ jsx9(MantineTabs, { ...props });
+  return /* @__PURE__ */ jsx10(MantineTabs, { ...props });
 }
 Tabs.List = MantineTabs.List;
 Tabs.Tab = MantineTabs.Tab;
 Tabs.Panel = MantineTabs.Panel;
 function SegmentedControl(props) {
-  return /* @__PURE__ */ jsx9(MantineSegmentedControl, { size: props.size ?? "sm", ...props });
+  return /* @__PURE__ */ jsx10(MantineSegmentedControl, { size: props.size ?? "sm", ...props });
 }
 function Pagination(props) {
-  return /* @__PURE__ */ jsx9(MantinePagination, { size: props.size ?? "sm", ...props });
+  return /* @__PURE__ */ jsx10(MantinePagination, { size: props.size ?? "sm", ...props });
 }
 function Menu(props) {
-  return /* @__PURE__ */ jsx9(MantineMenu, { ...props });
+  return /* @__PURE__ */ jsx10(MantineMenu, { ...props });
 }
 Menu.Target = MantineMenu.Target;
 Menu.Dropdown = MantineMenu.Dropdown;
@@ -1579,12 +1999,12 @@ Menu.Item = MantineMenu.Item;
 Menu.Label = MantineMenu.Label;
 Menu.Divider = MantineMenu.Divider;
 function Popover(props) {
-  return /* @__PURE__ */ jsx9(MantinePopover, { ...props });
+  return /* @__PURE__ */ jsx10(MantinePopover, { ...props });
 }
 Popover.Target = MantinePopover.Target;
 Popover.Dropdown = MantinePopover.Dropdown;
 function Tooltip(props) {
-  return /* @__PURE__ */ jsx9(MantineTooltip, { ...props });
+  return /* @__PURE__ */ jsx10(MantineTooltip, { ...props });
 }
 
 // src/components/DataTable.tsx
@@ -1597,15 +2017,15 @@ import {
   useReactTable
 } from "@tanstack/react-table";
 import { Checkbox, Group, Text as Text2 } from "@mantine/core";
-import { useMemo as useMemo4, useState } from "react";
+import { useMemo as useMemo4, useState as useState2 } from "react";
 
 // src/components/Table.tsx
 import {
   Table as MantineTable
 } from "@mantine/core";
-import { jsx as jsx10 } from "react/jsx-runtime";
+import { jsx as jsx11 } from "react/jsx-runtime";
 function Table(props) {
-  return /* @__PURE__ */ jsx10(MantineTable, { ...props });
+  return /* @__PURE__ */ jsx11(MantineTable, { ...props });
 }
 Table.Thead = MantineTable.Thead;
 Table.Tbody = MantineTable.Tbody;
@@ -1624,32 +2044,32 @@ import {
   Stack,
   Text
 } from "@mantine/core";
-import { jsx as jsx11, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx12, jsxs as jsxs4 } from "react/jsx-runtime";
 function Empty({
   title = "\u6682\u65E0\u5185\u5BB9",
   description,
   action,
   icon
 }) {
-  return /* @__PURE__ */ jsx11(Center, { py: 40, px: "md", children: /* @__PURE__ */ jsxs3(Stack, { align: "center", gap: "sm", maw: 360, children: [
+  return /* @__PURE__ */ jsx12(Center, { py: 40, px: "md", children: /* @__PURE__ */ jsxs4(Stack, { align: "center", gap: "sm", maw: 360, children: [
     icon,
-    /* @__PURE__ */ jsx11(Text, { fw: 600, size: "sm", c: COLORS.ink, children: title }),
-    description ? /* @__PURE__ */ jsx11(Text, { size: "sm", c: "dimmed", ta: "center", children: description }) : null,
+    /* @__PURE__ */ jsx12(Text, { fw: 600, size: "sm", c: COLORS.ink, children: title }),
+    description ? /* @__PURE__ */ jsx12(Text, { size: "sm", c: "dimmed", ta: "center", children: description }) : null,
     action
   ] }) });
 }
 function Skeleton(props) {
-  return /* @__PURE__ */ jsx11(MantineSkeleton, { ...props });
+  return /* @__PURE__ */ jsx12(MantineSkeleton, { ...props });
 }
 function Spinner({ label, size = "sm" }) {
-  return /* @__PURE__ */ jsx11(Center, { py: "xl", children: /* @__PURE__ */ jsxs3(Stack, { align: "center", gap: "sm", children: [
-    /* @__PURE__ */ jsx11(Loader, { size, color: "brand", type: "dots" }),
-    label ? /* @__PURE__ */ jsx11(Text, { size: "sm", c: "dimmed", children: label }) : null
+  return /* @__PURE__ */ jsx12(Center, { py: "xl", children: /* @__PURE__ */ jsxs4(Stack, { align: "center", gap: "sm", children: [
+    /* @__PURE__ */ jsx12(Loader, { size, color: "brand", type: "dots" }),
+    label ? /* @__PURE__ */ jsx12(Text, { size: "sm", c: "dimmed", children: label }) : null
   ] }) });
 }
 
 // src/components/DataTable.tsx
-import { jsx as jsx12, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx13, jsxs as jsxs5 } from "react/jsx-runtime";
 function DataTable({
   data,
   columns,
@@ -1665,11 +2085,11 @@ function DataTable({
   loading = false,
   maxHeight
 }) {
-  const [sorting, setSorting] = useState([]);
-  const [internalSelection, setInternalSelection] = useState(
+  const [sorting, setSorting] = useState2([]);
+  const [internalSelection, setInternalSelection] = useState2(
     {}
   );
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState2({
     pageIndex: 0,
     pageSize: pageSize ?? 20
   });
@@ -1680,7 +2100,7 @@ function DataTable({
     const selectCol = {
       id: "__select",
       size: 40,
-      header: ({ table: table2 }) => /* @__PURE__ */ jsx12(
+      header: ({ table: table2 }) => /* @__PURE__ */ jsx13(
         Checkbox,
         {
           "aria-label": "\u5168\u9009",
@@ -1689,7 +2109,7 @@ function DataTable({
           onChange: table2.getToggleAllPageRowsSelectedHandler()
         }
       ),
-      cell: ({ row }) => /* @__PURE__ */ jsx12(
+      cell: ({ row }) => /* @__PURE__ */ jsx13(
         Checkbox,
         {
           "aria-label": "\u9009\u62E9\u884C",
@@ -1722,9 +2142,9 @@ function DataTable({
   });
   const rows = table.getRowModel().rows;
   const pageCount = table.getPageCount();
-  return /* @__PURE__ */ jsxs4("div", { children: [
-    toolbar ? /* @__PURE__ */ jsx12("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
-    /* @__PURE__ */ jsx12(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs4(
+  return /* @__PURE__ */ jsxs5("div", { children: [
+    toolbar ? /* @__PURE__ */ jsx13("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
+    /* @__PURE__ */ jsx13(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs5(
       Table,
       {
         highlightOnHover: true,
@@ -1732,7 +2152,7 @@ function DataTable({
         verticalSpacing: "sm",
         stickyHeader: Boolean(maxHeight),
         children: [
-          /* @__PURE__ */ jsx12(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx12(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs4(
+          /* @__PURE__ */ jsx13(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx13(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs5(
             Table.Th,
             {
               style: {
@@ -1754,7 +2174,7 @@ function DataTable({
             },
             header.id
           )) }, hg.id)) }),
-          /* @__PURE__ */ jsx12(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx12(Table.Tr, { children: /* @__PURE__ */ jsx12(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx12(Text2, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx12(Table.Tr, { children: /* @__PURE__ */ jsx12(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx12(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx12(
+          /* @__PURE__ */ jsx13(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx13(Table.Tr, { children: /* @__PURE__ */ jsx13(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx13(Text2, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx13(Table.Tr, { children: /* @__PURE__ */ jsx13(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx13(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx13(
             Table.Tr,
             {
               "data-selected": row.getIsSelected() || void 0,
@@ -1763,7 +2183,7 @@ function DataTable({
                 backgroundColor: row.getIsSelected() ? "rgba(51, 112, 255, 0.06)" : void 0
               },
               onClick: () => onRowClick?.(row.original),
-              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx12(Table.Td, { children: flexRender(
+              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx13(Table.Td, { children: flexRender(
                 cell.column.columnDef.cell,
                 cell.getContext()
               ) }, cell.id))
@@ -1773,13 +2193,13 @@ function DataTable({
         ]
       }
     ) }),
-    pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs4(Group, { justify: "space-between", mt: "md", children: [
-      /* @__PURE__ */ jsxs4(Text2, { size: "sm", c: "dimmed", children: [
+    pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs5(Group, { justify: "space-between", mt: "md", children: [
+      /* @__PURE__ */ jsxs5(Text2, { size: "sm", c: "dimmed", children: [
         "\u5171 ",
         data.length,
         " \u6761"
       ] }),
-      /* @__PURE__ */ jsx12(
+      /* @__PURE__ */ jsx13(
         Pagination,
         {
           total: pageCount,
@@ -1793,7 +2213,7 @@ function DataTable({
 
 // src/components/FilterBar.tsx
 import { Box as Box2, Group as Group2, Stack as Stack2, Text as Text3, UnstyledButton } from "@mantine/core";
-import { jsx as jsx13, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
 var PANEL = {
   bg: COLORS.surface,
   border: `1px solid ${COLORS.border}`,
@@ -1819,7 +2239,7 @@ function FilterBar({
   onClear,
   clearLabel = "\u6E05\u9664\u7B5B\u9009"
 }) {
-  return /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs6(
     Box2,
     {
       className: "vijim-filter-bar",
@@ -1831,8 +2251,8 @@ function FilterBar({
         marginBottom: 16
       },
       children: [
-        /* @__PURE__ */ jsx13(Box2, { px: "md", py: "md", children }),
-        active != null || onClear ? /* @__PURE__ */ jsx13(
+        /* @__PURE__ */ jsx14(Box2, { px: "md", py: "md", children }),
+        active != null || onClear ? /* @__PURE__ */ jsx14(
           Box2,
           {
             px: "md",
@@ -1842,9 +2262,9 @@ function FilterBar({
               backgroundColor: COLORS.surface2,
               borderRadius: `0 0 ${PANEL.radius} ${PANEL.radius}`
             },
-            children: /* @__PURE__ */ jsxs5(Group2, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
-              /* @__PURE__ */ jsx13(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
-              onClear ? /* @__PURE__ */ jsx13(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
+            children: /* @__PURE__ */ jsxs6(Group2, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
+              /* @__PURE__ */ jsx14(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
+              onClear ? /* @__PURE__ */ jsx14(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
             ] })
           }
         ) : null
@@ -1859,11 +2279,11 @@ function FilterToolbar({
   resultText,
   extras
 }) {
-  return /* @__PURE__ */ jsxs5(Stack2, { gap: "sm", children: [
-    /* @__PURE__ */ jsxs5(Group2, { align: "center", gap: "md", wrap: "wrap", children: [
-      /* @__PURE__ */ jsx13(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
-      /* @__PURE__ */ jsxs5(Group2, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
-        resultText ? /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
+  return /* @__PURE__ */ jsxs6(Stack2, { gap: "sm", children: [
+    /* @__PURE__ */ jsxs6(Group2, { align: "center", gap: "md", wrap: "wrap", children: [
+      /* @__PURE__ */ jsx14(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
+      /* @__PURE__ */ jsxs6(Group2, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
+        resultText ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
         actions
       ] })
     ] }),
@@ -1876,7 +2296,7 @@ function FilterBatchBar({
   children
 }) {
   if (selectedCount <= 0) return null;
-  return /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs6(
     Group2,
     {
       gap: "sm",
@@ -1889,21 +2309,21 @@ function FilterBatchBar({
         borderRadius: PANEL.radius
       },
       children: [
-        /* @__PURE__ */ jsxs5(Text3, { size: "sm", c: COLORS.inkSecondary, children: [
+        /* @__PURE__ */ jsxs6(Text3, { size: "sm", c: COLORS.inkSecondary, children: [
           "\u5DF2\u9009",
           " ",
-          /* @__PURE__ */ jsx13(Text3, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
+          /* @__PURE__ */ jsx14(Text3, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
           " ",
           "\u9879"
         ] }),
-        /* @__PURE__ */ jsx13(Group2, { gap: "xs", children })
+        /* @__PURE__ */ jsx14(Group2, { gap: "xs", children })
       ]
     }
   );
 }
 function FilterRow({ children, label }) {
-  return /* @__PURE__ */ jsxs5(Group2, { gap: 6, align: "center", wrap: "wrap", children: [
-    label ? /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+  return /* @__PURE__ */ jsxs6(Group2, { gap: 6, align: "center", wrap: "wrap", children: [
+    label ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
     children
   ] });
 }
@@ -1915,12 +2335,12 @@ function FilterField({
   layout = "inline"
 }) {
   if (layout === "stack") {
-    return /* @__PURE__ */ jsxs5(Stack2, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
-      label ? /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
+    return /* @__PURE__ */ jsxs6(Stack2, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
+      label ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
       children
     ] });
   }
-  return /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs6(
     Group2,
     {
       gap: 6,
@@ -1928,8 +2348,8 @@ function FilterField({
       wrap: "nowrap",
       style: { flex: grow ? "1 1 200px" : void 0, minWidth },
       children: [
-        label ? /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
-        /* @__PURE__ */ jsx13(Box2, { style: { flex: 1, minWidth: 0 }, children })
+        label ? /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+        /* @__PURE__ */ jsx14(Box2, { style: { flex: 1, minWidth: 0 }, children })
       ]
     }
   );
@@ -1941,7 +2361,7 @@ function FilterSegment({
   disabled = false,
   "aria-label": ariaLabel
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     Group2,
     {
       gap: 2,
@@ -1960,7 +2380,7 @@ function FilterSegment({
       children: options.map((opt) => {
         const selected = opt.value === value;
         const press = pressHandlers(disabled);
-        return /* @__PURE__ */ jsxs5(
+        return /* @__PURE__ */ jsxs6(
           UnstyledButton,
           {
             type: "button",
@@ -2010,7 +2430,7 @@ function FilterSegment({
             onMouseUp: press.onMouseUp,
             children: [
               opt.label,
-              opt.count !== void 0 ? /* @__PURE__ */ jsx13(
+              opt.count !== void 0 ? /* @__PURE__ */ jsx14(
                 Text3,
                 {
                   component: "span",
@@ -2041,7 +2461,7 @@ function FilterTerm({
   disabled = false
 }) {
   const press = pressHandlers(disabled);
-  return /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs6(
     UnstyledButton,
     {
       type: "button",
@@ -2088,7 +2508,7 @@ function FilterTerm({
       onMouseUp: press.onMouseUp,
       children: [
         label,
-        count !== void 0 ? /* @__PURE__ */ jsx13(
+        count !== void 0 ? /* @__PURE__ */ jsx14(
           Text3,
           {
             component: "span",
@@ -2117,8 +2537,8 @@ function FilterFacet({
   showAll = true,
   allLabel = "\u5168\u90E8"
 }) {
-  return /* @__PURE__ */ jsxs5(Group2, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
-    /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsxs6(Group2, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
+    /* @__PURE__ */ jsx14(
       Text3,
       {
         size: "xs",
@@ -2132,8 +2552,8 @@ function FilterFacet({
         children: nested ? `\u2514 ${label}` : label
       }
     ),
-    /* @__PURE__ */ jsxs5(Group2, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
-      showAll ? /* @__PURE__ */ jsx13(
+    /* @__PURE__ */ jsxs6(Group2, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
+      showAll ? /* @__PURE__ */ jsx14(
         FilterTerm,
         {
           label: allLabel,
@@ -2141,7 +2561,7 @@ function FilterFacet({
           onClick: () => onChange(null)
         }
       ) : null,
-      options.map((opt) => /* @__PURE__ */ jsx13(
+      options.map((opt) => /* @__PURE__ */ jsx14(
         FilterTerm,
         {
           label: opt.label,
@@ -2160,11 +2580,11 @@ function FilterActive({
   emptyText = "\u672A\u8BBE\u7F6E\u7B5B\u9009"
 }) {
   if (items.length === 0) {
-    return /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", children: emptyText });
+    return /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", children: emptyText });
   }
-  return /* @__PURE__ */ jsxs5(Group2, { gap: "sm", align: "center", wrap: "wrap", children: [
-    /* @__PURE__ */ jsx13(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
-    items.map((item) => /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs6(Group2, { gap: "sm", align: "center", wrap: "wrap", children: [
+    /* @__PURE__ */ jsx14(Text3, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
+    items.map((item) => /* @__PURE__ */ jsxs6(
       Group2,
       {
         gap: 4,
@@ -2180,8 +2600,8 @@ function FilterActive({
           boxShadow: "0 1px 2px rgba(18,19,23,0.03)"
         },
         children: [
-          /* @__PURE__ */ jsx13(Text3, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
-          item.onRemove ? /* @__PURE__ */ jsx13(
+          /* @__PURE__ */ jsx14(Text3, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
+          item.onRemove ? /* @__PURE__ */ jsx14(
             UnstyledButton,
             {
               type: "button",
@@ -2205,7 +2625,7 @@ function FilterActive({
       },
       item.key
     )),
-    onClearAll ? /* @__PURE__ */ jsx13(
+    onClearAll ? /* @__PURE__ */ jsx14(
       UnstyledButton,
       {
         type: "button",
@@ -2224,14 +2644,14 @@ function FilterActive({
 
 // src/components/FormSection.tsx
 import { Box as Box3, SimpleGrid, Stack as Stack3, Text as Text4, Title } from "@mantine/core";
-import { jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
+import { jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
 function FormSection({
   title,
   description,
   children,
   cols = 2
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     Box3,
     {
       p: "lg",
@@ -2240,12 +2660,12 @@ function FormSection({
         border: `1px solid ${COLORS.border}`,
         borderRadius: 10
       },
-      children: /* @__PURE__ */ jsxs6(Stack3, { gap: "md", children: [
-        /* @__PURE__ */ jsxs6("div", { children: [
-          /* @__PURE__ */ jsx14(Title, { order: 4, children: title }),
-          description ? /* @__PURE__ */ jsx14(Text4, { size: "sm", c: "dimmed", mt: 4, children: description }) : null
+      children: /* @__PURE__ */ jsxs7(Stack3, { gap: "md", children: [
+        /* @__PURE__ */ jsxs7("div", { children: [
+          /* @__PURE__ */ jsx15(Title, { order: 4, children: title }),
+          description ? /* @__PURE__ */ jsx15(Text4, { size: "sm", c: "dimmed", mt: 4, children: description }) : null
         ] }),
-        /* @__PURE__ */ jsx14(SimpleGrid, { cols: { base: 1, sm: cols }, spacing: "md", children })
+        /* @__PURE__ */ jsx15(SimpleGrid, { cols: { base: 1, sm: cols }, spacing: "md", children })
       ] })
     }
   );
@@ -2262,7 +2682,7 @@ import {
   UnstyledButton as UnstyledButton2
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Fragment, jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
+import { Fragment, jsx as jsx16, jsxs as jsxs8 } from "react/jsx-runtime";
 var SHELL = {
   headerH: 60,
   brandH: 76,
@@ -2282,7 +2702,7 @@ function TopBar({
   sticky = true,
   onBack
 }) {
-  return /* @__PURE__ */ jsxs7(
+  return /* @__PURE__ */ jsxs8(
     Box4,
     {
       component: "header",
@@ -2302,8 +2722,8 @@ function TopBar({
         background: COLORS.surface
       },
       children: [
-        backHref != null || onBack ? /* @__PURE__ */ jsxs7(Fragment, { children: [
-          /* @__PURE__ */ jsxs7(
+        backHref != null || onBack ? /* @__PURE__ */ jsxs8(Fragment, { children: [
+          /* @__PURE__ */ jsxs8(
             UnstyledButton2,
             {
               component: backHref ? "a" : "button",
@@ -2323,12 +2743,12 @@ function TopBar({
                 textDecoration: "none"
               },
               children: [
-                /* @__PURE__ */ jsx15("span", { "aria-hidden": true, children: "\u2190" }),
+                /* @__PURE__ */ jsx16("span", { "aria-hidden": true, children: "\u2190" }),
                 backLabel
               ]
             }
           ),
-          /* @__PURE__ */ jsx15(
+          /* @__PURE__ */ jsx16(
             Box4,
             {
               "aria-hidden": true,
@@ -2341,8 +2761,8 @@ function TopBar({
             }
           )
         ] }) : null,
-        /* @__PURE__ */ jsxs7(Group3, { gap: 8, align: "center", style: { flex: 1, minWidth: 0 }, wrap: "nowrap", children: [
-          /* @__PURE__ */ jsx15(
+        /* @__PURE__ */ jsxs8(Group3, { gap: 8, align: "center", style: { flex: 1, minWidth: 0 }, wrap: "nowrap", children: [
+          /* @__PURE__ */ jsx16(
             Text5,
             {
               component: "h1",
@@ -2359,9 +2779,9 @@ function TopBar({
             }
           ),
           badge,
-          context != null ? /* @__PURE__ */ jsxs7(Fragment, { children: [
-            /* @__PURE__ */ jsx15(Text5, { c: "dimmed", size: "xs", style: { flex: "none" }, children: "\xB7" }),
-            /* @__PURE__ */ jsx15(
+          context != null ? /* @__PURE__ */ jsxs8(Fragment, { children: [
+            /* @__PURE__ */ jsx16(Text5, { c: "dimmed", size: "xs", style: { flex: "none" }, children: "\xB7" }),
+            /* @__PURE__ */ jsx16(
               Text5,
               {
                 size: "xs",
@@ -2377,7 +2797,7 @@ function TopBar({
             )
           ] }) : null
         ] }),
-        actions != null ? /* @__PURE__ */ jsx15(Group3, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
+        actions != null ? /* @__PURE__ */ jsx16(Group3, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
       ]
     }
   );
@@ -2393,7 +2813,7 @@ function AppShell({
   withHeader = true
 }) {
   const [opened, { toggle }] = useDisclosure();
-  return /* @__PURE__ */ jsxs7(
+  return /* @__PURE__ */ jsxs8(
     MantineAppShell,
     {
       header: withHeader ? { height: SHELL.headerH } : void 0,
@@ -2420,9 +2840,9 @@ function AppShell({
         }
       },
       children: [
-        withHeader ? /* @__PURE__ */ jsx15(MantineAppShell.Header, { px: SHELL.contentPadX, children: /* @__PURE__ */ jsxs7(Group3, { h: "100%", justify: "space-between", wrap: "nowrap", gap: "md", children: [
-          /* @__PURE__ */ jsxs7(Group3, { gap: "sm", wrap: "nowrap", children: [
-            /* @__PURE__ */ jsx15(
+        withHeader ? /* @__PURE__ */ jsx16(MantineAppShell.Header, { px: SHELL.contentPadX, children: /* @__PURE__ */ jsxs8(Group3, { h: "100%", justify: "space-between", wrap: "nowrap", gap: "md", children: [
+          /* @__PURE__ */ jsxs8(Group3, { gap: "sm", wrap: "nowrap", children: [
+            /* @__PURE__ */ jsx16(
               Burger,
               {
                 opened,
@@ -2432,7 +2852,7 @@ function AppShell({
                 color: COLORS.inkSecondary
               }
             ),
-            /* @__PURE__ */ jsx15(
+            /* @__PURE__ */ jsx16(
               Text5,
               {
                 fw: 650,
@@ -2444,7 +2864,7 @@ function AppShell({
               }
             )
           ] }),
-          headerCenter ? /* @__PURE__ */ jsx15(
+          headerCenter ? /* @__PURE__ */ jsx16(
             Box4,
             {
               style: {
@@ -2455,16 +2875,16 @@ function AppShell({
               },
               children: headerCenter
             }
-          ) : /* @__PURE__ */ jsx15(Box4, { style: { flex: 1 } }),
+          ) : /* @__PURE__ */ jsx16(Box4, { style: { flex: 1 } }),
           headerRight
         ] }) }) : null,
-        /* @__PURE__ */ jsxs7(
+        /* @__PURE__ */ jsxs8(
           MantineAppShell.Navbar,
           {
             p: 0,
             style: { display: "flex", flexDirection: "column" },
             children: [
-              /* @__PURE__ */ jsx15(
+              /* @__PURE__ */ jsx16(
                 Box4,
                 {
                   style: {
@@ -2474,8 +2894,8 @@ function AppShell({
                     padding: "0 12px 0 26px",
                     flex: "none"
                   },
-                  children: /* @__PURE__ */ jsxs7(Stack4, { gap: 2, children: [
-                    /* @__PURE__ */ jsx15(
+                  children: /* @__PURE__ */ jsxs8(Stack4, { gap: 2, children: [
+                    /* @__PURE__ */ jsx16(
                       Text5,
                       {
                         fw: 650,
@@ -2485,13 +2905,13 @@ function AppShell({
                         children: brand
                       }
                     ),
-                    brandHint ? /* @__PURE__ */ jsx15(Text5, { size: "xs", c: "dimmed", lineClamp: 1, children: brandHint }) : null
+                    brandHint ? /* @__PURE__ */ jsx16(Text5, { size: "xs", c: "dimmed", lineClamp: 1, children: brandHint }) : null
                   ] })
                 }
               ),
-              /* @__PURE__ */ jsx15(Stack4, { gap: 0, style: { flex: 1, padding: "12px 12px 18px" }, children: navItems.map((item) => {
+              /* @__PURE__ */ jsx16(Stack4, { gap: 0, style: { flex: 1, padding: "12px 12px 18px" }, children: navItems.map((item) => {
                 if (item.section) {
-                  return /* @__PURE__ */ jsx15(
+                  return /* @__PURE__ */ jsx16(
                     Text5,
                     {
                       style: {
@@ -2512,7 +2932,7 @@ function AppShell({
                     item.key
                   );
                 }
-                return /* @__PURE__ */ jsxs7(
+                return /* @__PURE__ */ jsxs8(
                   Box4,
                   {
                     component: item.href ? "a" : "button",
@@ -2561,7 +2981,7 @@ function AppShell({
             ]
           }
         ),
-        /* @__PURE__ */ jsx15(MantineAppShell.Main, { children })
+        /* @__PURE__ */ jsx16(MantineAppShell.Main, { children })
       ]
     }
   );
@@ -2577,8 +2997,8 @@ function PageShell({
   children,
   maxWidth
 }) {
-  return /* @__PURE__ */ jsxs7(Box4, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
-    /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsxs8(Box4, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
+    /* @__PURE__ */ jsx16(
       TopBar,
       {
         title,
@@ -2589,7 +3009,7 @@ function PageShell({
         backLabel
       }
     ),
-    /* @__PURE__ */ jsx15(
+    /* @__PURE__ */ jsx16(
       Box4,
       {
         style: {
@@ -2599,13 +3019,13 @@ function PageShell({
           width: "100%",
           boxSizing: "border-box"
         },
-        children: /* @__PURE__ */ jsx15(Stack4, { gap: "md", children })
+        children: /* @__PURE__ */ jsx16(Stack4, { gap: "md", children })
       }
     )
   ] });
 }
 function ShellTabs({ items }) {
-  return /* @__PURE__ */ jsx15(Group3, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx16(Group3, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx16(
     Box4,
     {
       component: item.href ? "a" : "button",
@@ -2680,13 +3100,13 @@ var notify = {
 import { Spotlight as MantineSpotlight } from "@mantine/spotlight";
 import { IconSearch as IconSearch2 } from "@tabler/icons-react";
 import { spotlight } from "@mantine/spotlight";
-import { jsx as jsx16 } from "react/jsx-runtime";
+import { jsx as jsx17 } from "react/jsx-runtime";
 function SpotlightSearch({
   actions,
   placeholder = "\u641C\u7D22\u9875\u9762\u4E0E\u64CD\u4F5C\u2026",
   shortcut = ["mod + K"]
 }) {
-  return /* @__PURE__ */ jsx16(
+  return /* @__PURE__ */ jsx17(
     MantineSpotlight,
     {
       actions,
@@ -2694,7 +3114,7 @@ function SpotlightSearch({
       nothingFound: "\u6CA1\u6709\u5339\u914D\u7ED3\u679C",
       highlightQuery: true,
       searchProps: {
-        leftSection: /* @__PURE__ */ jsx16(IconSearch2, { size: 16, stroke: 1.5 }),
+        leftSection: /* @__PURE__ */ jsx17(IconSearch2, { size: 16, stroke: 1.5 }),
         placeholder
       }
     }
@@ -2741,12 +3161,12 @@ import {
 // src/components/ThemeCompare.tsx
 import { MantineProvider as MantineProvider2 } from "@mantine/core";
 import { IconSearch as TablerIconSearch } from "@tabler/icons-react";
-import { jsx as jsx17 } from "react/jsx-runtime";
+import { jsx as jsx18 } from "react/jsx-runtime";
 function DefaultThemeProvider({ children }) {
-  return /* @__PURE__ */ jsx17(MantineProvider2, { forceColorScheme: "light", children });
+  return /* @__PURE__ */ jsx18(MantineProvider2, { forceColorScheme: "light", children });
 }
 function IconSearch3(props) {
-  return /* @__PURE__ */ jsx17(TablerIconSearch, { size: props.size ?? 16, stroke: props.stroke ?? 1.5 });
+  return /* @__PURE__ */ jsx18(TablerIconSearch, { size: props.size ?? 16, stroke: props.stroke ?? 1.5 });
 }
 export {
   ActionIcon2 as ActionIcon,
@@ -2784,6 +3204,7 @@ export {
   FormSection,
   Group4 as Group,
   IconSearch3 as IconSearch,
+  ImageGalleryUpload,
   MOTION,
   Menu,
   Modal,

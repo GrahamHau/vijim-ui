@@ -7,7 +7,12 @@
  */
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { ActionIcon, Box } from "@mantine/core";
-import { forwardRef, type ChangeEvent, type KeyboardEvent } from "react";
+import {
+  forwardRef,
+  type ChangeEvent,
+  type InputHTMLAttributes,
+  type KeyboardEvent,
+} from "react";
 import { COLORS, CONTROL_HEIGHT, RADIUS, SECTION_OFFSET } from "../theme/tokens";
 import { TextInput, type TextInputProps } from "./TextInput";
 
@@ -78,13 +83,14 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         id,
         "aria-label": ariaLabel,
         autoFocus,
+        ...inputProps
       } = props as {
         disabled?: boolean;
         name?: string;
         id?: string;
         "aria-label"?: string;
         autoFocus?: boolean;
-      };
+      } & Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type">;
       return (
         <Box
           style={{
@@ -125,6 +131,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             id={id}
             aria-label={ariaLabel}
             autoFocus={autoFocus}
+            {...inputProps}
             style={{
               flex: 1,
               minWidth: 0,

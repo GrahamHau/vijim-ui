@@ -51,6 +51,7 @@
 `Button` · `TextInput` · `Textarea` · `SearchInput`
 `Select` · `SearchableSelect`
 `DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）
+`ImageGalleryUpload`（通用图片选择 / 粘贴 / 拖拽上传）
 `Checkbox` · `Switch`
 
 ### 筛选（唯一壳）

@@ -205,9 +205,10 @@ declare function VijimProvider({ children, theme, withNotifications, withModals,
  * - default：中性实底（少用）
  *
  * ghost 为 subtle 别名（兼容旧 Studio API）。
+ * destructive 为 filled+red 迁移别名。
  * 高度默认 sm=32，不跟 Mantine 默认偏大。
  */
-type ButtonVariant = "filled" | "light" | "outline" | "subtle" | "default" | "ghost";
+type ButtonVariant = "filled" | "light" | "outline" | "subtle" | "default" | "ghost" | "destructive";
 type ButtonSize = "xs" | "sm" | "md" | "lg";
 /** brand=主蓝；red=危险；其余中性/语义 */
 type ButtonColor = "brand" | "neutral" | "gray" | "red" | "green" | "yellow";
@@ -215,6 +216,8 @@ type ButtonProps = Omit<ButtonProps$1, "variant" | "size" | "color"> & ElementPr
     variant?: ButtonVariant;
     size?: ButtonSize;
     color?: ButtonColor;
+    /** 迁移期兼容：让 Button 承载 Link 等子元素，不向业务暴露 Mantine component 方言。 */
+    asChild?: boolean;
     children?: ReactNode;
 };
 declare const Button: react.ForwardRefExoticComponent<Omit<ButtonProps, "ref"> & react.RefAttributes<HTMLButtonElement>>;
@@ -245,6 +248,38 @@ type SearchInputProps = Omit<TextInputProps, "leftSection" | "type" | "variant" 
     "aria-label"?: string;
 };
 declare const SearchInput: react.ForwardRefExoticComponent<Omit<SearchInputProps, "ref"> & react.RefAttributes<HTMLInputElement>>;
+
+type ImageGalleryUploadResult = {
+    ok: true;
+    url: string;
+} | {
+    ok: false;
+    message: string;
+};
+type ImageGalleryUploadProps = {
+    values: string[];
+    onAdd: (url: string, file: File) => void;
+    onRemove: (url: string) => void;
+    onReorder?: (values: string[]) => void;
+    upload?: (file: File) => Promise<ImageGalleryUploadResult>;
+    accept?: string;
+    maxSize?: number;
+    maxItems?: number;
+    multiple?: boolean;
+    replaceable?: boolean;
+    reorderable?: boolean;
+    coverBadge?: boolean;
+    removable?: boolean | ((url: string, index: number) => boolean);
+    addLabel?: string;
+    hint?: string;
+    paste?: boolean;
+    drop?: boolean;
+    aspectRatio?: string;
+    frameless?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+};
+declare function ImageGalleryUpload({ values, onAdd, onRemove, onReorder, upload, accept, maxSize, maxItems, multiple, replaceable, reorderable, coverBadge, removable, addLabel, hint, paste, drop, aspectRatio, frameless, disabled, readOnly, }: ImageGalleryUploadProps): react.JSX.Element;
 
 type SelectSize = "xs" | "sm" | "md" | "lg";
 /** compact = 筛选条；default = 表单 */
@@ -710,4 +745,4 @@ declare function IconSearch(props: {
     stroke?: number;
 }): react.JSX.Element;
 
-export { AppShell, type AppShellNavItem, Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, Drawer, type DrawerProps, Empty, type EmptyProps, FONT, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FormSection, type FormSectionProps, IconSearch, MOTION, Menu, Modal, type ModalProps, type NotifyOptions, PageShell, type PageShellProps, Pagination, Popover, RADIUS, SHADOWS, SearchInput, type SearchInputProps, SearchableSelect, type SearchableSelectOption, type SearchableSelectProps, SegmentedControl, Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, type ShellTabItem, ShellTabs, type ShellTabsProps, Skeleton, type SkeletonProps, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Table, type TableProps, Tabs, TextInput, type TextInputProps, Textarea, type TextareaProps, Tooltip, TopBar, type TopBarProps, type VijimAppShellProps, VijimProvider, type VijimProviderProps, notify, vijimTheme };
+export { AppShell, type AppShellNavItem, Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, Drawer, type DrawerProps, Empty, type EmptyProps, FONT, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FormSection, type FormSectionProps, IconSearch, ImageGalleryUpload, type ImageGalleryUploadProps, type ImageGalleryUploadResult, MOTION, Menu, Modal, type ModalProps, type NotifyOptions, PageShell, type PageShellProps, Pagination, Popover, RADIUS, SHADOWS, SearchInput, type SearchInputProps, SearchableSelect, type SearchableSelectOption, type SearchableSelectProps, SegmentedControl, Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, type ShellTabItem, ShellTabs, type ShellTabsProps, Skeleton, type SkeletonProps, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Table, type TableProps, Tabs, TextInput, type TextInputProps, Textarea, type TextareaProps, Tooltip, TopBar, type TopBarProps, type VijimAppShellProps, VijimProvider, type VijimProviderProps, notify, vijimTheme };
