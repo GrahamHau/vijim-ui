@@ -124,7 +124,9 @@ var WORKFLOW_STEP_COLORS = {
   pendingBorder: "#E5E6EB",
   pendingText: "#83898F",
   connector: "#F0F1F3",
-  foreground: "#FFFFFF"
+  foreground: "#FFFFFF",
+  nodeCardBorder: "#EEEEEE",
+  nodeCardTint: "#F9F9F9"
 };
 var TAG_COLORS = {
   blue: "#356FB6",
@@ -333,6 +335,8 @@ var STUDIO_CSS_VARS = {
   "--workflow-step-pending-text": WORKFLOW_STEP_COLORS.pendingText,
   "--workflow-step-connector": WORKFLOW_STEP_COLORS.connector,
   "--workflow-step-foreground": WORKFLOW_STEP_COLORS.foreground,
+  "--workflow-node-card-border": WORKFLOW_STEP_COLORS.nodeCardBorder,
+  "--workflow-node-card-tint": WORKFLOW_STEP_COLORS.nodeCardTint,
   "--color-tag-blue": TAG_COLORS.blue,
   "--color-tag-blue-muted": "color-mix(in oklab, var(--color-tag-blue) 12%, transparent)",
   "--color-tag-cyan": TAG_COLORS.cyan,
@@ -3233,10 +3237,30 @@ function Card({
   header,
   footer,
   scrollBody = false,
+  surface = "default",
+  style,
+  withBorder,
   ...props
 }) {
+  const workflowNodeStyle = surface === "workflow-node" ? {
+    overflow: "hidden",
+    border: "1px solid var(--workflow-node-card-border)",
+    borderRadius: "var(--radius-element)",
+    background: "linear-gradient(180deg, var(--surface) 0%, var(--surface) 58%, var(--workflow-node-card-tint) 100%)",
+    boxShadow: "none"
+  } : void 0;
   if (header == null && footer == null && bodyPadding == null && !scrollBody) {
-    return /* @__PURE__ */ jsx16(MantineCard, { padding, ...props, children });
+    return /* @__PURE__ */ jsx16(
+      MantineCard,
+      {
+        padding,
+        withBorder: surface === "workflow-node" ? true : withBorder,
+        "data-surface": surface === "default" ? void 0 : surface,
+        ...props,
+        style: { ...workflowNodeStyle, ...style },
+        children
+      }
+    );
   }
   const outerPad = typeof padding === "string" && padding in PAD ? PAD[padding] : typeof padding === "number" ? padding : PAD.md;
   const innerPad = bodyPadding === "none" ? 0 : bodyPadding && bodyPadding in PAD ? PAD[bodyPadding] : outerPad;
@@ -3245,14 +3269,16 @@ function Card({
     {
       padding: 0,
       radius: "md",
-      withBorder: true,
+      withBorder: surface === "workflow-node" ? true : withBorder ?? true,
+      "data-surface": surface === "default" ? void 0 : surface,
       ...props,
       style: {
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         height: scrollBody ? "100%" : void 0,
-        ...props.style
+        ...workflowNodeStyle,
+        ...style
       },
       children: [
         header != null ? /* @__PURE__ */ jsx16("div", { className: "vj-card__header", style: { padding: outerPad }, children: typeof header === "string" ? /* @__PURE__ */ jsx16("div", { className: "vj-card__title", children: header }) : header }) : null,

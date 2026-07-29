@@ -145,6 +145,8 @@ declare const WORKFLOW_STEP_COLORS: {
     readonly pendingText: "#83898F";
     readonly connector: "#F0F1F3";
     readonly foreground: "#FFFFFF";
+    readonly nodeCardBorder: "#EEEEEE";
+    readonly nodeCardTint: "#F9F9F9";
 };
 /**
  * 业务分类词条色。
@@ -673,8 +675,9 @@ type CardProps = CardProps$1 & {
     footer?: ReactNode;
     header?: ReactNode;
     scrollBody?: boolean;
+    surface?: "default" | "workflow-node";
 };
-declare function Card({ children, padding, bodyPadding, header, footer, scrollBody, ...props }: CardProps): react.JSX.Element;
+declare function Card({ children, padding, bodyPadding, header, footer, scrollBody, surface, style, withBorder, ...props }: CardProps): react.JSX.Element;
 type BadgeProps = Omit<ComponentPropsWithoutRef<"span">, "children"> & {
     label?: string;
     children?: ReactNode;

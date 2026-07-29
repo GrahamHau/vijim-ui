@@ -177,6 +177,8 @@ export const WORKFLOW_STEP_COLORS = {
   pendingText: "#83898F",
   connector: "#F0F1F3",
   foreground: "#FFFFFF",
+  nodeCardBorder: "#EEEEEE",
+  nodeCardTint: "#F9F9F9",
 } as const;
 
 /**
@@ -435,6 +437,8 @@ export const STUDIO_CSS_VARS: Record<string, string> = {
   "--workflow-step-pending-text": WORKFLOW_STEP_COLORS.pendingText,
   "--workflow-step-connector": WORKFLOW_STEP_COLORS.connector,
   "--workflow-step-foreground": WORKFLOW_STEP_COLORS.foreground,
+  "--workflow-node-card-border": WORKFLOW_STEP_COLORS.nodeCardBorder,
+  "--workflow-node-card-tint": WORKFLOW_STEP_COLORS.nodeCardTint,
   "--color-tag-blue": TAG_COLORS.blue,
   "--color-tag-blue-muted": "color-mix(in oklab, var(--color-tag-blue) 12%, transparent)",
   "--color-tag-cyan": TAG_COLORS.cyan,

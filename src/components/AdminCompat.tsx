@@ -50,6 +50,7 @@ export type CardProps = MantineCardProps & {
   footer?: ReactNode;
   header?: ReactNode;
   scrollBody?: boolean;
+  surface?: "default" | "workflow-node";
 };
 
 const PAD = { sm: 12, md: 16, lg: 24 } as const;
@@ -61,11 +62,29 @@ export function Card({
   header,
   footer,
   scrollBody = false,
+  surface = "default",
+  style,
+  withBorder,
   ...props
 }: CardProps) {
+  const workflowNodeStyle = surface === "workflow-node"
+    ? {
+        overflow: "hidden",
+        border: "1px solid var(--workflow-node-card-border)",
+        borderRadius: "var(--radius-element)",
+        background: "linear-gradient(180deg, var(--surface) 0%, var(--surface) 58%, var(--workflow-node-card-tint) 100%)",
+        boxShadow: "none",
+      }
+    : undefined;
   if (header == null && footer == null && bodyPadding == null && !scrollBody) {
     return (
-      <MantineCard padding={padding} {...props}>
+      <MantineCard
+        padding={padding}
+        withBorder={surface === "workflow-node" ? true : withBorder}
+        data-surface={surface === "default" ? undefined : surface}
+        {...props}
+        style={{ ...workflowNodeStyle, ...style }}
+      >
         {children}
       </MantineCard>
     );
@@ -88,14 +107,16 @@ export function Card({
     <MantineCard
       padding={0}
       radius="md"
-      withBorder
+      withBorder={surface === "workflow-node" ? true : (withBorder ?? true)}
+      data-surface={surface === "default" ? undefined : surface}
       {...props}
       style={{
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         height: scrollBody ? "100%" : undefined,
-        ...props.style,
+        ...workflowNodeStyle,
+        ...style,
       }}
     >
       {header != null ? (

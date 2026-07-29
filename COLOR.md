@@ -11,6 +11,8 @@
 | 白面 | `surface` / `--surface` | `#FFFFFF` | 卡片、筛选壳、弹层 |
 | 灰面 | `muted` / `--muted` / `--bg-2` | `#F6F7F9` | 录入底、Segment 外框 |
 | 浅面 | `surface2` | `#FAFAFB` | 次级条 |
+| 流程节点边线 | `--workflow-node-card-border` | `#EEEEEE` | 节点卡 1px 边线；取样自节点卡参考 |
+| 流程节点灰阶 | `--workflow-node-card-tint` | `#F9F9F9` | 节点卡极轻底部灰阶；取样自节点卡参考 |
 | 主字 | `ink` / `--ink` | `#121317` | 标题、正文、选中滑块字 |
 | 次字 | `ink2` / `--ink-2` | `#3D4047` | 说明、未选中 nav |
 | 弱字 | `mutedForeground` / `--dx-muted` | `#6B7078` | 元信息、未选词条 |
