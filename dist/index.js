@@ -1507,12 +1507,15 @@ var Textarea = forwardRef3(
 import { IconSearch as IconSearch2, IconX as IconX2 } from "@tabler/icons-react";
 import { ActionIcon, Box } from "@mantine/core";
 import {
-  forwardRef as forwardRef4
+  forwardRef as forwardRef4,
+  useState
 } from "react";
 import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
 function eventFromValue(value) {
+  const target = { value };
   return {
-    currentTarget: { value }
+    currentTarget: target,
+    target
   };
 }
 var SearchInput = forwardRef4(
@@ -1529,9 +1532,23 @@ var SearchInput = forwardRef4(
     onFocus,
     onKeyDown,
     spellCheck,
+    className,
+    style,
     ...props
   }, ref) {
-    const hasValue = typeof value === "string" ? value.length > 0 : Boolean(value);
+    const controlled = value !== void 0;
+    const [internalValue, setInternalValue] = useState(defaultValue ?? "");
+    const currentValue = controlled ? String(value ?? "") : internalValue;
+    const hasValue = currentValue.length > 0;
+    const emitChange = (event) => {
+      if (!controlled) setInternalValue(event.currentTarget.value);
+      onChange?.(event);
+    };
+    const clear = () => {
+      if (!controlled) setInternalValue("");
+      onClear?.();
+      onChange?.(eventFromValue(""));
+    };
     const clearBtn = clearable && hasValue ? /* @__PURE__ */ jsx6(
       ActionIcon,
       {
@@ -1539,10 +1556,7 @@ var SearchInput = forwardRef4(
         color: "gray",
         size: "sm",
         "aria-label": "\u6E05\u7A7A",
-        onClick: () => {
-          onClear?.();
-          onChange?.(eventFromValue(""));
-        },
+        onClick: clear,
         children: /* @__PURE__ */ jsx6(IconX2, { size: 14, stroke: 1.5 })
       }
     ) : rightSection;
@@ -1558,6 +1572,9 @@ var SearchInput = forwardRef4(
       return /* @__PURE__ */ jsxs2(
         Box,
         {
+          "data-slot": "search-field",
+          "data-search-variant": "filter",
+          className,
           style: {
             display: "flex",
             alignItems: "center",
@@ -1569,7 +1586,8 @@ var SearchInput = forwardRef4(
             borderBottom: `1px solid ${COLORS.borderStrong}`,
             background: "transparent",
             color: COLORS.faint,
-            transition: "border-color 0.15s ease, color 0.15s ease"
+            transition: "border-color 0.15s ease, color 0.15s ease",
+            ...style
           },
           onFocusCapture: (e) => {
             e.currentTarget.style.borderBottomColor = COLORS.ink;
@@ -1585,11 +1603,12 @@ var SearchInput = forwardRef4(
               "input",
               {
                 ref,
+                "data-slot": "search-input",
+                "data-search-variant": "filter",
                 type: "search",
                 placeholder,
-                value,
-                defaultValue,
-                onChange,
+                value: currentValue,
+                onChange: emitChange,
                 onFocus,
                 onKeyDown,
                 spellCheck,
@@ -1619,37 +1638,47 @@ var SearchInput = forwardRef4(
       );
     }
     return /* @__PURE__ */ jsx6(
-      TextInput,
+      Box,
       {
-        ref,
-        type: "search",
-        size: "md",
-        placeholder,
-        leftSection: /* @__PURE__ */ jsx6(IconSearch2, { size: 16, stroke: 1.5 }),
-        rightSection: clearBtn,
-        value,
-        defaultValue,
-        onChange: (next) => onChange?.(eventFromValue(next)),
-        onFocus,
-        onKeyDown,
-        spellCheck,
-        styles: (theme, styleProps, ctx) => {
-          const base = typeof styles === "function" ? styles(theme, styleProps, ctx) : styles ?? {};
-          return {
-            ...base,
-            input: {
-              ...typeof base === "object" && base && "input" in base ? base.input : {},
-              height: CONTROL_HEIGHT.md,
-              minHeight: CONTROL_HEIGHT.md,
-              borderRadius: RADIUS.element,
-              paddingInlineStart: SECTION_OFFSET.left,
-              backgroundColor: COLORS.surfaceMuted,
-              borderColor: "transparent"
+        "data-slot": "search-field",
+        "data-search-variant": "lookup",
+        className,
+        style: { width: "100%", minWidth: 0, ...style },
+        children: /* @__PURE__ */ jsx6(
+          TextInput,
+          {
+            ref,
+            "data-slot": "search-input",
+            "data-search-variant": "lookup",
+            type: "search",
+            size: "md",
+            placeholder,
+            leftSection: /* @__PURE__ */ jsx6(IconSearch2, { size: 16, stroke: 1.5 }),
+            rightSection: clearBtn,
+            value: currentValue,
+            onChange: (next) => emitChange(eventFromValue(next)),
+            onFocus,
+            onKeyDown,
+            spellCheck,
+            styles: (theme, styleProps, ctx) => {
+              const base = typeof styles === "function" ? styles(theme, styleProps, ctx) : styles ?? {};
+              return {
+                ...base,
+                input: {
+                  ...typeof base === "object" && base && "input" in base ? base.input : {},
+                  height: CONTROL_HEIGHT.md,
+                  minHeight: CONTROL_HEIGHT.md,
+                  borderRadius: RADIUS.element,
+                  paddingInlineStart: SECTION_OFFSET.left,
+                  backgroundColor: COLORS.surfaceMuted,
+                  borderColor: "transparent"
+                },
+                section: { width: SECTION_OFFSET.left, color: COLORS.faint }
+              };
             },
-            section: { width: SECTION_OFFSET.left, color: COLORS.faint }
-          };
-        },
-        ...props
+            ...props
+          }
+        )
       }
     );
   }
@@ -1658,7 +1687,7 @@ var SearchInput = forwardRef4(
 // src/components/ImageGalleryUpload.tsx
 import {
   useRef,
-  useState
+  useState as useState2
 } from "react";
 import { jsx as jsx7, jsxs as jsxs3 } from "react/jsx-runtime";
 var DEFAULT_MAX_SIZE = 6 * 1024 * 1024;
@@ -1713,12 +1742,12 @@ function ImageGalleryUpload({
 }) {
   const fileRef = useRef(null);
   const dragDepthRef = useRef(0);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(null);
-  const [hoverIndex, setHoverIndex] = useState(null);
-  const [draggingIndex, setDraggingIndex] = useState(null);
-  const [dragOverIndex, setDragOverIndex] = useState(null);
-  const [droppingFiles, setDroppingFiles] = useState(false);
+  const [busy, setBusy] = useState2(false);
+  const [error, setError] = useState2(null);
+  const [hoverIndex, setHoverIndex] = useState2(null);
+  const [draggingIndex, setDraggingIndex] = useState2(null);
+  const [dragOverIndex, setDragOverIndex] = useState2(null);
+  const [droppingFiles, setDroppingFiles] = useState2(false);
   const canReplace = replaceable && maxItems === 1 && values.length === 1;
   const canAdd = !readOnly && !disabled && !busy && (values.length < maxItems || canReplace);
   const canReorder = reorderable && typeof onReorder === "function" && !readOnly && !disabled;
@@ -2375,7 +2404,7 @@ import {
   useEffect,
   useId,
   useRef as useRef2,
-  useState as useState2
+  useState as useState3
 } from "react";
 import { jsx as jsx11, jsxs as jsxs4 } from "react/jsx-runtime";
 function Tabs(props) {
@@ -2484,7 +2513,7 @@ Menu.Label = MantineMenu.Label;
 Menu.Divider = MantineMenu.Divider;
 function Popover(props) {
   if ("trigger" in props) {
-    const [internalOpen, setInternalOpen] = useState2(false);
+    const [internalOpen, setInternalOpen] = useState3(false);
     const controlled = props.open !== void 0;
     const visible = controlled ? props.open : internalOpen;
     const rootRef = useRef2(null);
@@ -2568,7 +2597,7 @@ import {
   useReactTable
 } from "@tanstack/react-table";
 import { Checkbox, Group as Group3, Text as Text4 } from "@mantine/core";
-import { useMemo as useMemo5, useState as useState5 } from "react";
+import { useMemo as useMemo5, useState as useState6 } from "react";
 
 // src/components/Table.tsx
 import {
@@ -2633,7 +2662,7 @@ import {
   Text as Text2,
   UnstyledButton
 } from "@mantine/core";
-import { useEffect as useEffect2, useId as useId2, useRef as useRef3, useState as useState3 } from "react";
+import { useEffect as useEffect2, useId as useId2, useRef as useRef3, useState as useState4 } from "react";
 import { Fragment, jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
 var SHELL_GEOMETRY = {
   headerH: 60,
@@ -2852,7 +2881,7 @@ function AppShell({
   viewport = "page"
 }) {
   const sections = normalizeSections(navigation, navItems);
-  const [mobileOpen, setMobileOpen] = useState3(false);
+  const [mobileOpen, setMobileOpen] = useState4(false);
   const closeRef = useRef3(null);
   const panelRef = useRef3(null);
   const drawerTitleId = useId2();
@@ -3089,7 +3118,7 @@ import {
   useEffect as useEffect3,
   useId as useId3,
   useRef as useRef4,
-  useState as useState4
+  useState as useState5
 } from "react";
 import { Fragment as Fragment2, jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
 function normalizeTone(tone = "neutral") {
@@ -3748,7 +3777,7 @@ function Avatar({
   fallback,
   size = "md"
 }) {
-  const [failed, setFailed] = useState4(false);
+  const [failed, setFailed] = useState5(false);
   return /* @__PURE__ */ jsx15("span", { className: "vj-avatar", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx15("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx15("span", { "aria-label": alt, children: fallback.slice(0, 2) }) });
 }
 function Thumbnail({
@@ -3757,7 +3786,7 @@ function Thumbnail({
   size = "md",
   fallbackLabel = "\u6682\u65E0\u56FE\u7247"
 }) {
-  const [failed, setFailed] = useState4(false);
+  const [failed, setFailed] = useState5(false);
   return /* @__PURE__ */ jsx15("span", { className: "vj-thumbnail", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx15("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx15("span", { role: "img", "aria-label": `${alt}\uFF1A${fallbackLabel}`, children: fallbackLabel }) });
 }
 function MetadataList({
@@ -3918,11 +3947,11 @@ function ModernDataTable({
   loading = false,
   maxHeight
 }) {
-  const [sorting, setSorting] = useState5([]);
-  const [internalSelection, setInternalSelection] = useState5(
+  const [sorting, setSorting] = useState6([]);
+  const [internalSelection, setInternalSelection] = useState6(
     {}
   );
-  const [pagination, setPagination] = useState5({
+  const [pagination, setPagination] = useState6({
     pageIndex: 0,
     pageSize: pageSize ?? 20
   });
@@ -4596,7 +4625,7 @@ import {
   isValidElement as isValidElement3,
   useContext,
   useMemo as useMemo6,
-  useState as useState6
+  useState as useState7
 } from "react";
 import { Fragment as Fragment3, jsx as jsx20, jsxs as jsxs10 } from "react/jsx-runtime";
 var UiButtonAny = Button;
@@ -5076,7 +5105,7 @@ function Dialog2({
   onOpenChange,
   children
 }) {
-  const [innerOpen, setInnerOpen] = useState6(false);
+  const [innerOpen, setInnerOpen] = useState7(false);
   const actualOpen = open ?? innerOpen;
   const setOpen = (next) => {
     if (onOpenChange) onOpenChange(next);

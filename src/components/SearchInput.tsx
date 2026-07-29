@@ -9,6 +9,7 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { ActionIcon, Box } from "@mantine/core";
 import {
   forwardRef,
+  useState,
   type ChangeEvent,
   type ChangeEventHandler,
   type InputHTMLAttributes,
@@ -36,8 +37,10 @@ export type SearchInputProps = Omit<
 };
 
 function eventFromValue(value: string): ChangeEvent<HTMLInputElement> {
+  const target = { value } as HTMLInputElement;
   return {
-    currentTarget: { value },
+    currentTarget: target,
+    target,
   } as ChangeEvent<HTMLInputElement>;
 }
 
@@ -56,12 +59,27 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
       onFocus,
       onKeyDown,
       spellCheck,
+      className,
+      style,
       ...props
     },
     ref,
   ) {
-    const hasValue =
-      typeof value === "string" ? value.length > 0 : Boolean(value);
+    const controlled = value !== undefined;
+    const [internalValue, setInternalValue] = useState(defaultValue ?? "");
+    const currentValue = controlled ? String(value ?? "") : internalValue;
+    const hasValue = currentValue.length > 0;
+
+    const emitChange = (event: ChangeEvent<HTMLInputElement>) => {
+      if (!controlled) setInternalValue(event.currentTarget.value);
+      onChange?.(event);
+    };
+
+    const clear = () => {
+      if (!controlled) setInternalValue("");
+      onClear?.();
+      onChange?.(eventFromValue(""));
+    };
 
     const clearBtn =
       clearable && hasValue ? (
@@ -70,10 +88,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           color="gray"
           size="sm"
           aria-label="清空"
-          onClick={() => {
-            onClear?.();
-            onChange?.(eventFromValue(""));
-          }}
+          onClick={clear}
         >
           <IconX size={14} stroke={1.5} />
         </ActionIcon>
@@ -99,6 +114,9 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
       } & Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type">;
       return (
         <Box
+          data-slot="search-field"
+          data-search-variant="filter"
+          className={className}
           style={{
             display: "flex",
             alignItems: "center",
@@ -111,6 +129,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             background: "transparent",
             color: COLORS.faint,
             transition: "border-color 0.15s ease, color 0.15s ease",
+            ...style,
           }}
           onFocusCapture={(e) => {
             e.currentTarget.style.borderBottomColor = COLORS.ink;
@@ -124,11 +143,12 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           <IconSearch size={15} stroke={1.5} style={{ flex: "none" }} />
           <input
             ref={ref}
+            data-slot="search-input"
+            data-search-variant="filter"
             type="search"
             placeholder={placeholder}
-            value={value as string | undefined}
-            defaultValue={defaultValue}
-            onChange={onChange}
+            value={currentValue}
+            onChange={emitChange}
             onFocus={onFocus}
             onKeyDown={onKeyDown}
             spellCheck={spellCheck}
@@ -158,42 +178,50 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 
     // lookup：Studio 40px 灰底方框
     return (
-      <TextInput
-        ref={ref}
-        type="search"
-        size="md"
-        placeholder={placeholder}
-        leftSection={<IconSearch size={16} stroke={1.5} />}
-        rightSection={clearBtn}
-        value={value}
-        defaultValue={defaultValue}
-        onChange={(next) => onChange?.(eventFromValue(next))}
-        onFocus={onFocus}
-        onKeyDown={onKeyDown}
-        spellCheck={spellCheck}
-        styles={(theme, styleProps, ctx) => {
-          const base =
-            typeof styles === "function"
-              ? styles(theme, styleProps, ctx)
-              : styles ?? {};
-          return {
-            ...base,
-            input: {
-              ...(typeof base === "object" && base && "input" in base
-                ? (base as { input?: object }).input
-                : {}),
-              height: CONTROL_HEIGHT.md,
-              minHeight: CONTROL_HEIGHT.md,
-              borderRadius: RADIUS.element,
-              paddingInlineStart: SECTION_OFFSET.left,
-              backgroundColor: COLORS.surfaceMuted,
-              borderColor: "transparent",
-            },
-            section: { width: SECTION_OFFSET.left, color: COLORS.faint },
-          };
-        }}
-        {...props}
-      />
+      <Box
+        data-slot="search-field"
+        data-search-variant="lookup"
+        className={className}
+        style={{ width: "100%", minWidth: 0, ...style }}
+      >
+        <TextInput
+          ref={ref}
+          data-slot="search-input"
+          data-search-variant="lookup"
+          type="search"
+          size="md"
+          placeholder={placeholder}
+          leftSection={<IconSearch size={16} stroke={1.5} />}
+          rightSection={clearBtn}
+          value={currentValue}
+          onChange={(next) => emitChange(eventFromValue(next))}
+          onFocus={onFocus}
+          onKeyDown={onKeyDown}
+          spellCheck={spellCheck}
+          styles={(theme, styleProps, ctx) => {
+            const base =
+              typeof styles === "function"
+                ? styles(theme, styleProps, ctx)
+                : styles ?? {};
+            return {
+              ...base,
+              input: {
+                ...(typeof base === "object" && base && "input" in base
+                  ? (base as { input?: object }).input
+                  : {}),
+                height: CONTROL_HEIGHT.md,
+                minHeight: CONTROL_HEIGHT.md,
+                borderRadius: RADIUS.element,
+                paddingInlineStart: SECTION_OFFSET.left,
+                backgroundColor: COLORS.surfaceMuted,
+                borderColor: "transparent",
+              },
+              section: { width: SECTION_OFFSET.left, color: COLORS.faint },
+            };
+          }}
+          {...props}
+        />
+      </Box>
     );
   },
 );

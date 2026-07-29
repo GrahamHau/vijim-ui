@@ -53,6 +53,7 @@
 
 ### 录入
 `Button` · `TextInput` · `Textarea` · `SearchInput`
+`SearchInput filter` = 32px 下划线筛选；`lookup` = 40px 浅灰查找框。业务不得用全局 input CSS 覆盖。
 `Select` · `SearchableSelect`
 `DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）
 `ImageGalleryUpload`（通用图片选择 / 粘贴 / 拖拽上传）
