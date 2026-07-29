@@ -19,7 +19,9 @@ VIJIM Labs **唯一业务 UI 出口**。
 | `VijimProvider` 包一层 | 业务自己挂 `MantineProvider` |
 | 壳层只用 `AppShell` / `TopBar` / `PageShell` | 业务自写 sidebar/topbar 布局 CSS |
 
-没有 `VijimProvider` 的区域 = 主题与触感不生效。
+没有 `VijimProvider` 的区域 = 主题与触感不生效。Provider 会把平台固定的浅色方案
+挂到文档根节点；业务不再单独安装 `ColorSchemeScript` 或维护
+`data-mantine-color-scheme`。
 
 ## 导出清单（短）
 

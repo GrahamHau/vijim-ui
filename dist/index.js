@@ -1168,7 +1168,7 @@ import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
 dayjs.locale("zh-cn");
 function buildRootCss() {
@@ -1181,6 +1181,15 @@ function VijimProvider({
   withNotifications = true,
   withModals = true
 }) {
+  useEffect(() => {
+    const root = document.documentElement;
+    const previous = root.getAttribute("data-mantine-color-scheme");
+    root.setAttribute("data-mantine-color-scheme", "light");
+    return () => {
+      if (previous) root.setAttribute("data-mantine-color-scheme", previous);
+      else root.removeAttribute("data-mantine-color-scheme");
+    };
+  }, []);
   const rootCss = useMemo(
     () => theme === vijimTheme ? buildRootCss() : "",
     [theme]
@@ -1265,6 +1274,7 @@ import {
   IconStar,
   IconTag,
   IconTargetArrow,
+  IconTrash,
   IconUpload,
   IconUsersGroup,
   IconUserStar,
@@ -1319,6 +1329,7 @@ var ICONS = {
   sync: IconArrowsExchange,
   tag: IconTag,
   target: IconTargetArrow,
+  trash: IconTrash,
   upload: IconUpload,
   "user-star": IconUserStar,
   users: IconUsersGroup,
@@ -1477,6 +1488,8 @@ var TextInput = forwardRef2(
   }, ref) {
     const hasLeft = Boolean(leftSection);
     const hasRight = Boolean(rightSection);
+    const height = CONTROL_HEIGHT[size];
+    const fontSize = size === "xs" || size === "sm" ? FONT.sizes.xs : FONT.sizes.sm;
     return /* @__PURE__ */ jsx4(
       MantineTextInput,
       {
@@ -1490,6 +1503,9 @@ var TextInput = forwardRef2(
           return {
             ...base,
             input: {
+              height,
+              minHeight: height,
+              fontSize,
               ...typeof base === "object" && base && "input" in base ? base.input : {},
               ...hasLeft ? { paddingInlineStart: SECTION_OFFSET.left } : {},
               ...hasRight ? { paddingInlineEnd: SECTION_OFFSET.right } : {}
@@ -2421,7 +2437,7 @@ import {
   Tooltip as MantineTooltip
 } from "@mantine/core";
 import {
-  useEffect,
+  useEffect as useEffect2,
   useId,
   useRef as useRef2,
   useState as useState3
@@ -2542,7 +2558,7 @@ function Popover(props) {
       if (!controlled) setInternalOpen(next);
       props.onOpenChange?.(next);
     };
-    useEffect(() => {
+    useEffect2(() => {
       if (!visible) return;
       const onPointerDown = (event) => {
         if (!rootRef.current?.contains(event.target)) setVisible(false);
@@ -2682,7 +2698,7 @@ import {
   Text as Text2,
   UnstyledButton
 } from "@mantine/core";
-import { useEffect as useEffect2, useId as useId2, useRef as useRef3, useState as useState4 } from "react";
+import { useEffect as useEffect3, useId as useId2, useRef as useRef3, useState as useState4 } from "react";
 import { Fragment, jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
 var SHELL_GEOMETRY = {
   headerH: 60,
@@ -2906,7 +2922,7 @@ function AppShell({
   const panelRef = useRef3(null);
   const drawerTitleId = useId2();
   const foot = footer ?? user;
-  useEffect2(() => {
+  useEffect3(() => {
     const desktopQuery = window.matchMedia("(min-width: 901px)");
     const closeAtDesktop = (event) => {
       if (event.matches) setMobileOpen(false);
@@ -2915,7 +2931,7 @@ function AppShell({
     desktopQuery.addEventListener("change", closeAtDesktop);
     return () => desktopQuery.removeEventListener("change", closeAtDesktop);
   }, []);
-  useEffect2(() => {
+  useEffect3(() => {
     if (!mobileOpen) return;
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const frame = window.requestAnimationFrame(() => closeRef.current?.focus());
@@ -3135,7 +3151,7 @@ import {
   cloneElement,
   forwardRef as forwardRef7,
   isValidElement as isValidElement2,
-  useEffect as useEffect3,
+  useEffect as useEffect4,
   useId as useId3,
   useRef as useRef4,
   useState as useState5
@@ -3395,7 +3411,7 @@ function Dialog({
   footer
 }) {
   const ref = useRef4(null);
-  useEffect3(() => {
+  useEffect4(() => {
     const dialog = ref.current;
     if (!dialog) return;
     if (open && !dialog.open) dialog.showModal();

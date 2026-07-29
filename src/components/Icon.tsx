@@ -49,6 +49,7 @@ import {
   IconStar,
   IconTag,
   IconTargetArrow,
+  IconTrash,
   IconUpload,
   IconUsersGroup,
   IconUserStar,
@@ -106,6 +107,7 @@ export type IconName =
   | "sync"
   | "tag"
   | "target"
+  | "trash"
   | "upload"
   | "user-star"
   | "users"
@@ -161,6 +163,7 @@ const ICONS: Record<IconName, TablerIcon> = {
   sync: IconArrowsExchange,
   tag: IconTag,
   target: IconTargetArrow,
+  trash: IconTrash,
   upload: IconUpload,
   "user-star": IconUserStar,
   users: IconUsersGroup,

@@ -16,7 +16,7 @@ import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
-import { useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import { vijimTheme } from "./theme/vijim-theme";
 import { COLORS, FONT, STUDIO_CSS_VARS } from "./theme/tokens";
 
@@ -49,6 +49,16 @@ export function VijimProvider({
   withNotifications = true,
   withModals = true,
 }: VijimProviderProps) {
+  useEffect(() => {
+    const root = document.documentElement;
+    const previous = root.getAttribute("data-mantine-color-scheme");
+    root.setAttribute("data-mantine-color-scheme", "light");
+    return () => {
+      if (previous) root.setAttribute("data-mantine-color-scheme", previous);
+      else root.removeAttribute("data-mantine-color-scheme");
+    };
+  }, []);
+
   const rootCss = useMemo(
     () => (theme === vijimTheme ? buildRootCss() : ""),
     [theme],

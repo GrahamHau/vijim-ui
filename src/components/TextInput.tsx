@@ -6,7 +6,7 @@ import {
   type ElementProps,
 } from "@mantine/core";
 import { forwardRef, type ChangeEventHandler } from "react";
-import { SECTION_OFFSET } from "../theme/tokens";
+import { CONTROL_HEIGHT, FONT, SECTION_OFFSET } from "../theme/tokens";
 
 export type TextInputProps = Omit<MantineTextInputProps, "size" | "onChange"> &
   ElementProps<"input", keyof MantineTextInputProps> & {
@@ -36,6 +36,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   ) {
     const hasLeft = Boolean(leftSection);
     const hasRight = Boolean(rightSection);
+    const height = CONTROL_HEIGHT[size];
+    const fontSize = size === "xs" || size === "sm" ? FONT.sizes.xs : FONT.sizes.sm;
 
     return (
       <MantineTextInput
@@ -52,6 +54,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           return {
             ...base,
             input: {
+              height,
+              minHeight: height,
+              fontSize,
               ...(typeof base === "object" && base && "input" in base
                 ? (base as { input?: object }).input
                 : {}),

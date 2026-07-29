@@ -230,7 +230,7 @@ type VijimProviderProps = {
  */
 declare function VijimProvider({ children, theme, withNotifications, withModals, }: VijimProviderProps): react.JSX.Element;
 
-type IconName = "archive" | "arrow" | "back" | "board" | "calendar" | "cart" | "category" | "chart" | "chart-line" | "chart-pie" | "chart-trend" | "check" | "checklist" | "chevron" | "clock" | "close" | "clipboard" | "cube" | "database" | "doc" | "fail" | "feed" | "flame" | "grid" | "home" | "info" | "layers" | "list-check" | "message-check" | "money" | "note" | "panel" | "percent" | "pkg" | "plus" | "refresh" | "rocket" | "search" | "settings" | "shield" | "star" | "sparkle" | "sync" | "tag" | "target" | "upload" | "user-star" | "users" | "video" | "waiting" | "warehouse" | "world" | "warn";
+type IconName = "archive" | "arrow" | "back" | "board" | "calendar" | "cart" | "category" | "chart" | "chart-line" | "chart-pie" | "chart-trend" | "check" | "checklist" | "chevron" | "clock" | "close" | "clipboard" | "cube" | "database" | "doc" | "fail" | "feed" | "flame" | "grid" | "home" | "info" | "layers" | "list-check" | "message-check" | "money" | "note" | "panel" | "percent" | "pkg" | "plus" | "refresh" | "rocket" | "search" | "settings" | "shield" | "star" | "sparkle" | "sync" | "tag" | "target" | "trash" | "upload" | "user-star" | "users" | "video" | "waiting" | "warehouse" | "world" | "warn";
 type IconProps = {
     name: IconName;
     size?: number;
