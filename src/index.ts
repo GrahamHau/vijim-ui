@@ -86,6 +86,7 @@ export {
   DataTable,
   type DataTableProps,
   type DataTableColumn,
+  type ModernDataTableColumn,
   type RowSelectionState,
 } from "./components/DataTable";
 /** @deprecated 新列表用 DataTable；仅对照页/手写表头 */

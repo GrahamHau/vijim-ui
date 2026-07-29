@@ -4243,7 +4243,8 @@ function ModernDataTable({
   emptyDescription = "\u8C03\u6574\u7B5B\u9009\u6761\u4EF6\uFF0C\u6216\u7A0D\u540E\u518D\u8BD5\u3002",
   toolbar,
   loading = false,
-  maxHeight
+  maxHeight,
+  minWidth = 640
 }) {
   const [sorting, setSorting] = useState6([]);
   const [internalSelection, setInternalSelection] = useState6(
@@ -4304,7 +4305,7 @@ function ModernDataTable({
   const pageCount = table.getPageCount();
   return /* @__PURE__ */ jsxs8("div", { children: [
     toolbar ? /* @__PURE__ */ jsx17("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
-    /* @__PURE__ */ jsx17(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs8(
+    /* @__PURE__ */ jsx17(Table.ScrollContainer, { minWidth, maxHeight, children: /* @__PURE__ */ jsxs8(
       Table,
       {
         highlightOnHover: true,

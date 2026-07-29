@@ -47,6 +47,8 @@ export type ModernDataTableProps<T> = {
   toolbar?: ReactNode;
   loading?: boolean;
   maxHeight?: number | string;
+  /** 窄屏合并列时允许缩小表格基准宽度；桌面默认 640。 */
+  minWidth?: number | string;
 };
 export type DataTableProps<T extends object> =
   | ModernDataTableProps<T>
@@ -73,6 +75,7 @@ function ModernDataTable<T>({
   toolbar,
   loading = false,
   maxHeight,
+  minWidth = 640,
 }: ModernDataTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [internalSelection, setInternalSelection] = useState<RowSelectionState>(
@@ -142,7 +145,7 @@ function ModernDataTable<T>({
     <div>
       {toolbar ? <div style={{ marginBottom: 12 }}>{toolbar}</div> : null}
 
-      <Table.ScrollContainer minWidth={640} maxHeight={maxHeight}>
+      <Table.ScrollContainer minWidth={minWidth} maxHeight={maxHeight}>
         <Table
           highlightOnHover
           horizontalSpacing="md"
