@@ -52,7 +52,7 @@
 `Icon`（语义名白名单，业务禁止直连 Tabler）
 
 ### 录入
-`Button` · `TextInput`（xs/sm/md/lg 对应 28/32/40/44）· `Textarea` · `SearchInput`
+`Button` · `UnstyledButton`（仅 Tree 行 / 整行选择器）· `TextInput`（xs/sm/md/lg 对应 28/32/40/44）· `Textarea` · `SearchInput` · `FileInput`
 `SearchInput filter` = 32px 下划线筛选；`lookup` = 40px 浅灰查找框。业务不得用全局 input CSS 覆盖。
 `Select` · `SearchableSelect`
 `DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）

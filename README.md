@@ -28,7 +28,7 @@ VIJIM Labs **唯一业务 UI 出口**。
 见 [`SURFACE.md` §2](./SURFACE.md)。常用：
 
 - 主题：`VijimProvider` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS`
-- 录入：`Button` · `TextInput` · `SearchInput` · `Select` · `SearchableSelect` · 日期 · `ImageGalleryUpload`
+- 录入：`Button` · `UnstyledButton`（Tree 行 / 整行选择器）· `TextInput` · `SearchInput` · `Select` · `SearchableSelect` · 日期 · `FileInput` · `ImageGalleryUpload`
 - 筛选：`FilterBar` · `FilterSegment` · `FilterTerm`
 - 表：`DataTable`
 - 浮层：`Modal` · `Drawer` · `Menu` · `Popover`

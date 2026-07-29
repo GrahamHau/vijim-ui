@@ -168,3 +168,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return <MantineButton {...commonProps} data-slot="button">{buttonChildren}</MantineButton>;
   },
 );
+
+export type UnstyledButtonProps = ComponentPropsWithoutRef<"button">;
+
+/** 只提供按钮语义，供 Tree 行、整行选择器等业务布局承载交互。 */
+export const UnstyledButton = forwardRef<
+  HTMLButtonElement,
+  UnstyledButtonProps
+>(function UnstyledButton({ type = "button", ...props }, ref) {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      type={type}
+      data-slot="unstyled-button"
+    />
+  );
+});
