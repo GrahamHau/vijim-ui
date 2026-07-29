@@ -1,6 +1,6 @@
 {
   "name": "@vijimlabs/ui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "VIJIM Labs 唯一业务 UI 出口。应用只 import 本包；Mantine 9 仅为包内实现，禁止业务直连。",
   "type": "module",

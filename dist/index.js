@@ -1100,6 +1100,93 @@ function VijimProvider({
   ] });
 }
 
+// src/components/Icon.tsx
+import {
+  IconAlertTriangle,
+  IconArrowLeft,
+  IconArrowRight,
+  IconArrowsExchange,
+  IconBox,
+  IconChartBar,
+  IconCheck,
+  IconChevronDown,
+  IconCircle,
+  IconClock,
+  IconDatabase,
+  IconFileText,
+  IconLayoutGrid,
+  IconLayoutKanban,
+  IconLayoutSidebar,
+  IconLayersSubtract,
+  IconListDetails,
+  IconNote,
+  IconPackage,
+  IconPlus,
+  IconRefresh,
+  IconSearch,
+  IconSettings,
+  IconShieldCheck,
+  IconSparkles,
+  IconTag,
+  IconUpload,
+  IconUsersGroup,
+  IconVideo,
+  IconX
+} from "@tabler/icons-react";
+import { jsx as jsx2 } from "react/jsx-runtime";
+var ICONS = {
+  arrow: IconArrowRight,
+  back: IconArrowLeft,
+  board: IconLayoutKanban,
+  chart: IconChartBar,
+  check: IconCheck,
+  chevron: IconChevronDown,
+  clock: IconClock,
+  close: IconX,
+  cube: IconBox,
+  database: IconDatabase,
+  doc: IconFileText,
+  feed: IconListDetails,
+  grid: IconLayoutGrid,
+  layers: IconLayersSubtract,
+  note: IconNote,
+  panel: IconLayoutSidebar,
+  pkg: IconPackage,
+  plus: IconPlus,
+  refresh: IconRefresh,
+  search: IconSearch,
+  settings: IconSettings,
+  shield: IconShieldCheck,
+  sparkle: IconSparkles,
+  sync: IconArrowsExchange,
+  tag: IconTag,
+  upload: IconUpload,
+  users: IconUsersGroup,
+  video: IconVideo,
+  warn: IconAlertTriangle
+};
+function Icon({
+  name,
+  size = 18,
+  strokeWidth = 1.8,
+  className,
+  style,
+  color
+}) {
+  const IconComponent = ICONS[name] ?? IconCircle;
+  return /* @__PURE__ */ jsx2(
+    IconComponent,
+    {
+      "aria-hidden": "true",
+      className,
+      color,
+      size,
+      stroke: strokeWidth,
+      style
+    }
+  );
+}
+
 // src/components/Button.tsx
 import {
   Button as MantineButton
@@ -1108,7 +1195,7 @@ import {
   forwardRef,
   isValidElement
 } from "react";
-import { jsx as jsx2 } from "react/jsx-runtime";
+import { jsx as jsx3 } from "react/jsx-runtime";
 function mapVariant(v) {
   if (v === "destructive") return "filled";
   if (v === "ghost") return "subtle";
@@ -1163,7 +1250,7 @@ var Button = forwardRef(
     };
     if (child) {
       const AnyMantineButton = MantineButton;
-      return /* @__PURE__ */ jsx2(
+      return /* @__PURE__ */ jsx3(
         AnyMantineButton,
         {
           component: child.component,
@@ -1173,7 +1260,7 @@ var Button = forwardRef(
         }
       );
     }
-    return /* @__PURE__ */ jsx2(MantineButton, { ...commonProps, children: buttonChildren });
+    return /* @__PURE__ */ jsx3(MantineButton, { ...commonProps, children: buttonChildren });
   }
 );
 
@@ -1182,7 +1269,7 @@ import {
   TextInput as MantineTextInput
 } from "@mantine/core";
 import { forwardRef as forwardRef2 } from "react";
-import { jsx as jsx3 } from "react/jsx-runtime";
+import { jsx as jsx4 } from "react/jsx-runtime";
 var TextInput = forwardRef2(
   function TextInput2({
     size = "md",
@@ -1196,7 +1283,7 @@ var TextInput = forwardRef2(
   }, ref) {
     const hasLeft = Boolean(leftSection);
     const hasRight = Boolean(rightSection);
-    return /* @__PURE__ */ jsx3(
+    return /* @__PURE__ */ jsx4(
       MantineTextInput,
       {
         ref,
@@ -1235,20 +1322,20 @@ import {
   Textarea as MantineTextarea
 } from "@mantine/core";
 import { forwardRef as forwardRef3 } from "react";
-import { jsx as jsx4 } from "react/jsx-runtime";
+import { jsx as jsx5 } from "react/jsx-runtime";
 var Textarea = forwardRef3(
   function Textarea2({ size = "sm", ...props }, ref) {
-    return /* @__PURE__ */ jsx4(MantineTextarea, { ref, size, ...props });
+    return /* @__PURE__ */ jsx5(MantineTextarea, { ref, size, ...props });
   }
 );
 
 // src/components/SearchInput.tsx
-import { IconSearch, IconX } from "@tabler/icons-react";
+import { IconSearch as IconSearch2, IconX as IconX2 } from "@tabler/icons-react";
 import { ActionIcon, Box } from "@mantine/core";
 import {
   forwardRef as forwardRef4
 } from "react";
-import { jsx as jsx5, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
 function eventFromValue(value) {
   return {
     currentTarget: { value }
@@ -1271,7 +1358,7 @@ var SearchInput = forwardRef4(
     ...props
   }, ref) {
     const hasValue = typeof value === "string" ? value.length > 0 : Boolean(value);
-    const clearBtn = clearable && hasValue ? /* @__PURE__ */ jsx5(
+    const clearBtn = clearable && hasValue ? /* @__PURE__ */ jsx6(
       ActionIcon,
       {
         variant: "subtle",
@@ -1282,7 +1369,7 @@ var SearchInput = forwardRef4(
           onClear?.();
           onChange?.(eventFromValue(""));
         },
-        children: /* @__PURE__ */ jsx5(IconX, { size: 14, stroke: 1.5 })
+        children: /* @__PURE__ */ jsx6(IconX2, { size: 14, stroke: 1.5 })
       }
     ) : rightSection;
     if (variant === "filter") {
@@ -1319,8 +1406,8 @@ var SearchInput = forwardRef4(
             e.currentTarget.style.color = COLORS.faint;
           },
           children: [
-            /* @__PURE__ */ jsx5(IconSearch, { size: 15, stroke: 1.5, style: { flex: "none" } }),
-            /* @__PURE__ */ jsx5(
+            /* @__PURE__ */ jsx6(IconSearch2, { size: 15, stroke: 1.5, style: { flex: "none" } }),
+            /* @__PURE__ */ jsx6(
               "input",
               {
                 ref,
@@ -1357,14 +1444,14 @@ var SearchInput = forwardRef4(
         }
       );
     }
-    return /* @__PURE__ */ jsx5(
+    return /* @__PURE__ */ jsx6(
       TextInput,
       {
         ref,
         type: "search",
         size: "md",
         placeholder,
-        leftSection: /* @__PURE__ */ jsx5(IconSearch, { size: 16, stroke: 1.5 }),
+        leftSection: /* @__PURE__ */ jsx6(IconSearch2, { size: 16, stroke: 1.5 }),
         rightSection: clearBtn,
         value,
         defaultValue,
@@ -1399,7 +1486,7 @@ import {
   useRef,
   useState
 } from "react";
-import { jsx as jsx6, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx7, jsxs as jsxs3 } from "react/jsx-runtime";
 var DEFAULT_MAX_SIZE = 6 * 1024 * 1024;
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -1542,9 +1629,9 @@ function ImageGalleryUpload({
   };
   if (readOnly) {
     if (!values.length) {
-      return /* @__PURE__ */ jsx6("span", { "data-slot": "image-gallery-upload", style: { fontSize: 11.5, color: COLORS.faint }, children: "\u65E0\u56FE" });
+      return /* @__PURE__ */ jsx7("span", { "data-slot": "image-gallery-upload", style: { fontSize: 11.5, color: COLORS.faint }, children: "\u65E0\u56FE" });
     }
-    return /* @__PURE__ */ jsx6("div", { "data-slot": "image-gallery-upload", style: gridStyle, children: values.map((url, index) => /* @__PURE__ */ jsx6(
+    return /* @__PURE__ */ jsx7("div", { "data-slot": "image-gallery-upload", style: gridStyle, children: values.map((url, index) => /* @__PURE__ */ jsx7(
       "a",
       {
         href: url,
@@ -1558,7 +1645,7 @@ function ImageGalleryUpload({
           border: frameless ? "none" : `1px solid ${COLORS.border}`,
           background: COLORS.surfaceMuted
         },
-        children: /* @__PURE__ */ jsx6("img", { src: url, alt: `\u56FE\u7247 ${index + 1}`, referrerPolicy: "no-referrer", loading: "lazy", style: imageStyle })
+        children: /* @__PURE__ */ jsx7("img", { src: url, alt: `\u56FE\u7247 ${index + 1}`, referrerPolicy: "no-referrer", loading: "lazy", style: imageStyle })
       },
       `${url}-${index}`
     )) });
@@ -1585,7 +1672,7 @@ function ImageGalleryUpload({
         transition: `outline-color ${MOTION.fast}, background-color ${MOTION.fast}`
       },
       children: [
-        droppingFiles ? /* @__PURE__ */ jsx6(
+        droppingFiles ? /* @__PURE__ */ jsx7(
           "div",
           {
             "aria-hidden": "true",
@@ -1606,7 +1693,7 @@ function ImageGalleryUpload({
             children: "\u677E\u5F00\u5373\u53EF\u4E0A\u4F20\u56FE\u7247"
           }
         ) : null,
-        error ? /* @__PURE__ */ jsx6("p", { style: { margin: "0 0 10px", fontSize: 11.5, color: COLORS.danger }, children: error }) : hint ? /* @__PURE__ */ jsx6("p", { style: { margin: "0 0 10px", fontSize: 11.5, color: COLORS.faint }, children: hint }) : null,
+        error ? /* @__PURE__ */ jsx7("p", { style: { margin: "0 0 10px", fontSize: 11.5, color: COLORS.danger }, children: error }) : hint ? /* @__PURE__ */ jsx7("p", { style: { margin: "0 0 10px", fontSize: 11.5, color: COLORS.faint }, children: hint }) : null,
         /* @__PURE__ */ jsxs3("div", { style: gridStyle, children: [
           values.map((url, index) => /* @__PURE__ */ jsxs3(
             "div",
@@ -1649,8 +1736,8 @@ function ImageGalleryUpload({
                 opacity: draggingIndex === index ? 0.55 : 1
               },
               children: [
-                /* @__PURE__ */ jsx6("img", { src: url, alt: "", referrerPolicy: "no-referrer", loading: "lazy", style: imageStyle }),
-                canReplace ? /* @__PURE__ */ jsx6(
+                /* @__PURE__ */ jsx7("img", { src: url, alt: "", referrerPolicy: "no-referrer", loading: "lazy", style: imageStyle }),
+                canReplace ? /* @__PURE__ */ jsx7(
                   "button",
                   {
                     type: "button",
@@ -1671,7 +1758,7 @@ function ImageGalleryUpload({
                       justifyContent: "center",
                       font: "inherit"
                     },
-                    children: /* @__PURE__ */ jsx6(
+                    children: /* @__PURE__ */ jsx7(
                       "span",
                       {
                         style: {
@@ -1690,7 +1777,7 @@ function ImageGalleryUpload({
                     )
                   }
                 ) : null,
-                coverBadge && index === 0 ? /* @__PURE__ */ jsx6(
+                coverBadge && index === 0 ? /* @__PURE__ */ jsx7(
                   "span",
                   {
                     style: {
@@ -1709,7 +1796,7 @@ function ImageGalleryUpload({
                     children: "\u5C01\u9762"
                   }
                 ) : null,
-                (typeof removable === "function" ? removable(url, index) : removable) ? /* @__PURE__ */ jsx6(
+                (typeof removable === "function" ? removable(url, index) : removable) ? /* @__PURE__ */ jsx7(
                   "button",
                   {
                     type: "button",
@@ -1744,7 +1831,7 @@ function ImageGalleryUpload({
             },
             `${url}-${index}`
           )),
-          values.length < maxItems ? /* @__PURE__ */ jsx6(
+          values.length < maxItems ? /* @__PURE__ */ jsx7(
             "button",
             {
               type: "button",
@@ -1771,7 +1858,7 @@ function ImageGalleryUpload({
             }
           ) : null
         ] }),
-        /* @__PURE__ */ jsx6("input", { ref: fileRef, type: "file", accept, multiple, hidden: true, onChange: pick, disabled: !canAdd })
+        /* @__PURE__ */ jsx7("input", { ref: fileRef, type: "file", accept, multiple, hidden: true, onChange: pick, disabled: !canAdd })
       ]
     }
   );
@@ -1785,7 +1872,7 @@ import {
   forwardRef as forwardRef5,
   useMemo as useMemo2
 } from "react";
-import { jsx as jsx7 } from "react/jsx-runtime";
+import { jsx as jsx8 } from "react/jsx-runtime";
 function heightFor(size, density) {
   if (density === "compact" || size === "sm" || size === "xs") {
     return size === "xs" ? CONTROL_HEIGHT.xs : CONTROL_HEIGHT.sm;
@@ -1842,7 +1929,7 @@ var Select = forwardRef5(
       }),
       [comboboxProps]
     );
-    return /* @__PURE__ */ jsx7(
+    return /* @__PURE__ */ jsx8(
       MantineSelect,
       {
         ref,
@@ -1924,7 +2011,7 @@ function SearchableSelect({
 }) {
   const data = normalizeOptions(options);
   const controlled = value !== void 0;
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     Select,
     {
       name,
@@ -1992,7 +2079,7 @@ function fromDateString(value) {
 }
 
 // src/components/DatePicker.tsx
-import { jsx as jsx8 } from "react/jsx-runtime";
+import { jsx as jsx9 } from "react/jsx-runtime";
 var DatePickerInput = forwardRef6(
   function DatePickerInput2({
     size = "md",
@@ -2011,7 +2098,7 @@ var DatePickerInput = forwardRef6(
       () => defaultValue === void 0 ? void 0 : fromDateString(defaultValue ?? null),
       [defaultValue]
     );
-    return /* @__PURE__ */ jsx8(
+    return /* @__PURE__ */ jsx9(
       MantineDatePickerInput,
       {
         ref,
@@ -2019,7 +2106,7 @@ var DatePickerInput = forwardRef6(
         valueFormat: "YYYY-MM-DD",
         value: dateValue,
         defaultValue: defaultDate,
-        leftSection: leftSection ?? /* @__PURE__ */ jsx8(IconCalendar, { size: 16, stroke: 1.5 }),
+        leftSection: leftSection ?? /* @__PURE__ */ jsx9(IconCalendar, { size: 16, stroke: 1.5 }),
         leftSectionPointerEvents: "none",
         onChange: (next) => {
           onChange?.(toDateString(next));
@@ -2058,7 +2145,7 @@ var DateInput = forwardRef6(
       () => defaultValue === void 0 ? void 0 : fromDateString(defaultValue ?? null),
       [defaultValue]
     );
-    return /* @__PURE__ */ jsx8(
+    return /* @__PURE__ */ jsx9(
       MantineDateInput,
       {
         ref,
@@ -2066,7 +2153,7 @@ var DateInput = forwardRef6(
         valueFormat: "YYYY-MM-DD",
         value: dateValue,
         defaultValue: defaultDate,
-        leftSection: leftSection ?? /* @__PURE__ */ jsx8(IconCalendar, { size: 16, stroke: 1.5 }),
+        leftSection: leftSection ?? /* @__PURE__ */ jsx9(IconCalendar, { size: 16, stroke: 1.5 }),
         leftSectionPointerEvents: "none",
         onChange: (next) => {
           onChange?.(toDateString(next));
@@ -2093,12 +2180,12 @@ import {
   Modal as MantineModal,
   Drawer as MantineDrawer
 } from "@mantine/core";
-import { jsx as jsx9 } from "react/jsx-runtime";
+import { jsx as jsx10 } from "react/jsx-runtime";
 function Modal(props) {
-  return /* @__PURE__ */ jsx9(MantineModal, { ...props });
+  return /* @__PURE__ */ jsx10(MantineModal, { ...props });
 }
 function Drawer(props) {
-  return /* @__PURE__ */ jsx9(MantineDrawer, { ...props });
+  return /* @__PURE__ */ jsx10(MantineDrawer, { ...props });
 }
 
 // src/components/Navigation.tsx
@@ -2116,7 +2203,7 @@ import {
   useRef as useRef2,
   useState as useState2
 } from "react";
-import { jsx as jsx10, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx11, jsxs as jsxs4 } from "react/jsx-runtime";
 function Tabs(props) {
   if ("options" in props) {
     let onKeyDown2 = function(event, index) {
@@ -2134,7 +2221,7 @@ function Tabs(props) {
     var onKeyDown = onKeyDown2;
     const legacyProps = props;
     const refs = useRef2([]);
-    return /* @__PURE__ */ jsx10("div", { className: "vj-tabs", role: "tablist", "aria-label": legacyProps.ariaLabel, children: legacyProps.options.map((option, index) => /* @__PURE__ */ jsx10(
+    return /* @__PURE__ */ jsx11("div", { className: "vj-tabs", role: "tablist", "aria-label": legacyProps.ariaLabel, children: legacyProps.options.map((option, index) => /* @__PURE__ */ jsx11(
       "button",
       {
         ref: (node) => {
@@ -2152,14 +2239,14 @@ function Tabs(props) {
       option.value
     )) });
   }
-  return /* @__PURE__ */ jsx10(MantineTabs, { ...props });
+  return /* @__PURE__ */ jsx11(MantineTabs, { ...props });
 }
 Tabs.List = MantineTabs.List;
 Tabs.Tab = MantineTabs.Tab;
 Tabs.Panel = MantineTabs.Panel;
 function SegmentedControl(props) {
   if ("options" in props) {
-    return /* @__PURE__ */ jsx10("div", { className: "vj-segmented", role: "radiogroup", "aria-label": props.ariaLabel, children: props.options.map((option) => /* @__PURE__ */ jsx10(
+    return /* @__PURE__ */ jsx11("div", { className: "vj-segmented", role: "radiogroup", "aria-label": props.ariaLabel, children: props.options.map((option) => /* @__PURE__ */ jsx11(
       "button",
       {
         className: "vj-segmented__item",
@@ -2172,7 +2259,7 @@ function SegmentedControl(props) {
       option.value
     )) });
   }
-  return /* @__PURE__ */ jsx10(MantineSegmentedControl, { size: props.size ?? "sm", ...props });
+  return /* @__PURE__ */ jsx11(MantineSegmentedControl, { size: props.size ?? "sm", ...props });
 }
 function Pagination(props) {
   if ("page" in props) {
@@ -2181,7 +2268,7 @@ function Pagination(props) {
     const start = Math.max(1, Math.min(current - 2, total - 4));
     const pages = Array.from({ length: Math.min(5, total) }, (_, index) => start + index);
     return /* @__PURE__ */ jsxs4("nav", { className: "vj-pagination", "aria-label": props.ariaLabel ?? "\u5206\u9875", children: [
-      /* @__PURE__ */ jsx10(
+      /* @__PURE__ */ jsx11(
         "button",
         {
           type: "button",
@@ -2190,7 +2277,7 @@ function Pagination(props) {
           children: "\u4E0A\u4E00\u9875"
         }
       ),
-      pages.map((item) => /* @__PURE__ */ jsx10(
+      pages.map((item) => /* @__PURE__ */ jsx11(
         "button",
         {
           type: "button",
@@ -2200,7 +2287,7 @@ function Pagination(props) {
         },
         item
       )),
-      /* @__PURE__ */ jsx10(
+      /* @__PURE__ */ jsx11(
         "button",
         {
           type: "button",
@@ -2211,10 +2298,10 @@ function Pagination(props) {
       )
     ] });
   }
-  return /* @__PURE__ */ jsx10(MantinePagination, { size: props.size ?? "sm", ...props });
+  return /* @__PURE__ */ jsx11(MantinePagination, { size: props.size ?? "sm", ...props });
 }
 function Menu(props) {
-  return /* @__PURE__ */ jsx10(MantineMenu, { ...props });
+  return /* @__PURE__ */ jsx11(MantineMenu, { ...props });
 }
 Menu.Target = MantineMenu.Target;
 Menu.Dropdown = MantineMenu.Dropdown;
@@ -2248,7 +2335,7 @@ function Popover(props) {
       };
     }, [visible]);
     return /* @__PURE__ */ jsxs4("div", { className: "vj-popover", ref: rootRef, children: [
-      /* @__PURE__ */ jsx10(
+      /* @__PURE__ */ jsx11(
         "button",
         {
           className: "vj-popover__trigger",
@@ -2260,7 +2347,7 @@ function Popover(props) {
           children: props.trigger
         }
       ),
-      visible ? /* @__PURE__ */ jsx10(
+      visible ? /* @__PURE__ */ jsx11(
         "div",
         {
           className: "vj-popover__content",
@@ -2273,7 +2360,7 @@ function Popover(props) {
       ) : null
     ] });
   }
-  return /* @__PURE__ */ jsx10(MantinePopover, { ...props });
+  return /* @__PURE__ */ jsx11(MantinePopover, { ...props });
 }
 Popover.Target = MantinePopover.Target;
 Popover.Dropdown = MantinePopover.Dropdown;
@@ -2281,8 +2368,8 @@ function Tooltip(props) {
   if ("trigger" in props) {
     const id = useId();
     return /* @__PURE__ */ jsxs4("span", { className: "vj-tooltip", children: [
-      /* @__PURE__ */ jsx10("button", { type: "button", "aria-label": props.triggerLabel, "aria-describedby": id, children: props.trigger }),
-      /* @__PURE__ */ jsx10(
+      /* @__PURE__ */ jsx11("button", { type: "button", "aria-label": props.triggerLabel, "aria-describedby": id, children: props.trigger }),
+      /* @__PURE__ */ jsx11(
         "span",
         {
           className: "vj-tooltip__content",
@@ -2294,7 +2381,7 @@ function Tooltip(props) {
       )
     ] });
   }
-  return /* @__PURE__ */ jsx10(MantineTooltip, { ...props });
+  return /* @__PURE__ */ jsx11(MantineTooltip, { ...props });
 }
 
 // src/components/DataTable.tsx
@@ -2313,9 +2400,9 @@ import { useMemo as useMemo5, useState as useState4 } from "react";
 import {
   Table as MantineTable
 } from "@mantine/core";
-import { jsx as jsx11 } from "react/jsx-runtime";
+import { jsx as jsx12 } from "react/jsx-runtime";
 function Table(props) {
-  return /* @__PURE__ */ jsx11(MantineTable, { ...props });
+  return /* @__PURE__ */ jsx12(MantineTable, { ...props });
 }
 Table.Thead = MantineTable.Thead;
 Table.Tbody = MantineTable.Tbody;
@@ -2334,33 +2421,33 @@ import {
   Stack,
   Text
 } from "@mantine/core";
-import { jsx as jsx12, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx13, jsxs as jsxs5 } from "react/jsx-runtime";
 function Empty({
   title = "\u6682\u65E0\u5185\u5BB9",
   description,
   action,
   icon
 }) {
-  return /* @__PURE__ */ jsx12(Center, { py: 40, px: "md", children: /* @__PURE__ */ jsxs5(Stack, { align: "center", gap: "sm", maw: 360, children: [
+  return /* @__PURE__ */ jsx13(Center, { py: 40, px: "md", children: /* @__PURE__ */ jsxs5(Stack, { align: "center", gap: "sm", maw: 360, children: [
     icon,
-    /* @__PURE__ */ jsx12(Text, { fw: 600, size: "sm", c: COLORS.ink, children: title }),
-    description ? /* @__PURE__ */ jsx12(Text, { size: "sm", c: "dimmed", ta: "center", children: description }) : null,
+    /* @__PURE__ */ jsx13(Text, { fw: 600, size: "sm", c: COLORS.ink, children: title }),
+    description ? /* @__PURE__ */ jsx13(Text, { size: "sm", c: "dimmed", ta: "center", children: description }) : null,
     action
   ] }) });
 }
 function Skeleton({ variant, lines, ...props }) {
   if (variant) {
-    return /* @__PURE__ */ jsx12("div", { className: "vj-skeleton", "data-variant": variant, "aria-hidden": "true", children: Array.from(
+    return /* @__PURE__ */ jsx13("div", { className: "vj-skeleton", "data-variant": variant, "aria-hidden": "true", children: Array.from(
       { length: variant === "text" ? lines ?? 1 : 1 },
-      (_, index) => /* @__PURE__ */ jsx12("span", {}, index)
+      (_, index) => /* @__PURE__ */ jsx13("span", {}, index)
     ) });
   }
-  return /* @__PURE__ */ jsx12(MantineSkeleton, { ...props });
+  return /* @__PURE__ */ jsx13(MantineSkeleton, { ...props });
 }
 function Spinner({ label, size = "sm" }) {
-  return /* @__PURE__ */ jsx12(Center, { py: "xl", children: /* @__PURE__ */ jsxs5(Stack, { align: "center", gap: "sm", children: [
-    /* @__PURE__ */ jsx12(Loader, { size, color: "brand", type: "dots" }),
-    label ? /* @__PURE__ */ jsx12(Text, { size: "sm", c: "dimmed", children: label }) : null
+  return /* @__PURE__ */ jsx13(Center, { py: "xl", children: /* @__PURE__ */ jsxs5(Stack, { align: "center", gap: "sm", children: [
+    /* @__PURE__ */ jsx13(Loader, { size, color: "brand", type: "dots" }),
+    label ? /* @__PURE__ */ jsx13(Text, { size: "sm", c: "dimmed", children: label }) : null
   ] }) });
 }
 
@@ -2380,7 +2467,7 @@ import {
   useRef as useRef3,
   useState as useState3
 } from "react";
-import { Fragment, jsx as jsx13, jsxs as jsxs6 } from "react/jsx-runtime";
+import { Fragment, jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
 function normalizeTone(tone = "neutral") {
   if (tone === "accent") return "info";
   if (tone === "danger") return "error";
@@ -2397,7 +2484,7 @@ function Card({
   ...props
 }) {
   if (header == null && footer == null && bodyPadding == null && !scrollBody) {
-    return /* @__PURE__ */ jsx13(MantineCard, { padding, ...props, children });
+    return /* @__PURE__ */ jsx14(MantineCard, { padding, ...props, children });
   }
   const outerPad = typeof padding === "string" && padding in PAD ? PAD[padding] : typeof padding === "number" ? padding : PAD.md;
   const innerPad = bodyPadding === "none" ? 0 : bodyPadding && bodyPadding in PAD ? PAD[bodyPadding] : outerPad;
@@ -2416,8 +2503,8 @@ function Card({
         ...props.style
       },
       children: [
-        header != null ? /* @__PURE__ */ jsx13("div", { className: "vj-card__header", style: { padding: outerPad }, children: typeof header === "string" ? /* @__PURE__ */ jsx13("div", { className: "vj-card__title", children: header }) : header }) : null,
-        /* @__PURE__ */ jsx13(
+        header != null ? /* @__PURE__ */ jsx14("div", { className: "vj-card__header", style: { padding: outerPad }, children: typeof header === "string" ? /* @__PURE__ */ jsx14("div", { className: "vj-card__title", children: header }) : header }) : null,
+        /* @__PURE__ */ jsx14(
           "div",
           {
             className: "vj-card__body",
@@ -2430,16 +2517,16 @@ function Card({
             children
           }
         ),
-        footer != null ? /* @__PURE__ */ jsx13("div", { className: "vj-card__footer", style: { padding: outerPad }, children: footer }) : null
+        footer != null ? /* @__PURE__ */ jsx14("div", { className: "vj-card__footer", style: { padding: outerPad }, children: footer }) : null
       ]
     }
   );
 }
 function Badge({ label, children, tone = "neutral" }) {
-  return /* @__PURE__ */ jsx13("span", { className: "vj-badge", "data-tone": normalizeTone(tone), children: label ?? children });
+  return /* @__PURE__ */ jsx14("span", { className: "vj-badge", "data-tone": normalizeTone(tone), children: label ?? children });
 }
 function StatusDot({ label, tone = "neutral" }) {
-  return /* @__PURE__ */ jsx13("span", { className: "vj-status-dot", "data-tone": normalizeTone(tone), children: label });
+  return /* @__PURE__ */ jsx14("span", { className: "vj-status-dot", "data-tone": normalizeTone(tone), children: label });
 }
 function TrendBadge({
   direction,
@@ -2449,7 +2536,7 @@ function TrendBadge({
   const tone = direction === "flat" ? "neutral" : direction === positiveDirection ? "success" : "error";
   const marker = direction === "up" ? "\u2191" : direction === "down" ? "\u2193" : "\u2014";
   return /* @__PURE__ */ jsxs6(Badge, { tone, children: [
-    /* @__PURE__ */ jsx13("span", { "aria-hidden": true, children: marker }),
+    /* @__PURE__ */ jsx14("span", { "aria-hidden": true, children: marker }),
     value,
     /* @__PURE__ */ jsxs6("span", { className: "vj-visually-hidden", children: [
       "\uFF0C\u8D8B\u52BF",
@@ -2483,7 +2570,7 @@ function FormField({
       ] }) : null
     ] }),
     control,
-    error || description ? /* @__PURE__ */ jsx13(
+    error || description ? /* @__PURE__ */ jsx14(
       "p",
       {
         className: "vj-field__message",
@@ -2508,7 +2595,7 @@ function TextArea({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     "textarea",
     {
       className: "vj-textarea",
@@ -2543,7 +2630,7 @@ function NumberInput({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     "input",
     {
       className: "vj-input",
@@ -2572,7 +2659,7 @@ function List({
   dividers = false,
   ariaLabel
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     "div",
     {
       className: "vj-list",
@@ -2593,14 +2680,14 @@ function ListItem({
   disabled
 }) {
   const content = /* @__PURE__ */ jsxs6(Fragment, { children: [
-    startContent ? /* @__PURE__ */ jsx13("span", { className: "vj-list-item__side", children: startContent }) : null,
+    startContent ? /* @__PURE__ */ jsx14("span", { className: "vj-list-item__side", children: startContent }) : null,
     /* @__PURE__ */ jsxs6("span", { className: "vj-list-item__body", children: [
-      /* @__PURE__ */ jsx13("span", { className: "vj-list-item__label", children: label }),
-      description ? /* @__PURE__ */ jsx13("span", { className: "vj-list-item__desc", children: description }) : null
+      /* @__PURE__ */ jsx14("span", { className: "vj-list-item__label", children: label }),
+      description ? /* @__PURE__ */ jsx14("span", { className: "vj-list-item__desc", children: description }) : null
     ] }),
-    endContent ? /* @__PURE__ */ jsx13("span", { className: "vj-list-item__side", children: endContent }) : null
+    endContent ? /* @__PURE__ */ jsx14("span", { className: "vj-list-item__side", children: endContent }) : null
   ] });
-  return onClick ? /* @__PURE__ */ jsx13(
+  return onClick ? /* @__PURE__ */ jsx14(
     "button",
     {
       className: "vj-list-item",
@@ -2610,7 +2697,7 @@ function ListItem({
       onClick,
       children: content
     }
-  ) : /* @__PURE__ */ jsx13("div", { className: "vj-list-item", role: "listitem", children: content });
+  ) : /* @__PURE__ */ jsx14("div", { className: "vj-list-item", role: "listitem", children: content });
 }
 function LegacyDataTable({
   columns,
@@ -2620,10 +2707,10 @@ function LegacyDataTable({
   density = "default",
   emptyLabel = "\u6682\u65E0\u6570\u636E"
 }) {
-  return /* @__PURE__ */ jsx13("div", { className: "vj-table-wrap", children: /* @__PURE__ */ jsxs6("table", { className: "vj-table", "data-density": density, children: [
-    /* @__PURE__ */ jsx13("caption", { children: ariaLabel }),
-    /* @__PURE__ */ jsx13("thead", { children: /* @__PURE__ */ jsx13("tr", { children: columns.map((column) => /* @__PURE__ */ jsx13("th", { scope: "col", "data-align": column.align, children: column.header }, column.key)) }) }),
-    /* @__PURE__ */ jsx13("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx13("tr", { children: /* @__PURE__ */ jsx13("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : data.map((row) => /* @__PURE__ */ jsx13("tr", { children: columns.map((column) => /* @__PURE__ */ jsx13("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
+  return /* @__PURE__ */ jsx14("div", { className: "vj-table-wrap", children: /* @__PURE__ */ jsxs6("table", { className: "vj-table", "data-density": density, children: [
+    /* @__PURE__ */ jsx14("caption", { children: ariaLabel }),
+    /* @__PURE__ */ jsx14("thead", { children: /* @__PURE__ */ jsx14("tr", { children: columns.map((column) => /* @__PURE__ */ jsx14("th", { scope: "col", "data-align": column.align, children: column.header }, column.key)) }) }),
+    /* @__PURE__ */ jsx14("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx14("tr", { children: /* @__PURE__ */ jsx14("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : data.map((row) => /* @__PURE__ */ jsx14("tr", { children: columns.map((column) => /* @__PURE__ */ jsx14("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
   ] }) });
 }
 function Dialog({
@@ -2655,11 +2742,11 @@ function Dialog({
       "aria-describedby": description ? "vj-dialog-description" : void 0,
       children: [
         /* @__PURE__ */ jsxs6("header", { className: "vj-dialog__header", children: [
-          /* @__PURE__ */ jsx13("h2", { className: "vj-dialog__title", id: "vj-dialog-title", children: title }),
-          description ? /* @__PURE__ */ jsx13("p", { className: "vj-dialog__description", id: "vj-dialog-description", children: description }) : null
+          /* @__PURE__ */ jsx14("h2", { className: "vj-dialog__title", id: "vj-dialog-title", children: title }),
+          description ? /* @__PURE__ */ jsx14("p", { className: "vj-dialog__description", id: "vj-dialog-description", children: description }) : null
         ] }),
-        /* @__PURE__ */ jsx13("div", { className: "vj-dialog__body", children }),
-        /* @__PURE__ */ jsx13("footer", { className: "vj-dialog__footer", children: footer ?? /* @__PURE__ */ jsx13(Button, { variant: "secondary", label: "\u5173\u95ED", onClick: () => onOpenChange(false) }) })
+        /* @__PURE__ */ jsx14("div", { className: "vj-dialog__body", children }),
+        /* @__PURE__ */ jsx14("footer", { className: "vj-dialog__footer", children: footer ?? /* @__PURE__ */ jsx14(Button, { variant: "secondary", label: "\u5173\u95ED", onClick: () => onOpenChange(false) }) })
       ]
     }
   );
@@ -2674,7 +2761,7 @@ function AlertDialog({
   onConfirm,
   loading = false
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     Dialog,
     {
       open,
@@ -2682,7 +2769,7 @@ function AlertDialog({
       title,
       description,
       footer: /* @__PURE__ */ jsxs6(Fragment, { children: [
-        /* @__PURE__ */ jsx13(
+        /* @__PURE__ */ jsx14(
           Button,
           {
             variant: "secondary",
@@ -2690,7 +2777,7 @@ function AlertDialog({
             onClick: () => onOpenChange(false)
           }
         ),
-        /* @__PURE__ */ jsx13(
+        /* @__PURE__ */ jsx14(
           Button,
           {
             variant: "danger",
@@ -2712,7 +2799,7 @@ function mapGap(gap) {
   return gap;
 }
 var Stack2 = forwardRef7(function Stack3({ gap = "md", ...props }, ref) {
-  return /* @__PURE__ */ jsx13(MantineStack, { ref, gap: mapGap(gap), ...props });
+  return /* @__PURE__ */ jsx14(MantineStack, { ref, gap: mapGap(gap), ...props });
 });
 function HStack({
   children,
@@ -2721,7 +2808,7 @@ function HStack({
   align = "center",
   wrap = false
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     Group,
     {
       gap: mapGap(gap),
@@ -2733,15 +2820,15 @@ function HStack({
   );
 }
 function Grid({ children, gap = "4", columns = 2 }) {
-  return /* @__PURE__ */ jsx13(SimpleGrid, { cols: { base: 1, sm: columns }, spacing: mapGap(gap), children });
+  return /* @__PURE__ */ jsx14(SimpleGrid, { cols: { base: 1, sm: columns }, spacing: mapGap(gap), children });
 }
 function PageCanvas({ children }) {
-  return /* @__PURE__ */ jsx13("main", { className: "vj-page-canvas", children });
+  return /* @__PURE__ */ jsx14("main", { className: "vj-page-canvas", children });
 }
 function PageHeader({ title, scope, context, actions }) {
   return /* @__PURE__ */ jsxs6("header", { className: "vj-page-header", children: [
     /* @__PURE__ */ jsxs6("div", { className: "vj-page-header__main", children: [
-      /* @__PURE__ */ jsx13("h1", { className: "vj-page-header__title", children: title }),
+      /* @__PURE__ */ jsx14("h1", { className: "vj-page-header__title", children: title }),
       scope,
       context ? /* @__PURE__ */ jsxs6("span", { className: "vj-page-header__context", children: [
         "\xB7 ",
@@ -2760,8 +2847,8 @@ function SectionHeader({
   const copy = description ?? subtitle;
   return /* @__PURE__ */ jsxs6("div", { className: "vj-section-header", children: [
     /* @__PURE__ */ jsxs6("div", { children: [
-      /* @__PURE__ */ jsx13("h2", { children: title }),
-      copy ? /* @__PURE__ */ jsx13("p", { children: copy }) : null
+      /* @__PURE__ */ jsx14("h2", { children: title }),
+      copy ? /* @__PURE__ */ jsx14("p", { children: copy }) : null
     ] }),
     actions
   ] });
@@ -2774,22 +2861,22 @@ function DashboardPage({
   children
 }) {
   return /* @__PURE__ */ jsxs6("div", { className: "vj-pattern", children: [
-    /* @__PURE__ */ jsx13(PageHeader, { title, scope, context, actions }),
-    /* @__PURE__ */ jsx13(PageCanvas, { children })
+    /* @__PURE__ */ jsx14(PageHeader, { title, scope, context, actions }),
+    /* @__PURE__ */ jsx14(PageCanvas, { children })
   ] });
 }
 var ListPage = DashboardPage;
 var DetailPage = DashboardPage;
 var SettingsPage = DashboardPage;
 function EmptyState({ title, description, action }) {
-  return /* @__PURE__ */ jsx13("section", { className: "vj-empty-state", children: /* @__PURE__ */ jsxs6("div", { children: [
-    /* @__PURE__ */ jsx13("h2", { children: title }),
-    /* @__PURE__ */ jsx13("p", { children: description }),
+  return /* @__PURE__ */ jsx14("section", { className: "vj-empty-state", children: /* @__PURE__ */ jsxs6("div", { children: [
+    /* @__PURE__ */ jsx14("h2", { children: title }),
+    /* @__PURE__ */ jsx14("p", { children: description }),
     action
   ] }) });
 }
 function PermissionDeniedState({ action }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     EmptyState,
     {
       title: "\u6CA1\u6709\u8BBF\u95EE\u6743\u9650",
@@ -2799,7 +2886,7 @@ function PermissionDeniedState({ action }) {
   );
 }
 function ErrorState({ action }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     EmptyState,
     {
       title: "\u5185\u5BB9\u6682\u65F6\u65E0\u6CD5\u52A0\u8F7D",
@@ -2814,8 +2901,8 @@ function FilterWorkspace({
   filterLabel = "\u7B5B\u9009\u6761\u4EF6"
 }) {
   return /* @__PURE__ */ jsxs6("div", { className: "vj-filter-workspace", children: [
-    /* @__PURE__ */ jsx13("aside", { "aria-label": filterLabel, children: filters }),
-    /* @__PURE__ */ jsx13("section", { children })
+    /* @__PURE__ */ jsx14("aside", { "aria-label": filterLabel, children: filters }),
+    /* @__PURE__ */ jsx14("section", { children })
   ] });
 }
 function DataSection({
@@ -2825,10 +2912,10 @@ function DataSection({
   children,
   bodyPadding = "none"
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     Card,
     {
-      header: /* @__PURE__ */ jsx13(SectionHeader, { title, description, actions }),
+      header: /* @__PURE__ */ jsx14(SectionHeader, { title, description, actions }),
       bodyPadding,
       children
     }
@@ -2840,7 +2927,7 @@ function FormSection({
   children,
   footer
 }) {
-  return /* @__PURE__ */ jsx13(Card, { header: /* @__PURE__ */ jsx13(SectionHeader, { title, description }), footer, children });
+  return /* @__PURE__ */ jsx14(Card, { header: /* @__PURE__ */ jsx14(SectionHeader, { title, description }), footer, children });
 }
 function AppShell({
   product,
@@ -2851,9 +2938,9 @@ function AppShell({
   children
 }) {
   return /* @__PURE__ */ jsxs6("div", { className: "vj-app-shell", children: [
-    /* @__PURE__ */ jsx13(SideNav, { product, brand, navigation, user }),
+    /* @__PURE__ */ jsx14(SideNav, { product, brand, navigation, user }),
     /* @__PURE__ */ jsxs6("div", { className: "vj-app-shell__main", children: [
-      /* @__PURE__ */ jsx13(MobileNav, { product, navigation, user }),
+      /* @__PURE__ */ jsx14(MobileNav, { product, navigation, user }),
       header,
       children
     ] })
@@ -2866,14 +2953,14 @@ function SideNav({
   user
 }) {
   return /* @__PURE__ */ jsxs6("aside", { className: "vj-sidebar", "aria-label": `${product} \u4E3B\u5BFC\u822A`, children: [
-    /* @__PURE__ */ jsx13("div", { className: "vj-sidebar__brand", children: brand }),
+    /* @__PURE__ */ jsx14("div", { className: "vj-sidebar__brand", children: brand }),
     navigation.map((section, index) => /* @__PURE__ */ jsxs6(
       "nav",
       {
         className: "vj-sidebar__section",
         "aria-label": section.label,
         children: [
-          section.label ? /* @__PURE__ */ jsx13("div", { className: "vj-sidebar__section-label", children: section.label }) : null,
+          section.label ? /* @__PURE__ */ jsx14("div", { className: "vj-sidebar__section-label", children: section.label }) : null,
           section.items.map((item) => /* @__PURE__ */ jsxs6(
             "button",
             {
@@ -2893,7 +2980,7 @@ function SideNav({
       },
       section.label ?? index
     )),
-    user ? /* @__PURE__ */ jsx13("div", { children: user }) : null
+    user ? /* @__PURE__ */ jsx14("div", { children: user }) : null
   ] });
 }
 function MobileNav({
@@ -2904,14 +2991,14 @@ function MobileNav({
   const items = navigation?.flatMap((section) => section.items).filter((item) => !item.disabled) ?? [];
   const active = items.find((item) => item.active)?.id ?? items[0]?.id ?? "";
   return /* @__PURE__ */ jsxs6("div", { className: "vj-mobile-nav", children: [
-    /* @__PURE__ */ jsx13("strong", { children: product }),
-    items.length > 0 ? /* @__PURE__ */ jsx13(
+    /* @__PURE__ */ jsx14("strong", { children: product }),
+    items.length > 0 ? /* @__PURE__ */ jsx14(
       "select",
       {
         "aria-label": "\u9875\u9762\u5BFC\u822A",
         value: active,
         onChange: (event) => items.find((item) => item.id === event.currentTarget.value)?.onSelect?.(),
-        children: items.map((item) => /* @__PURE__ */ jsx13("option", { value: item.id, children: item.label }, item.id))
+        children: items.map((item) => /* @__PURE__ */ jsx14("option", { value: item.id, children: item.label }, item.id))
       }
     ) : null,
     user
@@ -2921,7 +3008,7 @@ function KpiGrid({
   children,
   columns = 4
 }) {
-  return /* @__PURE__ */ jsx13("div", { className: "vj-kpi-grid", "data-columns": columns, children });
+  return /* @__PURE__ */ jsx14("div", { className: "vj-kpi-grid", "data-columns": columns, children });
 }
 function StatCard({
   value,
@@ -2935,22 +3022,22 @@ function StatCard({
       value,
       trend
     ] }),
-    /* @__PURE__ */ jsx13("div", { className: "vj-stat__label", children: label }),
-    hint ? /* @__PURE__ */ jsx13("div", { className: "vj-stat__hint", children: hint }) : null
+    /* @__PURE__ */ jsx14("div", { className: "vj-stat__label", children: label }),
+    hint ? /* @__PURE__ */ jsx14("div", { className: "vj-stat__hint", children: hint }) : null
   ] });
 }
 function DashboardGrid({ children }) {
-  return /* @__PURE__ */ jsx13("div", { className: "vj-dashboard-grid", children });
+  return /* @__PURE__ */ jsx14("div", { className: "vj-dashboard-grid", children });
 }
 function DashboardGridItem({
   children,
   span = 6
 }) {
-  return /* @__PURE__ */ jsx13("div", { className: "vj-dashboard-grid__item", "data-span": span, children });
+  return /* @__PURE__ */ jsx14("div", { className: "vj-dashboard-grid__item", "data-span": span, children });
 }
 var IconButton = forwardRef7(
   function IconButton2({ label, icon, variant = "ghost", size = "md", disabled, onClick }, ref) {
-    return /* @__PURE__ */ jsx13(
+    return /* @__PURE__ */ jsx14(
       "button",
       {
         ref,
@@ -2977,7 +3064,7 @@ function ProgressBar({
   const percent = Math.min(100, Math.max(0, value / safeMax * 100));
   return /* @__PURE__ */ jsxs6("div", { className: "vj-progress", children: [
     /* @__PURE__ */ jsxs6("div", { className: "vj-progress__meta", children: [
-      /* @__PURE__ */ jsx13("span", { children: label }),
+      /* @__PURE__ */ jsx14("span", { children: label }),
       showValue ? /* @__PURE__ */ jsxs6("span", { children: [
         Math.round(percent),
         "%"
@@ -3002,14 +3089,14 @@ function ThemeProvider({
   theme = "light",
   children
 }) {
-  return /* @__PURE__ */ jsx13("div", { className: "vijim-root", "data-vijim-theme": theme, children });
+  return /* @__PURE__ */ jsx14("div", { className: "vijim-root", "data-vijim-theme": theme, children });
 }
 function BrandLockup({
   product,
   background = "light",
   alt = `VIJIM ${product}`
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     "img",
     {
       src: `/brand/vijimlabs-${product.toLowerCase()}-lockup${background === "dark" ? "-dark" : ""}.svg`,
@@ -3049,7 +3136,7 @@ function ChartCard({
   children,
   footer
 }) {
-  return /* @__PURE__ */ jsx13(Card, { header: /* @__PURE__ */ jsx13(SectionHeader, { title, description }), footer, children });
+  return /* @__PURE__ */ jsx14(Card, { header: /* @__PURE__ */ jsx14(SectionHeader, { title, description }), footer, children });
 }
 function Avatar({
   src,
@@ -3058,7 +3145,7 @@ function Avatar({
   size = "md"
 }) {
   const [failed, setFailed] = useState3(false);
-  return /* @__PURE__ */ jsx13("span", { className: "vj-avatar", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx13("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx13("span", { "aria-label": alt, children: fallback.slice(0, 2) }) });
+  return /* @__PURE__ */ jsx14("span", { className: "vj-avatar", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx14("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx14("span", { "aria-label": alt, children: fallback.slice(0, 2) }) });
 }
 function Thumbnail({
   src,
@@ -3067,16 +3154,16 @@ function Thumbnail({
   fallbackLabel = "\u6682\u65E0\u56FE\u7247"
 }) {
   const [failed, setFailed] = useState3(false);
-  return /* @__PURE__ */ jsx13("span", { className: "vj-thumbnail", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx13("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx13("span", { role: "img", "aria-label": `${alt}\uFF1A${fallbackLabel}`, children: fallbackLabel }) });
+  return /* @__PURE__ */ jsx14("span", { className: "vj-thumbnail", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx14("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx14("span", { role: "img", "aria-label": `${alt}\uFF1A${fallbackLabel}`, children: fallbackLabel }) });
 }
 function MetadataList({
   items,
   columns = 1,
   ariaLabel
 }) {
-  return /* @__PURE__ */ jsx13("dl", { className: "vj-metadata", "data-columns": columns, "aria-label": ariaLabel, children: items.map((item) => /* @__PURE__ */ jsxs6("div", { children: [
-    /* @__PURE__ */ jsx13("dt", { children: item.label }),
-    /* @__PURE__ */ jsx13("dd", { children: item.value })
+  return /* @__PURE__ */ jsx14("dl", { className: "vj-metadata", "data-columns": columns, "aria-label": ariaLabel, children: items.map((item) => /* @__PURE__ */ jsxs6("div", { children: [
+    /* @__PURE__ */ jsx14("dt", { children: item.label }),
+    /* @__PURE__ */ jsx14("dd", { children: item.value })
   ] }, item.label)) });
 }
 function MultiSelector({
@@ -3089,7 +3176,7 @@ function MultiSelector({
   const toggle = (value) => onChange(
     values.includes(value) ? values.filter((item) => item !== value) : [...values, value]
   );
-  return /* @__PURE__ */ jsx13("div", { className: "vj-multi-selector", role: "group", "aria-label": label, children: options.map((option) => /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14("div", { className: "vj-multi-selector", role: "group", "aria-label": label, children: options.map((option) => /* @__PURE__ */ jsx14(
     "button",
     {
       type: "button",
@@ -3108,8 +3195,8 @@ function Tag({
   removeLabel = `\u79FB\u9664${label}`
 }) {
   return /* @__PURE__ */ jsxs6("span", { className: "vj-tag", "data-tone": tone, children: [
-    /* @__PURE__ */ jsx13("span", { children: label }),
-    onRemove ? /* @__PURE__ */ jsx13("button", { type: "button", "aria-label": removeLabel, onClick: onRemove, children: "\xD7" }) : null
+    /* @__PURE__ */ jsx14("span", { children: label }),
+    onRemove ? /* @__PURE__ */ jsx14("button", { type: "button", "aria-label": removeLabel, onClick: onRemove, children: "\xD7" }) : null
   ] });
 }
 function InputGroup({
@@ -3126,8 +3213,8 @@ function InputGroup({
   "aria-invalid": invalid
 }) {
   return /* @__PURE__ */ jsxs6("div", { className: "vj-input-group", "data-invalid": invalid || void 0, children: [
-    prefix ? /* @__PURE__ */ jsx13("span", { children: prefix }) : null,
-    /* @__PURE__ */ jsx13(
+    prefix ? /* @__PURE__ */ jsx14("span", { children: prefix }) : null,
+    /* @__PURE__ */ jsx14(
       "input",
       {
         value,
@@ -3141,7 +3228,7 @@ function InputGroup({
         "aria-invalid": invalid
       }
     ),
-    suffix ? /* @__PURE__ */ jsx13("span", { children: suffix }) : null
+    suffix ? /* @__PURE__ */ jsx14("span", { children: suffix }) : null
   ] });
 }
 function Slider({
@@ -3156,10 +3243,10 @@ function Slider({
 }) {
   return /* @__PURE__ */ jsxs6("label", { className: "vj-slider", children: [
     /* @__PURE__ */ jsxs6("span", { className: "vj-slider__meta", children: [
-      /* @__PURE__ */ jsx13("span", { children: label }),
-      showValue ? /* @__PURE__ */ jsx13("strong", { children: value }) : null
+      /* @__PURE__ */ jsx14("span", { children: label }),
+      showValue ? /* @__PURE__ */ jsx14("strong", { children: value }) : null
     ] }),
-    /* @__PURE__ */ jsx13(
+    /* @__PURE__ */ jsx14(
       "input",
       {
         type: "range",
@@ -3185,7 +3272,7 @@ function DatePicker({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx14(
     "input",
     {
       className: "vj-input vj-date",
@@ -3205,12 +3292,12 @@ function DatePicker({
 }
 
 // src/components/DataTable.tsx
-import { jsx as jsx14, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
 function DataTable(props) {
   if ("rowKey" in props) {
-    return /* @__PURE__ */ jsx14(LegacyDataTable, { ...props });
+    return /* @__PURE__ */ jsx15(LegacyDataTable, { ...props });
   }
-  return /* @__PURE__ */ jsx14(ModernDataTable, { ...props });
+  return /* @__PURE__ */ jsx15(ModernDataTable, { ...props });
 }
 function ModernDataTable({
   data,
@@ -3242,7 +3329,7 @@ function ModernDataTable({
     const selectCol = {
       id: "__select",
       size: 40,
-      header: ({ table: table2 }) => /* @__PURE__ */ jsx14(
+      header: ({ table: table2 }) => /* @__PURE__ */ jsx15(
         Checkbox,
         {
           "aria-label": "\u5168\u9009",
@@ -3251,7 +3338,7 @@ function ModernDataTable({
           onChange: table2.getToggleAllPageRowsSelectedHandler()
         }
       ),
-      cell: ({ row }) => /* @__PURE__ */ jsx14(
+      cell: ({ row }) => /* @__PURE__ */ jsx15(
         Checkbox,
         {
           "aria-label": "\u9009\u62E9\u884C",
@@ -3285,8 +3372,8 @@ function ModernDataTable({
   const rows = table.getRowModel().rows;
   const pageCount = table.getPageCount();
   return /* @__PURE__ */ jsxs7("div", { children: [
-    toolbar ? /* @__PURE__ */ jsx14("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
-    /* @__PURE__ */ jsx14(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs7(
+    toolbar ? /* @__PURE__ */ jsx15("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
+    /* @__PURE__ */ jsx15(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs7(
       Table,
       {
         highlightOnHover: true,
@@ -3294,7 +3381,7 @@ function ModernDataTable({
         verticalSpacing: "sm",
         stickyHeader: Boolean(maxHeight),
         children: [
-          /* @__PURE__ */ jsx14(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx14(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs7(
+          /* @__PURE__ */ jsx15(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx15(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs7(
             Table.Th,
             {
               style: {
@@ -3316,7 +3403,7 @@ function ModernDataTable({
             },
             header.id
           )) }, hg.id)) }),
-          /* @__PURE__ */ jsx14(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx14(Table.Tr, { children: /* @__PURE__ */ jsx14(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx14(Text3, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx14(Table.Tr, { children: /* @__PURE__ */ jsx14(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx14(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx15(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx15(Table.Tr, { children: /* @__PURE__ */ jsx15(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx15(Text3, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx15(Table.Tr, { children: /* @__PURE__ */ jsx15(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx15(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx15(
             Table.Tr,
             {
               "data-selected": row.getIsSelected() || void 0,
@@ -3325,7 +3412,7 @@ function ModernDataTable({
                 backgroundColor: row.getIsSelected() ? "rgba(51, 112, 255, 0.06)" : void 0
               },
               onClick: () => onRowClick?.(row.original),
-              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx14(Table.Td, { children: flexRender(
+              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx15(Table.Td, { children: flexRender(
                 cell.column.columnDef.cell,
                 cell.getContext()
               ) }, cell.id))
@@ -3341,7 +3428,7 @@ function ModernDataTable({
         data.length,
         " \u6761"
       ] }),
-      /* @__PURE__ */ jsx14(
+      /* @__PURE__ */ jsx15(
         Pagination,
         {
           total: pageCount,
@@ -3355,7 +3442,7 @@ function ModernDataTable({
 
 // src/components/FilterBar.tsx
 import { Box as Box2, Group as Group3, Stack as Stack4, Text as Text4, UnstyledButton } from "@mantine/core";
-import { jsx as jsx15, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs8 } from "react/jsx-runtime";
 var PANEL = {
   bg: COLORS.surface,
   border: `1px solid ${COLORS.border}`,
@@ -3393,8 +3480,8 @@ function FilterBar({
         marginBottom: 16
       },
       children: [
-        /* @__PURE__ */ jsx15(Box2, { px: "md", py: "md", children }),
-        active != null || onClear ? /* @__PURE__ */ jsx15(
+        /* @__PURE__ */ jsx16(Box2, { px: "md", py: "md", children }),
+        active != null || onClear ? /* @__PURE__ */ jsx16(
           Box2,
           {
             px: "md",
@@ -3405,8 +3492,8 @@ function FilterBar({
               borderRadius: `0 0 ${PANEL.radius} ${PANEL.radius}`
             },
             children: /* @__PURE__ */ jsxs8(Group3, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
-              /* @__PURE__ */ jsx15(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
-              onClear ? /* @__PURE__ */ jsx15(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
+              /* @__PURE__ */ jsx16(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
+              onClear ? /* @__PURE__ */ jsx16(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
             ] })
           }
         ) : null
@@ -3423,9 +3510,9 @@ function FilterToolbar({
 }) {
   return /* @__PURE__ */ jsxs8(Stack4, { gap: "sm", children: [
     /* @__PURE__ */ jsxs8(Group3, { align: "center", gap: "md", wrap: "wrap", children: [
-      /* @__PURE__ */ jsx15(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
+      /* @__PURE__ */ jsx16(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
       /* @__PURE__ */ jsxs8(Group3, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
-        resultText ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
+        resultText ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
         actions
       ] })
     ] }),
@@ -3454,18 +3541,18 @@ function FilterBatchBar({
         /* @__PURE__ */ jsxs8(Text4, { size: "sm", c: COLORS.inkSecondary, children: [
           "\u5DF2\u9009",
           " ",
-          /* @__PURE__ */ jsx15(Text4, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
+          /* @__PURE__ */ jsx16(Text4, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
           " ",
           "\u9879"
         ] }),
-        /* @__PURE__ */ jsx15(Group3, { gap: "xs", children })
+        /* @__PURE__ */ jsx16(Group3, { gap: "xs", children })
       ]
     }
   );
 }
 function FilterRow({ children, label }) {
   return /* @__PURE__ */ jsxs8(Group3, { gap: 6, align: "center", wrap: "wrap", children: [
-    label ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+    label ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
     children
   ] });
 }
@@ -3478,7 +3565,7 @@ function FilterField({
 }) {
   if (layout === "stack") {
     return /* @__PURE__ */ jsxs8(Stack4, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
-      label ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
+      label ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
       children
     ] });
   }
@@ -3490,8 +3577,8 @@ function FilterField({
       wrap: "nowrap",
       style: { flex: grow ? "1 1 200px" : void 0, minWidth },
       children: [
-        label ? /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
-        /* @__PURE__ */ jsx15(Box2, { style: { flex: 1, minWidth: 0 }, children })
+        label ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+        /* @__PURE__ */ jsx16(Box2, { style: { flex: 1, minWidth: 0 }, children })
       ]
     }
   );
@@ -3503,7 +3590,7 @@ function FilterSegment({
   disabled = false,
   "aria-label": ariaLabel
 }) {
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx16(
     Group3,
     {
       gap: 2,
@@ -3572,7 +3659,7 @@ function FilterSegment({
             onMouseUp: press.onMouseUp,
             children: [
               opt.label,
-              opt.count !== void 0 ? /* @__PURE__ */ jsx15(
+              opt.count !== void 0 ? /* @__PURE__ */ jsx16(
                 Text4,
                 {
                   component: "span",
@@ -3650,7 +3737,7 @@ function FilterTerm({
       onMouseUp: press.onMouseUp,
       children: [
         label,
-        count !== void 0 ? /* @__PURE__ */ jsx15(
+        count !== void 0 ? /* @__PURE__ */ jsx16(
           Text4,
           {
             component: "span",
@@ -3680,7 +3767,7 @@ function FilterFacet({
   allLabel = "\u5168\u90E8"
 }) {
   return /* @__PURE__ */ jsxs8(Group3, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
-    /* @__PURE__ */ jsx15(
+    /* @__PURE__ */ jsx16(
       Text4,
       {
         size: "xs",
@@ -3695,7 +3782,7 @@ function FilterFacet({
       }
     ),
     /* @__PURE__ */ jsxs8(Group3, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
-      showAll ? /* @__PURE__ */ jsx15(
+      showAll ? /* @__PURE__ */ jsx16(
         FilterTerm,
         {
           label: allLabel,
@@ -3703,7 +3790,7 @@ function FilterFacet({
           onClick: () => onChange(null)
         }
       ) : null,
-      options.map((opt) => /* @__PURE__ */ jsx15(
+      options.map((opt) => /* @__PURE__ */ jsx16(
         FilterTerm,
         {
           label: opt.label,
@@ -3722,10 +3809,10 @@ function FilterActive({
   emptyText = "\u672A\u8BBE\u7F6E\u7B5B\u9009"
 }) {
   if (items.length === 0) {
-    return /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", children: emptyText });
+    return /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", children: emptyText });
   }
   return /* @__PURE__ */ jsxs8(Group3, { gap: "sm", align: "center", wrap: "wrap", children: [
-    /* @__PURE__ */ jsx15(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
+    /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
     items.map((item) => /* @__PURE__ */ jsxs8(
       Group3,
       {
@@ -3742,8 +3829,8 @@ function FilterActive({
           boxShadow: "0 1px 2px rgba(18,19,23,0.03)"
         },
         children: [
-          /* @__PURE__ */ jsx15(Text4, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
-          item.onRemove ? /* @__PURE__ */ jsx15(
+          /* @__PURE__ */ jsx16(Text4, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
+          item.onRemove ? /* @__PURE__ */ jsx16(
             UnstyledButton,
             {
               type: "button",
@@ -3767,7 +3854,7 @@ function FilterActive({
       },
       item.key
     )),
-    onClearAll ? /* @__PURE__ */ jsx15(
+    onClearAll ? /* @__PURE__ */ jsx16(
       UnstyledButton,
       {
         type: "button",
@@ -3795,7 +3882,7 @@ import {
   UnstyledButton as UnstyledButton2
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Fragment as Fragment2, jsx as jsx16, jsxs as jsxs9 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx17, jsxs as jsxs9 } from "react/jsx-runtime";
 var SHELL = {
   headerH: 60,
   brandH: 76,
@@ -3856,12 +3943,12 @@ function TopBar({
                 textDecoration: "none"
               },
               children: [
-                /* @__PURE__ */ jsx16("span", { "aria-hidden": true, children: "\u2190" }),
+                /* @__PURE__ */ jsx17("span", { "aria-hidden": true, children: "\u2190" }),
                 backLabel
               ]
             }
           ),
-          /* @__PURE__ */ jsx16(
+          /* @__PURE__ */ jsx17(
             Box3,
             {
               "aria-hidden": true,
@@ -3875,7 +3962,7 @@ function TopBar({
           )
         ] }) : null,
         /* @__PURE__ */ jsxs9(Group4, { gap: 8, align: "center", style: { flex: 1, minWidth: 0 }, wrap: "nowrap", children: [
-          /* @__PURE__ */ jsx16(
+          /* @__PURE__ */ jsx17(
             Text5,
             {
               component: "h1",
@@ -3893,8 +3980,8 @@ function TopBar({
           ),
           badge,
           context != null ? /* @__PURE__ */ jsxs9(Fragment2, { children: [
-            /* @__PURE__ */ jsx16(Text5, { c: "dimmed", size: "xs", style: { flex: "none" }, children: "\xB7" }),
-            /* @__PURE__ */ jsx16(
+            /* @__PURE__ */ jsx17(Text5, { c: "dimmed", size: "xs", style: { flex: "none" }, children: "\xB7" }),
+            /* @__PURE__ */ jsx17(
               Text5,
               {
                 size: "xs",
@@ -3910,7 +3997,7 @@ function TopBar({
             )
           ] }) : null
         ] }),
-        actions != null ? /* @__PURE__ */ jsx16(Group4, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
+        actions != null ? /* @__PURE__ */ jsx17(Group4, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
       ]
     }
   );
@@ -3927,7 +4014,7 @@ function PageShell({
   maxWidth
 }) {
   return /* @__PURE__ */ jsxs9(Box3, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
-    /* @__PURE__ */ jsx16(
+    /* @__PURE__ */ jsx17(
       TopBar,
       {
         title,
@@ -3938,7 +4025,7 @@ function PageShell({
         backLabel
       }
     ),
-    /* @__PURE__ */ jsx16(
+    /* @__PURE__ */ jsx17(
       Box3,
       {
         style: {
@@ -3948,13 +4035,13 @@ function PageShell({
           width: "100%",
           boxSizing: "border-box"
         },
-        children: /* @__PURE__ */ jsx16(Stack5, { gap: "md", children })
+        children: /* @__PURE__ */ jsx17(Stack5, { gap: "md", children })
       }
     )
   ] });
 }
 function ShellTabs({ items }) {
-  return /* @__PURE__ */ jsx16(Group4, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx16(
+  return /* @__PURE__ */ jsx17(Group4, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx17(
     Box3,
     {
       component: item.href ? "a" : "button",
@@ -4027,15 +4114,15 @@ var notify = {
 
 // src/components/Spotlight.tsx
 import { Spotlight as MantineSpotlight } from "@mantine/spotlight";
-import { IconSearch as IconSearch2 } from "@tabler/icons-react";
+import { IconSearch as IconSearch3 } from "@tabler/icons-react";
 import { spotlight } from "@mantine/spotlight";
-import { jsx as jsx17 } from "react/jsx-runtime";
+import { jsx as jsx18 } from "react/jsx-runtime";
 function SpotlightSearch({
   actions,
   placeholder = "\u641C\u7D22\u9875\u9762\u4E0E\u64CD\u4F5C\u2026",
   shortcut = ["mod + K"]
 }) {
-  return /* @__PURE__ */ jsx17(
+  return /* @__PURE__ */ jsx18(
     MantineSpotlight,
     {
       actions,
@@ -4043,7 +4130,7 @@ function SpotlightSearch({
       nothingFound: "\u6CA1\u6709\u5339\u914D\u7ED3\u679C",
       highlightQuery: true,
       searchProps: {
-        leftSection: /* @__PURE__ */ jsx17(IconSearch2, { size: 16, stroke: 1.5 }),
+        leftSection: /* @__PURE__ */ jsx18(IconSearch3, { size: 16, stroke: 1.5 }),
         placeholder
       }
     }
@@ -4087,12 +4174,12 @@ import {
 // src/components/ThemeCompare.tsx
 import { MantineProvider as MantineProvider2 } from "@mantine/core";
 import { IconSearch as TablerIconSearch } from "@tabler/icons-react";
-import { jsx as jsx18 } from "react/jsx-runtime";
+import { jsx as jsx19 } from "react/jsx-runtime";
 function DefaultThemeProvider({ children }) {
-  return /* @__PURE__ */ jsx18(MantineProvider2, { forceColorScheme: "light", children });
+  return /* @__PURE__ */ jsx19(MantineProvider2, { forceColorScheme: "light", children });
 }
-function IconSearch3(props) {
-  return /* @__PURE__ */ jsx18(TablerIconSearch, { size: props.size ?? 16, stroke: props.stroke ?? 1.5 });
+function IconSearch4(props) {
+  return /* @__PURE__ */ jsx19(TablerIconSearch, { size: props.size ?? 16, stroke: props.stroke ?? 1.5 });
 }
 export {
   ActionIcon2 as ActionIcon,
@@ -4146,8 +4233,9 @@ export {
   Grid,
   Group5 as Group,
   HStack,
+  Icon,
   IconButton,
-  IconSearch3 as IconSearch,
+  IconSearch4 as IconSearch,
   ImageGalleryUpload,
   InputGroup,
   KpiGrid,
