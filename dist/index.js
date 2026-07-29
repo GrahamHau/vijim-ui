@@ -126,6 +126,14 @@ var WORKFLOW_STEP_COLORS = {
   connector: "#F0F1F3",
   foreground: "#FFFFFF"
 };
+var TAG_COLORS = {
+  blue: "#356FB6",
+  cyan: "#2A7F88",
+  green: "#3E8461",
+  amber: "#9A711C",
+  rose: "#C65370",
+  violet: "#7163A8"
+};
 var DERIVED = {
   /** 主行动浅底（链接 hover 底、词条选中底）≈ brand 8% */
   brandMuted: "rgba(51, 112, 255, 0.08)",
@@ -325,6 +333,18 @@ var STUDIO_CSS_VARS = {
   "--workflow-step-pending-text": WORKFLOW_STEP_COLORS.pendingText,
   "--workflow-step-connector": WORKFLOW_STEP_COLORS.connector,
   "--workflow-step-foreground": WORKFLOW_STEP_COLORS.foreground,
+  "--color-tag-blue": TAG_COLORS.blue,
+  "--color-tag-blue-muted": "color-mix(in oklab, var(--color-tag-blue) 12%, transparent)",
+  "--color-tag-cyan": TAG_COLORS.cyan,
+  "--color-tag-cyan-muted": "color-mix(in oklab, var(--color-tag-cyan) 12%, transparent)",
+  "--color-tag-green": TAG_COLORS.green,
+  "--color-tag-green-muted": "color-mix(in oklab, var(--color-tag-green) 12%, transparent)",
+  "--color-tag-amber": TAG_COLORS.amber,
+  "--color-tag-amber-muted": "color-mix(in oklab, var(--color-tag-amber) 13%, transparent)",
+  "--color-tag-rose": TAG_COLORS.rose,
+  "--color-tag-rose-muted": "color-mix(in oklab, var(--color-tag-rose) 12%, transparent)",
+  "--color-tag-violet": TAG_COLORS.violet,
+  "--color-tag-violet-muted": "color-mix(in oklab, var(--color-tag-violet) 12%, transparent)",
   "--color-favorite": COLORS.favorite,
   "--color-favorite-muted": "rgba(229, 72, 77, 0.10)",
   "--color-input-error-bg": COLORS.errorFieldBg,
@@ -5348,6 +5368,7 @@ export {
   StatCard,
   StatusDot,
   Switch,
+  TAG_COLORS,
   Table,
   Tabs,
   Tag,

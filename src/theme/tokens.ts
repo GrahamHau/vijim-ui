@@ -179,6 +179,22 @@ export const WORKFLOW_STEP_COLORS = {
 } as const;
 
 /**
+ * 业务分类词条色。
+ *
+ * 仅用于“爆款 / 利润款 / 引流款 / 活动款”等彼此并列的分类标签；不替代
+ * brand、success、warning、danger 等状态根色。保留完整六色短表，避免各业务
+ * 页面再造同义的 tag palette。
+ */
+export const TAG_COLORS = {
+  blue: "#356FB6",
+  cyan: "#2A7F88",
+  green: "#3E8461",
+  amber: "#9A711C",
+  rose: "#C65370",
+  violet: "#7163A8",
+} as const;
+
+/**
  * 派生：只动透明度 / 叠在 surface 上，不换色相。
  * 词条选中 = brand 字 + brand@8% 底（不再另开一套蓝）
  */
@@ -418,6 +434,18 @@ export const STUDIO_CSS_VARS: Record<string, string> = {
   "--workflow-step-pending-text": WORKFLOW_STEP_COLORS.pendingText,
   "--workflow-step-connector": WORKFLOW_STEP_COLORS.connector,
   "--workflow-step-foreground": WORKFLOW_STEP_COLORS.foreground,
+  "--color-tag-blue": TAG_COLORS.blue,
+  "--color-tag-blue-muted": "color-mix(in oklab, var(--color-tag-blue) 12%, transparent)",
+  "--color-tag-cyan": TAG_COLORS.cyan,
+  "--color-tag-cyan-muted": "color-mix(in oklab, var(--color-tag-cyan) 12%, transparent)",
+  "--color-tag-green": TAG_COLORS.green,
+  "--color-tag-green-muted": "color-mix(in oklab, var(--color-tag-green) 12%, transparent)",
+  "--color-tag-amber": TAG_COLORS.amber,
+  "--color-tag-amber-muted": "color-mix(in oklab, var(--color-tag-amber) 13%, transparent)",
+  "--color-tag-rose": TAG_COLORS.rose,
+  "--color-tag-rose-muted": "color-mix(in oklab, var(--color-tag-rose) 12%, transparent)",
+  "--color-tag-violet": TAG_COLORS.violet,
+  "--color-tag-violet-muted": "color-mix(in oklab, var(--color-tag-violet) 12%, transparent)",
   "--color-favorite": COLORS.favorite,
   "--color-favorite-muted": "rgba(229, 72, 77, 0.10)",
   "--color-input-error-bg": COLORS.errorFieldBg,

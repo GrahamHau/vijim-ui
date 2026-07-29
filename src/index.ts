@@ -16,6 +16,7 @@ export {
   SHADOWS,
   FONT,
   WORKFLOW_STEP_COLORS,
+  TAG_COLORS,
 } from "./theme/tokens";
 export { VijimProvider, type VijimProviderProps } from "./provider";
 export { Icon, type IconProps, type IconName } from "./components/Icon";

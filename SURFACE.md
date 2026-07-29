@@ -46,7 +46,7 @@
 ## 2. 导出白名单（刻意短）
 
 ### 主题
-`VijimProvider` · `vijimTheme` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `FONT` · `CONTROL_HEIGHT` · `CONTROL_PADDING_X`
+`VijimProvider` · `vijimTheme` · `COLORS` · `TAG_COLORS` · `WORKFLOW_STEP_COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `FONT` · `CONTROL_HEIGHT` · `CONTROL_PADDING_X`
 
 ### 图标
 `Icon`（语义名白名单，业务禁止直连 Tabler）
