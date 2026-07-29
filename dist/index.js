@@ -3352,16 +3352,29 @@ function SectionHeader({
   title,
   description,
   subtitle,
-  actions
+  actions,
+  contained = false
 }) {
   const copy = description ?? subtitle;
-  return /* @__PURE__ */ jsxs7("div", { className: "vj-section-header", "data-slot": "section-header", children: [
-    /* @__PURE__ */ jsxs7("div", { children: [
-      /* @__PURE__ */ jsx15("h2", { children: title }),
-      copy ? /* @__PURE__ */ jsx15("p", { children: copy }) : null
-    ] }),
-    actions
-  ] });
+  return /* @__PURE__ */ jsxs7(
+    "div",
+    {
+      className: "vj-section-header",
+      "data-slot": "section-header",
+      "data-contained": contained ? "true" : void 0,
+      style: contained ? {
+        padding: "15px 18px 14px",
+        borderBottom: "1px solid var(--line)"
+      } : void 0,
+      children: [
+        /* @__PURE__ */ jsxs7("div", { children: [
+          /* @__PURE__ */ jsx15("h2", { children: title }),
+          copy ? /* @__PURE__ */ jsx15("p", { children: copy }) : null
+        ] }),
+        actions
+      ]
+    }
+  );
 }
 function DashboardPage({
   title,
@@ -4669,7 +4682,8 @@ function SectionHeader2({
   description,
   actions,
   action,
-  divider
+  divider,
+  contained = false
 }) {
   return /* @__PURE__ */ jsxs10(
     "header",
@@ -4677,7 +4691,18 @@ function SectionHeader2({
       className: "material-section-header",
       "data-slot": "section-header",
       "data-divider": divider ? "true" : "false",
-      style: { display: "flex", minWidth: 0, alignItems: "flex-end", justifyContent: "space-between", gap: 16 },
+      "data-contained": contained ? "true" : void 0,
+      style: {
+        display: "flex",
+        minWidth: 0,
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        gap: 16,
+        ...contained ? {
+          padding: "15px 18px 14px",
+          borderBottom: "1px solid var(--line)"
+        } : {}
+      },
       children: [
         /* @__PURE__ */ jsxs10("div", { style: { minWidth: 0 }, children: [
           /* @__PURE__ */ jsx20("h2", { style: { margin: 0, color: "var(--ink)", fontSize: 18, fontWeight: 650, letterSpacing: 0, lineHeight: 1.35 }, children: title }),

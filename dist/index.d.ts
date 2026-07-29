@@ -768,8 +768,10 @@ type SectionHeaderProps = {
     description?: string;
     subtitle?: string;
     actions?: ReactNode;
+    /** 标题位于有边框的面板内，由 UI 统一提供内边距与下分隔线。 */
+    contained?: boolean;
 };
-declare function SectionHeader$1({ title, description, subtitle, actions, }: SectionHeaderProps): react.JSX.Element;
+declare function SectionHeader$1({ title, description, subtitle, actions, contained, }: SectionHeaderProps): react.JSX.Element;
 type PagePatternProps = PageHeaderProps & {
     children?: ReactNode;
 };
@@ -1236,12 +1238,13 @@ declare function PageHeader({ eyebrow, title, description, actions, backAction, 
     actions?: ReactNode;
     backAction?: ReactNode;
 }): react.JSX.Element;
-declare function SectionHeader({ title, description, actions, action, divider, }: {
+declare function SectionHeader({ title, description, actions, action, divider, contained, }: {
     title: ReactNode;
     description?: ReactNode;
     actions?: ReactNode;
     action?: ReactNode;
     divider?: boolean;
+    contained?: boolean;
 }): react.JSX.Element;
 declare function PageToolbar({ children, end }: {
     children?: ReactNode;

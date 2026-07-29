@@ -677,6 +677,8 @@ export type SectionHeaderProps = {
   description?: string;
   subtitle?: string;
   actions?: ReactNode;
+  /** 标题位于有边框的面板内，由 UI 统一提供内边距与下分隔线。 */
+  contained?: boolean;
 };
 
 export function SectionHeader({
@@ -684,10 +686,19 @@ export function SectionHeader({
   description,
   subtitle,
   actions,
+  contained = false,
 }: SectionHeaderProps) {
   const copy = description ?? subtitle;
   return (
-    <div className="vj-section-header" data-slot="section-header">
+    <div
+      className="vj-section-header"
+      data-slot="section-header"
+      data-contained={contained ? "true" : undefined}
+      style={contained ? {
+        padding: "15px 18px 14px",
+        borderBottom: "1px solid var(--line)",
+      } : undefined}
+    >
       <div>
         <h2>{title}</h2>
         {copy ? <p>{copy}</p> : null}

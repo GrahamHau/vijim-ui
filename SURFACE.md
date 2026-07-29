@@ -23,6 +23,7 @@
 2. 业务 **不写** hex / 圆角 / 控件高度 / duration；只读 `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `CONTROL_HEIGHT`。
 3. 新能力先拼 ≤3 个现成组件；不能拼再进本包加 **一个** 名字。
 4. **禁止** 业务为「更像 Mantine 文档」再开第二套 props 方言。
+5. 组件分类遵循 **MECE**：职责互斥、场景完整；同一职责的视觉差异加语义 variant，不新增同义组件。
 
 ---
 
@@ -82,6 +83,7 @@
 `AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
 几何：侧栏 246 · 品牌区 76 · 顶栏 60 · 内容区 20/22。
 业务只填导航 / 品牌 / 用户 / 顶栏动作，**禁止**再写本地 shell CSS。
+面板内标题用 `SectionHeader contained`，内边距与下分隔线由本包负责，业务不补选择器。
 
 ### ADMIN 迁移兼容
 Admin 旧控制台模式仍从 **同一个 `@vijimlabs/ui` root 出口**取用，不再依赖

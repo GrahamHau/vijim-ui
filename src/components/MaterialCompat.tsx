@@ -271,19 +271,32 @@ export function SectionHeader({
   actions,
   action,
   divider,
+  contained = false,
 }: {
   title: ReactNode;
   description?: ReactNode;
   actions?: ReactNode;
   action?: ReactNode;
   divider?: boolean;
+  contained?: boolean;
 }) {
   return (
     <header
       className="material-section-header"
       data-slot="section-header"
       data-divider={divider ? "true" : "false"}
-      style={{ display: "flex", minWidth: 0, alignItems: "flex-end", justifyContent: "space-between", gap: 16 }}
+      data-contained={contained ? "true" : undefined}
+      style={{
+        display: "flex",
+        minWidth: 0,
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        gap: 16,
+        ...(contained ? {
+          padding: "15px 18px 14px",
+          borderBottom: "1px solid var(--line)",
+        } : {}),
+      }}
     >
       <div style={{ minWidth: 0 }}>
         <h2 style={{ margin: 0, color: "var(--ink)", fontSize: 18, fontWeight: 650, letterSpacing: 0, lineHeight: 1.35 }}>
