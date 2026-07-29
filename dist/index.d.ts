@@ -86,19 +86,20 @@ declare const MOTION: {
     readonly pressScale: "0.97";
 };
 /**
- * 阴影：大面更深、小面更轻。禁止重黑框投影。
+ * 阴影只表达脱离文档流的海拔。页面内卡片、筛选壳和选中态保持平面。
+ * xs/sm 保留为兼容别名；md=浮层，lg/xl=模态。
  */
 declare const SHADOWS: {
     readonly none: "none";
-    /** 芯片 / 选中滑块 */
-    readonly xs: "0 1px 2px rgba(18, 19, 23, 0.05), 0 0 0 1px rgba(18, 19, 23, 0.03)";
-    /** 筛选壳 / 卡片 */
-    readonly sm: "0 1px 2px rgba(18, 19, 23, 0.04), 0 4px 16px rgba(18, 19, 23, 0.05)";
+    /** 兼容旧选中滑块：改用灰面 / 边线表达，不抬高。 */
+    readonly xs: "none";
+    /** 页面内筛选壳 / 卡片：平面。 */
+    readonly sm: "none";
     /** 下拉 / popover */
-    readonly md: "0 2px 8px rgba(18, 19, 23, 0.05), 0 12px 32px rgba(18, 19, 23, 0.07)";
+    readonly md: "0 6px 18px rgba(18, 19, 23, 0.1), 0 0 0 1px rgba(18, 19, 23, 0.06)";
     /** 模态 */
-    readonly lg: "0 4px 16px rgba(18, 19, 23, 0.06), 0 24px 48px rgba(18, 19, 23, 0.1)";
-    readonly xl: "0 8px 28px rgba(18, 19, 23, 0.08), 0 32px 64px rgba(18, 19, 23, 0.12)";
+    readonly lg: "0 16px 40px rgba(18, 19, 23, 0.14), 0 0 0 1px rgba(18, 19, 23, 0.06)";
+    readonly xl: "0 16px 40px rgba(18, 19, 23, 0.14), 0 0 0 1px rgba(18, 19, 23, 0.06)";
 };
 declare const FONT: {
     readonly family: "\"SF Pro Text\",\"SF Pro Display\",-apple-system,BlinkMacSystemFont,\"Helvetica Neue\",\"Segoe UI\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif";

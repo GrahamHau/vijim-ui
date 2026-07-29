@@ -75,7 +75,9 @@ Material Hub 的纵向流程轴沿用 William 运行版源码的三态语义，�
 |---|---|
 | `RADIUS.term / element / panel / overlay` | 按尺寸圆角 |
 | `MOTION.press / pressScale / easeOut / springish` | 按压与过渡 |
-| `SHADOWS.xs…xl` | 材料厚度 |
+| `SHADOWS.none/xs/sm` | 页面内一律平面；用边线、灰面和留白建立层级 |
+| `SHADOWS.md` | 仅下拉、菜单、Popover 等浮层 |
+| `SHADOWS.lg/xl` | 仅 Modal、Drawer 等模态层 |
 | `FONT.tracking.*` | 标题字距 |
 
 全在 `src/theme/tokens.ts`，经 `VijimProvider` 注入 CSS 变量。
