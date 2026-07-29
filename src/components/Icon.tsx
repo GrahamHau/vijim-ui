@@ -23,6 +23,7 @@ import {
   IconClockHour4,
   IconClipboardText,
   IconDatabase,
+  IconExternalLink,
   IconFileText,
   IconFlame,
   IconHome,
@@ -82,6 +83,7 @@ export type IconName =
   | "cube"
   | "database"
   | "doc"
+  | "external-link"
   | "fail"
   | "feed"
   | "flame"
@@ -138,6 +140,7 @@ const ICONS: Record<IconName, TablerIcon> = {
   cube: IconBox,
   database: IconDatabase,
   doc: IconFileText,
+  "external-link": IconExternalLink,
   fail: IconBoxOff,
   feed: IconListDetails,
   flame: IconFlame,

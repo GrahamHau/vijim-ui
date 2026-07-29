@@ -7,7 +7,7 @@
 
 | 角色 | Token | 值 | 用途 |
 |---|---|---|---|
-| 页面底 | `background` / `--background` | `#F1F3F6` | 壳、主区底 |
+| 页面底 | `background` / `--background` | `#F7F8FA` | 壳、主区底；取样自统一视觉参考 |
 | 白面 | `surface` / `--surface` | `#FFFFFF` | 卡片、筛选壳、弹层 |
 | 灰面 | `muted` / `--muted` / `--bg-2` | `#F6F7F9` | 录入底、Segment 外框 |
 | 浅面 | `surface2` | `#FAFAFB` | 次级条 |

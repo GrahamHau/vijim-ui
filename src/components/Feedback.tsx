@@ -17,6 +17,7 @@ export type EmptyProps = {
   description?: string;
   action?: ReactNode;
   icon?: ReactNode;
+  scope?: "page" | "section" | "inline";
 };
 
 export function Empty({
@@ -24,16 +25,24 @@ export function Empty({
   description,
   action,
   icon,
+  scope = "section",
 }: EmptyProps) {
+  const inline = scope === "inline";
   return (
-    <Center py={40} px="md">
-      <Stack align="center" gap="sm" maw={360}>
+    <Center
+      data-scope={scope}
+      mih={scope === "page" ? 420 : inline ? 72 : 120}
+      py={scope === "page" ? 64 : inline ? 12 : 32}
+      px="md"
+      style={inline ? { justifyContent: "flex-start" } : undefined}
+    >
+      <Stack align={inline ? "flex-start" : "center"} gap={inline ? 2 : "sm"} maw={360}>
         {icon}
         <Text fw={600} size="sm" c={COLORS.ink}>
           {title}
         </Text>
         {description ? (
-          <Text size="sm" c="dimmed" ta="center">
+          <Text size={inline ? "xs" : "sm"} c="dimmed" ta={inline ? "left" : "center"}>
             {description}
           </Text>
         ) : null}

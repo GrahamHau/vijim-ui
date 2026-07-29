@@ -23,6 +23,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ComponentPropsWithoutRef,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
@@ -126,7 +127,7 @@ export function Card({
   );
 }
 
-export type BadgeProps = {
+export type BadgeProps = Omit<ComponentPropsWithoutRef<"span">, "children"> & {
   label?: string;
   children?: ReactNode;
   tone?: Tone;
@@ -134,9 +135,13 @@ export type BadgeProps = {
   dot?: boolean;
 };
 
-export function Badge({ label, children, tone = "neutral" }: BadgeProps) {
+export function Badge({ label, children, tone = "neutral", className, ...props }: BadgeProps) {
   return (
-    <span className="vj-badge" data-tone={normalizeTone(tone)}>
+    <span
+      className={["vj-badge", className].filter(Boolean).join(" ")}
+      data-tone={normalizeTone(tone)}
+      {...props}
+    >
       {label ?? children}
     </span>
   );

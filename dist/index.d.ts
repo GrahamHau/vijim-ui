@@ -172,7 +172,7 @@ declare const COLORS: {
     readonly termSelectedBg: "rgba(51, 112, 255, 0.08)";
     readonly termSelectedInk: "#3370FF";
     /** @deprecated 用 background */
-    readonly body: "#F1F3F6";
+    readonly body: "#F7F8FA";
     /** @deprecated 用 ink2 */
     readonly inkSecondary: "#3D4047";
     /** @deprecated 用 mutedForeground */
@@ -195,7 +195,7 @@ declare const COLORS: {
     readonly fieldHover: "rgba(18, 19, 23, 0.035)";
     readonly fieldFocus: "rgba(18, 19, 23, 0.05)";
     readonly errorFieldBg: "rgba(224, 55, 66, 0.06)";
-    readonly background: "#F1F3F6";
+    readonly background: "#F7F8FA";
     readonly ink: "#121317";
     readonly ink2: "#3D4047";
     readonly mutedForeground: "#6B7078";
@@ -231,7 +231,7 @@ type VijimProviderProps = {
  */
 declare function VijimProvider({ children, theme, withNotifications, withModals, }: VijimProviderProps): react.JSX.Element;
 
-type IconName = "archive" | "arrow" | "back" | "board" | "calendar" | "cart" | "category" | "chart" | "chart-line" | "chart-pie" | "chart-trend" | "check" | "checklist" | "chevron" | "clock" | "close" | "clipboard" | "cube" | "database" | "doc" | "fail" | "feed" | "flame" | "grid" | "home" | "info" | "layers" | "list-check" | "message-check" | "money" | "note" | "panel" | "percent" | "pkg" | "plus" | "refresh" | "rocket" | "search" | "settings" | "shield" | "star" | "sparkle" | "sync" | "tag" | "target" | "trash" | "upload" | "user-star" | "users" | "video" | "waiting" | "warehouse" | "world" | "warn";
+type IconName = "archive" | "arrow" | "back" | "board" | "calendar" | "cart" | "category" | "chart" | "chart-line" | "chart-pie" | "chart-trend" | "check" | "checklist" | "chevron" | "clock" | "close" | "clipboard" | "cube" | "database" | "doc" | "external-link" | "fail" | "feed" | "flame" | "grid" | "home" | "info" | "layers" | "list-check" | "message-check" | "money" | "note" | "panel" | "percent" | "pkg" | "plus" | "refresh" | "rocket" | "search" | "settings" | "shield" | "star" | "sparkle" | "sync" | "tag" | "target" | "trash" | "upload" | "user-star" | "users" | "video" | "waiting" | "warehouse" | "world" | "warn";
 type IconProps = {
     name: IconName;
     size?: number;
@@ -583,6 +583,8 @@ declare const SHELL_GEOMETRY: {
 };
 type TopBarProps = {
     title: ReactNode;
+    /** 路线定位默认是 h1；有正文记录标题时用 div，确保页面只有一个主标题。 */
+    titleComponent?: "h1" | "div";
     context?: ReactNode;
     badge?: ReactNode;
     center?: ReactNode;
@@ -593,7 +595,7 @@ type TopBarProps = {
     onBack?: () => void;
     leading?: ReactNode;
 };
-declare function TopBar({ title, context, badge, center, actions, backHref, backLabel, sticky, onBack, leading, }: TopBarProps): react.JSX.Element;
+declare function TopBar({ title, titleComponent, context, badge, center, actions, backHref, backLabel, sticky, onBack, leading, }: TopBarProps): react.JSX.Element;
 type AppShellNavItem = {
     key?: string;
     id?: string;
@@ -624,6 +626,7 @@ type AppShellProps = {
     footer?: ReactNode;
     header?: ReactNode;
     headerTitle?: ReactNode;
+    headerTitleComponent?: TopBarProps["titleComponent"];
     headerContext?: ReactNode;
     headerBadge?: ReactNode;
     headerBackHref?: string;
@@ -636,9 +639,10 @@ type AppShellProps = {
     withHeader?: boolean;
     className?: string;
     contentClassName?: string;
+    contentSurface?: "background" | "surface";
     viewport?: "page" | "fixed";
 };
-declare function AppShell({ product, brand, brandHint, navigation, navItems, user, footer, header, headerTitle, headerContext, headerBadge, headerBackHref, headerBackLabel, headerRight, headerCenter, headerActions, children, contentPadding, withHeader, className, contentClassName, viewport, }: AppShellProps): react.JSX.Element;
+declare function AppShell({ product, brand, brandHint, navigation, navItems, user, footer, header, headerTitle, headerTitleComponent, headerContext, headerBadge, headerBackHref, headerBackLabel, headerRight, headerCenter, headerActions, children, contentPadding, withHeader, className, contentClassName, contentSurface, viewport, }: AppShellProps): react.JSX.Element;
 type PageShellProps = {
     title: string;
     description?: string;
@@ -671,14 +675,14 @@ type CardProps = CardProps$1 & {
     scrollBody?: boolean;
 };
 declare function Card({ children, padding, bodyPadding, header, footer, scrollBody, ...props }: CardProps): react.JSX.Element;
-type BadgeProps = {
+type BadgeProps = Omit<ComponentPropsWithoutRef<"span">, "children"> & {
     label?: string;
     children?: ReactNode;
     tone?: Tone;
     size?: "xs" | "sm" | "md" | "lg";
     dot?: boolean;
 };
-declare function Badge$1({ label, children, tone }: BadgeProps): react.JSX.Element;
+declare function Badge$1({ label, children, tone, className, ...props }: BadgeProps): react.JSX.Element;
 type StatusDotProps = {
     label: string;
     tone?: Tone;
@@ -1207,8 +1211,9 @@ type EmptyProps = {
     description?: string;
     action?: ReactNode;
     icon?: ReactNode;
+    scope?: "page" | "section" | "inline";
 };
-declare function Empty({ title, description, action, icon, }: EmptyProps): react.JSX.Element;
+declare function Empty({ title, description, action, icon, scope, }: EmptyProps): react.JSX.Element;
 type SkeletonProps = SkeletonProps$1 & {
     variant?: "text" | "block" | "avatar";
     lines?: 1 | 2 | 3 | 4;

@@ -21,11 +21,13 @@ import {
   createContext,
   isValidElement,
   useContext,
+  useId,
   useMemo,
   useState,
   type ChangeEventHandler,
   type ComponentProps,
   type CSSProperties,
+  type ElementType,
   type ReactElement,
   type ReactNode,
 } from "react";
@@ -123,15 +125,13 @@ export function Badge({
   variant?: "default" | "secondary" | "destructive" | "outline" | "ghost" | "link";
   asChild?: boolean;
 }) {
-  const color = variant === "destructive" ? "red" : variant === "secondary" ? "gray" : "brand";
-  const mappedVariant = variant === "outline" ? "outline" : variant === "default" ? "light" : "light";
+  const tone = variant === "destructive" ? "error" : variant === "secondary" ? "neutral" : "info";
   if (asChild && isValidElement(children)) {
     const child = children as ReactElement<Record<string, unknown>>;
     return (
       <UiBadgeAny
         component={child.type as never}
-        color={color}
-        variant={mappedVariant}
+        tone={tone}
         data-slot="badge"
         data-variant={variant}
         {...props}
@@ -142,7 +142,7 @@ export function Badge({
     );
   }
   return (
-    <UiBadgeAny color={color} variant={mappedVariant} data-slot="badge" data-variant={variant} {...props}>
+    <UiBadgeAny tone={tone} data-slot="badge" data-variant={variant} {...props}>
       {children}
     </UiBadgeAny>
   );
@@ -648,6 +648,7 @@ export function TableCaption(props: ComponentProps<"caption">) {
 type DialogContextValue = {
   open: boolean;
   setOpen: (open: boolean) => void;
+  contentId: string;
 };
 const DialogContext = createContext<DialogContextValue | null>(null);
 
@@ -661,12 +662,23 @@ export function Dialog({
   children?: ReactNode;
 }) {
   const [innerOpen, setInnerOpen] = useState(false);
+  const id = useId();
   const actualOpen = open ?? innerOpen;
   const setOpen = (next: boolean) => {
     if (onOpenChange) onOpenChange(next);
     else setInnerOpen(next);
   };
-  return <DialogContext.Provider value={{ open: actualOpen, setOpen }}>{children}</DialogContext.Provider>;
+  return (
+    <DialogContext.Provider
+      value={{
+        open: actualOpen,
+        setOpen,
+        contentId: `${id}-content`,
+      }}
+    >
+      {children}
+    </DialogContext.Provider>
+  );
 }
 
 export function DialogTrigger({ asChild, children }: { asChild?: boolean; children?: ReactNode }) {
@@ -674,6 +686,10 @@ export function DialogTrigger({ asChild, children }: { asChild?: boolean; childr
   if (asChild && isValidElement(children)) {
     const child = children as ReactElement<Record<string, unknown>>;
     return cloneElement(child, {
+      "aria-controls": ctx?.contentId,
+      "aria-expanded": ctx?.open ?? false,
+      "aria-haspopup": "dialog",
+      "data-state": ctx?.open ? "open" : "closed",
       onClick: (event: unknown) => {
         (child.props.onClick as ((event: unknown) => void) | undefined)?.(event);
         ctx?.setOpen(true);
@@ -681,10 +697,42 @@ export function DialogTrigger({ asChild, children }: { asChild?: boolean; childr
     });
   }
   return (
-    <Button type="button" onClick={() => ctx?.setOpen(true)}>
+    <Button
+      type="button"
+      aria-controls={ctx?.contentId}
+      aria-expanded={ctx?.open ?? false}
+      aria-haspopup="dialog"
+      data-state={ctx?.open ? "open" : "closed"}
+      onClick={() => ctx?.setOpen(true)}
+    >
       {children}
     </Button>
   );
+}
+
+function findDialogPart(children: ReactNode, target: ElementType): ReactNode {
+  let match: ReactNode = null;
+  Children.forEach(children, (child) => {
+    if (match != null || !isValidElement(child)) return;
+    if (child.type === target) {
+      match = (child.props as { children?: ReactNode }).children ?? null;
+      return;
+    }
+    match = findDialogPart((child.props as { children?: ReactNode }).children, target);
+  });
+  return match;
+}
+
+function removeDialogPart(children: ReactNode, target: ElementType): ReactNode {
+  return Children.map(children, (child) => {
+    if (!isValidElement(child)) return child;
+    if (child.type === target) return null;
+    const element = child as ReactElement<Record<string, unknown>>;
+    if (!("children" in element.props)) return child;
+    return cloneElement(element, {
+      children: removeDialogPart(element.props.children as ReactNode, target),
+    });
+  });
 }
 
 export function DialogContent({
@@ -701,10 +749,14 @@ export function DialogContent({
   showCloseButton?: boolean;
 }) {
   const ctx = useContext(DialogContext);
+  const title = findDialogPart(children, DialogTitle);
+  const body = removeDialogPart(children, DialogTitle);
   return (
     <Modal
+      id={ctx?.contentId}
       opened={ctx?.open ?? false}
       onClose={() => ctx?.setOpen(false)}
+      title={title}
       className={className}
       closeOnClickOutside={!onPointerDownOutside}
       closeOnEscape={!onEscapeKeyDown}
@@ -712,7 +764,7 @@ export function DialogContent({
       size="lg"
       centered
     >
-      <div data-slot="dialog-content" className={className}>{children}</div>
+      <div data-slot="dialog-content" className={className}>{body}</div>
     </Modal>
   );
 }

@@ -123,7 +123,7 @@ export const FONT = {
  * 只用这些根；组件里禁止再写别的 hex。
  *
  * | 角色 | 键 | 值 |
- * | 页面底 | background | #F1F3F6 |
+ * | 页面底 | background | #F7F8FA |
  * | 主文字 | ink | #121317 |
  * | 次文字 | ink2 | #3D4047 |
  * | 弱文字 | mutedForeground | #6B7078 |
@@ -138,7 +138,7 @@ export const FONT = {
  * | 信息/成功/警告/危险 | info/success/warning/danger | 固定四色 |
  */
 const ROOT = {
-  background: "#F1F3F6",
+  background: "#F7F8FA",
   ink: "#121317",
   ink2: "#3D4047",
   mutedForeground: "#6B7078",
@@ -288,7 +288,7 @@ export const BRAND_BLUE: MantineTuple = [
 
 export const GRAY_SCALE: MantineTuple = [
   "#FAFAFB",
-  "#F1F3F6",
+  "#F7F8FA",
   "#F6F7F9",
   "#E8EAED",
   "#A6AAB2",

@@ -32,6 +32,8 @@ export const SHELL_GEOMETRY = {
 
 export type TopBarProps = {
   title: ReactNode;
+  /** 路线定位默认是 h1；有正文记录标题时用 div，确保页面只有一个主标题。 */
+  titleComponent?: "h1" | "div";
   context?: ReactNode;
   badge?: ReactNode;
   center?: ReactNode;
@@ -45,6 +47,7 @@ export type TopBarProps = {
 
 export function TopBar({
   title,
+  titleComponent = "h1",
   context,
   badge,
   center,
@@ -87,7 +90,7 @@ export function TopBar({
               textDecoration: "none",
             }}
           >
-            <span aria-hidden>←</span>
+            <Icon name="back" size={14} aria-hidden />
             {backLabel}
           </UnstyledButton>
           <Box
@@ -104,7 +107,7 @@ export function TopBar({
 
       <Group gap={8} align="center" className="vj-platform-shell__topbar-title" wrap="nowrap">
         <Text
-          component="h1"
+          component={titleComponent}
           style={{
             margin: 0,
             flex: "none",
@@ -186,6 +189,7 @@ export type AppShellProps = {
   footer?: ReactNode;
   header?: ReactNode;
   headerTitle?: ReactNode;
+  headerTitleComponent?: TopBarProps["titleComponent"];
   headerContext?: ReactNode;
   headerBadge?: ReactNode;
   headerBackHref?: string;
@@ -198,6 +202,7 @@ export type AppShellProps = {
   withHeader?: boolean;
   className?: string;
   contentClassName?: string;
+  contentSurface?: "background" | "surface";
   viewport?: "page" | "fixed";
 };
 
@@ -306,6 +311,7 @@ export function AppShell({
   footer,
   header,
   headerTitle,
+  headerTitleComponent,
   headerContext,
   headerBadge,
   headerBackHref,
@@ -318,6 +324,7 @@ export function AppShell({
   withHeader = true,
   className,
   contentClassName,
+  contentSurface = "background",
   viewport = "page",
 }: AppShellProps) {
   const sections = normalizeSections(navigation, navItems);
@@ -393,6 +400,7 @@ export function AppShell({
     (withHeader && (headerTitle || headerCenter || headerRight || headerActions) ? (
       <TopBar
         title={headerTitle ?? (typeof brand === "string" ? brand : product ?? "VIJIM")}
+        titleComponent={headerTitleComponent}
         context={headerContext}
         center={headerCenter}
         badge={headerBadge}
@@ -482,7 +490,11 @@ export function AppShell({
       >
         {topbar}
         {contentPadding ? (
-          <div className={["vj-platform-shell__content", contentClassName].filter(Boolean).join(" ")}>
+          <div
+            className={["vj-platform-shell__content", contentClassName].filter(Boolean).join(" ")}
+            data-surface={contentSurface}
+            style={{ background: contentSurface === "surface" ? COLORS.surface : COLORS.background }}
+          >
             {children}
           </div>
         ) : (
