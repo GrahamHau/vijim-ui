@@ -36,6 +36,22 @@
 词条选中：**底 = brandMuted，字 = brand**，无边框。
 不要再用 `#1456F0` 或其它「看起来像飞书」的平行蓝。
 
+## 流程节点状态
+
+Material Hub 的纵向流程轴沿用 William 运行版源码的三态语义，由
+`WORKFLOW_STEP_COLORS` 注入 `--workflow-step-*`，业务只能消费变量：
+
+| 状态 | 变量 | 值 |
+|---|---|---|
+| 当前节点 | `--workflow-step-active` | `#3370FF` |
+| 当前节点外圈 | `--workflow-step-active-muted` | brand @ 13% |
+| 已完成 | `--workflow-step-completed` | `#00B42A` |
+| 未开始边框 | `--workflow-step-pending-border` | `#E5E6EB` |
+| 未开始文字 | `--workflow-step-pending-text` | `#83898F` |
+| 连接线 | `--workflow-step-connector` | `#F0F1F3` |
+
+这组颜色只用于有明确顺序的流程节点，不替代平台品牌色、按钮色或通用状态色。
+
 ## 形 / 动 / 触（同一令牌表，不是第二源）
 
 | 键 | 用途 |

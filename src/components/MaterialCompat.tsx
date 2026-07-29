@@ -209,14 +209,58 @@ export function PageHeader({
   backAction?: ReactNode;
 }) {
   return (
-    <header className="material-page-header" data-slot="page-header">
+    <header
+      className="material-page-header"
+      data-slot="page-header"
+      style={{ display: "grid", minWidth: 0, gap: 10 }}
+    >
       {backAction ? <div className="material-page-header__back">{backAction}</div> : null}
-      <div>
-        {eyebrow ? <p className="material-eyebrow">{eyebrow}</p> : null}
-        <h1>{title}</h1>
-        {description ? <p>{description}</p> : null}
+      <div
+        style={{
+          display: "flex",
+          minWidth: 0,
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          gap: 16,
+        }}
+      >
+        <div style={{ minWidth: 0 }}>
+          {eyebrow ? (
+            <p
+              className="material-eyebrow"
+              style={{ margin: "0 0 5px", color: "var(--faint)", fontSize: 12, lineHeight: 1.4 }}
+            >
+              {eyebrow}
+            </p>
+          ) : null}
+          <h1
+            style={{
+              margin: 0,
+              color: "var(--ink)",
+              fontSize: 24,
+              fontWeight: 680,
+              letterSpacing: 0,
+              lineHeight: 1.3,
+              overflowWrap: "anywhere",
+            }}
+          >
+            {title}
+          </h1>
+          {description ? (
+            <p style={{ margin: "6px 0 0", color: "var(--muted-foreground)", fontSize: 13, lineHeight: 1.45 }}>
+              {description}
+            </p>
+          ) : null}
+        </div>
+        {actions ? (
+          <div
+            className="material-page-header__actions"
+            style={{ display: "flex", flex: "none", alignItems: "center", gap: 8 }}
+          >
+            {actions}
+          </div>
+        ) : null}
       </div>
-      {actions ? <div className="material-page-header__actions">{actions}</div> : null}
     </header>
   );
 }
@@ -235,10 +279,21 @@ export function SectionHeader({
   divider?: boolean;
 }) {
   return (
-    <header className="material-section-header" data-slot="section-header" data-divider={divider ? "true" : "false"}>
-      <div>
-        <h2>{title}</h2>
-        {description ? <p>{description}</p> : null}
+    <header
+      className="material-section-header"
+      data-slot="section-header"
+      data-divider={divider ? "true" : "false"}
+      style={{ display: "flex", minWidth: 0, alignItems: "flex-end", justifyContent: "space-between", gap: 16 }}
+    >
+      <div style={{ minWidth: 0 }}>
+        <h2 style={{ margin: 0, color: "var(--ink)", fontSize: 18, fontWeight: 650, letterSpacing: 0, lineHeight: 1.35 }}>
+          {title}
+        </h2>
+        {description ? (
+          <p style={{ margin: "4px 0 0", color: "var(--muted-foreground)", fontSize: 13, lineHeight: 1.5 }}>
+            {description}
+          </p>
+        ) : null}
       </div>
       {actions ?? action ? <div className="material-section-header__actions">{actions ?? action}</div> : null}
     </header>

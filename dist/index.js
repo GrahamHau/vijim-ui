@@ -117,6 +117,15 @@ var ROOT = {
   favorite: "#E5484D",
   ai: "#9065B0"
 };
+var WORKFLOW_STEP_COLORS = {
+  active: "#3370FF",
+  activeMuted: "rgba(51, 112, 255, 0.13)",
+  completed: "#00B42A",
+  pendingBorder: "#E5E6EB",
+  pendingText: "#83898F",
+  connector: "#F0F1F3",
+  foreground: "#FFFFFF"
+};
 var DERIVED = {
   /** 主行动浅底（链接 hover 底、词条选中底）≈ brand 8% */
   brandMuted: "rgba(51, 112, 255, 0.08)",
@@ -309,6 +318,13 @@ var STUDIO_CSS_VARS = {
   "--color-error-muted": "rgba(224, 55, 66, 0.12)",
   "--color-on-error": "#FFFFFF",
   "--color-on-status": "#FFFFFF",
+  "--workflow-step-active": WORKFLOW_STEP_COLORS.active,
+  "--workflow-step-active-muted": WORKFLOW_STEP_COLORS.activeMuted,
+  "--workflow-step-completed": WORKFLOW_STEP_COLORS.completed,
+  "--workflow-step-pending-border": WORKFLOW_STEP_COLORS.pendingBorder,
+  "--workflow-step-pending-text": WORKFLOW_STEP_COLORS.pendingText,
+  "--workflow-step-connector": WORKFLOW_STEP_COLORS.connector,
+  "--workflow-step-foreground": WORKFLOW_STEP_COLORS.foreground,
   "--color-favorite": COLORS.favorite,
   "--color-favorite-muted": "rgba(229, 72, 77, 0.10)",
   "--color-input-error-bg": COLORS.errorFieldBg,
@@ -417,6 +433,31 @@ var STUDIO_CSS_VARS = {
   "--font-family-mono": FONT.mono,
   "--tracking-title": FONT.tracking.title,
   "--tracking-display": FONT.tracking.display,
+  // MATERIAL 迁移兼容：旧页面布局变量只回指本包的统一间距与语义令牌。
+  "--spacing-0": "0px",
+  "--spacing-0-5": "2px",
+  "--spacing-1": "4px",
+  "--spacing-1-5": "6px",
+  "--spacing-2": "8px",
+  "--spacing-3": "12px",
+  "--spacing-4": "16px",
+  "--spacing-5": "20px",
+  "--spacing-6": "24px",
+  "--spacing-7": "28px",
+  "--spacing-8": "32px",
+  "--spacing-9": "36px",
+  "--spacing-10": "40px",
+  "--spacing-11": "44px",
+  "--spacing-12": "48px",
+  "--radius-page": RADIUS.sm,
+  "--maxw": "1480px",
+  "--ink-1": COLORS.ink,
+  "--line-soft": "rgba(18, 19, 23, 0.055)",
+  "--accent-soft": COLORS.brandSoft,
+  "--color-primary": COLORS.brand,
+  "--state-filter-selected-bg": COLORS.surface,
+  "--state-filter-selected-ink": COLORS.ink,
+  "--state-filter-selected-shadow": "0 1px 4px rgba(18, 19, 23, 0.06)",
   // ADMIN 迁移兼容：旧 @vijimlabs/ui@0.1 的 .vj-* 组件令牌。
   "--vijim-background-canvas": COLORS.background,
   "--vijim-surface-default": COLORS.surface,
@@ -1267,6 +1308,7 @@ var Button = forwardRef(
     const mappedColor = mapColor(variant, color);
     const buttonChildren = label ?? (child ? child.childChildren : children);
     const commonProps = {
+      ...props,
       ref,
       variant: mapVariant(variant),
       size,
@@ -1274,7 +1316,11 @@ var Button = forwardRef(
       leftSection: icon && iconPosition === "start" ? icon : props.leftSection,
       rightSection: icon && iconPosition === "end" ? icon : props.rightSection,
       fullWidth,
-      ...props
+      style: {
+        minWidth: fullWidth ? void 0 : "max-content",
+        whiteSpace: "nowrap",
+        ...props.style
+      }
     };
     if (child) {
       const AnyMantineButton = MantineButton;
@@ -2691,6 +2737,8 @@ function AppShell({
   headerTitle,
   headerContext,
   headerBadge,
+  headerBackHref,
+  headerBackLabel,
   headerRight,
   headerCenter,
   headerActions,
@@ -2758,6 +2806,8 @@ function AppShell({
       context: headerContext ?? headerCenter,
       badge: headerBadge,
       actions: headerActions ?? headerRight,
+      backHref: headerBackHref,
+      backLabel: headerBackLabel,
       leading: /* @__PURE__ */ jsx14(
         "button",
         {
@@ -3305,7 +3355,7 @@ function SectionHeader({
   actions
 }) {
   const copy = description ?? subtitle;
-  return /* @__PURE__ */ jsxs7("div", { className: "vj-section-header", children: [
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-section-header", "data-slot": "section-header", children: [
     /* @__PURE__ */ jsxs7("div", { children: [
       /* @__PURE__ */ jsx15("h2", { children: title }),
       copy ? /* @__PURE__ */ jsx15("p", { children: copy }) : null
@@ -4554,15 +4604,65 @@ function PageHeader2({
   actions,
   backAction
 }) {
-  return /* @__PURE__ */ jsxs10("header", { className: "material-page-header", "data-slot": "page-header", children: [
-    backAction ? /* @__PURE__ */ jsx20("div", { className: "material-page-header__back", children: backAction }) : null,
-    /* @__PURE__ */ jsxs10("div", { children: [
-      eyebrow ? /* @__PURE__ */ jsx20("p", { className: "material-eyebrow", children: eyebrow }) : null,
-      /* @__PURE__ */ jsx20("h1", { children: title }),
-      description ? /* @__PURE__ */ jsx20("p", { children: description }) : null
-    ] }),
-    actions ? /* @__PURE__ */ jsx20("div", { className: "material-page-header__actions", children: actions }) : null
-  ] });
+  return /* @__PURE__ */ jsxs10(
+    "header",
+    {
+      className: "material-page-header",
+      "data-slot": "page-header",
+      style: { display: "grid", minWidth: 0, gap: 10 },
+      children: [
+        backAction ? /* @__PURE__ */ jsx20("div", { className: "material-page-header__back", children: backAction }) : null,
+        /* @__PURE__ */ jsxs10(
+          "div",
+          {
+            style: {
+              display: "flex",
+              minWidth: 0,
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: 16
+            },
+            children: [
+              /* @__PURE__ */ jsxs10("div", { style: { minWidth: 0 }, children: [
+                eyebrow ? /* @__PURE__ */ jsx20(
+                  "p",
+                  {
+                    className: "material-eyebrow",
+                    style: { margin: "0 0 5px", color: "var(--faint)", fontSize: 12, lineHeight: 1.4 },
+                    children: eyebrow
+                  }
+                ) : null,
+                /* @__PURE__ */ jsx20(
+                  "h1",
+                  {
+                    style: {
+                      margin: 0,
+                      color: "var(--ink)",
+                      fontSize: 24,
+                      fontWeight: 680,
+                      letterSpacing: 0,
+                      lineHeight: 1.3,
+                      overflowWrap: "anywhere"
+                    },
+                    children: title
+                  }
+                ),
+                description ? /* @__PURE__ */ jsx20("p", { style: { margin: "6px 0 0", color: "var(--muted-foreground)", fontSize: 13, lineHeight: 1.45 }, children: description }) : null
+              ] }),
+              actions ? /* @__PURE__ */ jsx20(
+                "div",
+                {
+                  className: "material-page-header__actions",
+                  style: { display: "flex", flex: "none", alignItems: "center", gap: 8 },
+                  children: actions
+                }
+              ) : null
+            ]
+          }
+        )
+      ]
+    }
+  );
 }
 function SectionHeader2({
   title,
@@ -4571,13 +4671,22 @@ function SectionHeader2({
   action,
   divider
 }) {
-  return /* @__PURE__ */ jsxs10("header", { className: "material-section-header", "data-slot": "section-header", "data-divider": divider ? "true" : "false", children: [
-    /* @__PURE__ */ jsxs10("div", { children: [
-      /* @__PURE__ */ jsx20("h2", { children: title }),
-      description ? /* @__PURE__ */ jsx20("p", { children: description }) : null
-    ] }),
-    actions ?? action ? /* @__PURE__ */ jsx20("div", { className: "material-section-header__actions", children: actions ?? action }) : null
-  ] });
+  return /* @__PURE__ */ jsxs10(
+    "header",
+    {
+      className: "material-section-header",
+      "data-slot": "section-header",
+      "data-divider": divider ? "true" : "false",
+      style: { display: "flex", minWidth: 0, alignItems: "flex-end", justifyContent: "space-between", gap: 16 },
+      children: [
+        /* @__PURE__ */ jsxs10("div", { style: { minWidth: 0 }, children: [
+          /* @__PURE__ */ jsx20("h2", { style: { margin: 0, color: "var(--ink)", fontSize: 18, fontWeight: 650, letterSpacing: 0, lineHeight: 1.35 }, children: title }),
+          description ? /* @__PURE__ */ jsx20("p", { style: { margin: "4px 0 0", color: "var(--muted-foreground)", fontSize: 13, lineHeight: 1.5 }, children: description }) : null
+        ] }),
+        actions ?? action ? /* @__PURE__ */ jsx20("div", { className: "material-section-header__actions", children: actions ?? action }) : null
+      ]
+    }
+  );
 }
 function PageToolbar({ children, end }) {
   return /* @__PURE__ */ jsxs10("div", { className: "material-page-toolbar", "data-slot": "page-toolbar", children: [
@@ -5085,6 +5194,7 @@ export {
   TopBar,
   TrendBadge,
   VijimProvider,
+  WORKFLOW_STEP_COLORS,
   hasLength,
   isEmail,
   isNotEmpty,

@@ -163,6 +163,22 @@ const ROOT = {
 } as const;
 
 /**
+ * William Material Hub 运行版流程轴状态色。
+ *
+ * 这组颜色只服务“完成 / 当前 / 未开始”的顺序节点表达，不替代平台品牌色或
+ * 通用 success/info 色。数值来自 legacy/public/styles.css 的真实运行样式。
+ */
+export const WORKFLOW_STEP_COLORS = {
+  active: "#3370FF",
+  activeMuted: "rgba(51, 112, 255, 0.13)",
+  completed: "#00B42A",
+  pendingBorder: "#E5E6EB",
+  pendingText: "#83898F",
+  connector: "#F0F1F3",
+  foreground: "#FFFFFF",
+} as const;
+
+/**
  * 派生：只动透明度 / 叠在 surface 上，不换色相。
  * 词条选中 = brand 字 + brand@8% 底（不再另开一套蓝）
  */
@@ -395,6 +411,13 @@ export const STUDIO_CSS_VARS: Record<string, string> = {
   "--color-error-muted": "rgba(224, 55, 66, 0.12)",
   "--color-on-error": "#FFFFFF",
   "--color-on-status": "#FFFFFF",
+  "--workflow-step-active": WORKFLOW_STEP_COLORS.active,
+  "--workflow-step-active-muted": WORKFLOW_STEP_COLORS.activeMuted,
+  "--workflow-step-completed": WORKFLOW_STEP_COLORS.completed,
+  "--workflow-step-pending-border": WORKFLOW_STEP_COLORS.pendingBorder,
+  "--workflow-step-pending-text": WORKFLOW_STEP_COLORS.pendingText,
+  "--workflow-step-connector": WORKFLOW_STEP_COLORS.connector,
+  "--workflow-step-foreground": WORKFLOW_STEP_COLORS.foreground,
   "--color-favorite": COLORS.favorite,
   "--color-favorite-muted": "rgba(229, 72, 77, 0.10)",
   "--color-input-error-bg": COLORS.errorFieldBg,
@@ -508,6 +531,32 @@ export const STUDIO_CSS_VARS: Record<string, string> = {
   "--font-family-mono": FONT.mono,
   "--tracking-title": FONT.tracking.title,
   "--tracking-display": FONT.tracking.display,
+
+  // MATERIAL 迁移兼容：旧页面布局变量只回指本包的统一间距与语义令牌。
+  "--spacing-0": "0px",
+  "--spacing-0-5": "2px",
+  "--spacing-1": "4px",
+  "--spacing-1-5": "6px",
+  "--spacing-2": "8px",
+  "--spacing-3": "12px",
+  "--spacing-4": "16px",
+  "--spacing-5": "20px",
+  "--spacing-6": "24px",
+  "--spacing-7": "28px",
+  "--spacing-8": "32px",
+  "--spacing-9": "36px",
+  "--spacing-10": "40px",
+  "--spacing-11": "44px",
+  "--spacing-12": "48px",
+  "--radius-page": RADIUS.sm,
+  "--maxw": "1480px",
+  "--ink-1": COLORS.ink,
+  "--line-soft": "rgba(18, 19, 23, 0.055)",
+  "--accent-soft": COLORS.brandSoft,
+  "--color-primary": COLORS.brand,
+  "--state-filter-selected-bg": COLORS.surface,
+  "--state-filter-selected-ink": COLORS.ink,
+  "--state-filter-selected-shadow": "0 1px 4px rgba(18, 19, 23, 0.06)",
 
   // ADMIN 迁移兼容：旧 @vijimlabs/ui@0.1 的 .vj-* 组件令牌。
   "--vijim-background-canvas": COLORS.background,

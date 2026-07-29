@@ -687,7 +687,7 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   const copy = description ?? subtitle;
   return (
-    <div className="vj-section-header">
+    <div className="vj-section-header" data-slot="section-header">
       <div>
         <h2>{title}</h2>
         {copy ? <p>{copy}</p> : null}

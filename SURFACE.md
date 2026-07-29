@@ -103,6 +103,8 @@ Material 旧页面在不改 IA / 业务 API 的前提下，仍从**同一个 `@v
 `MaterialSegmentedControl` · `MaterialSwitch` · `MaterialTable*`
 `MaterialDialog*` · `MaterialManagedDialog`。
 这些名字只承担迁移期 props 兼容；视觉实现、主题和 Mantine 边界仍归本包。
+旧 Material 页面仍使用的 `--spacing-*`、`--radius-page` 等布局变量也由
+`VijimProvider` 映射到本包令牌，业务侧不得自行补第二套数值。
 
 ### 钩子
 `useForm` · `isNotEmpty` · `isEmail` · `hasLength`

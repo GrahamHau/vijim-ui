@@ -182,6 +182,8 @@ export type AppShellProps = {
   headerTitle?: string;
   headerContext?: ReactNode;
   headerBadge?: ReactNode;
+  headerBackHref?: string;
+  headerBackLabel?: string;
   headerRight?: ReactNode;
   headerCenter?: ReactNode;
   headerActions?: ReactNode;
@@ -297,6 +299,8 @@ export function AppShell({
   headerTitle,
   headerContext,
   headerBadge,
+  headerBackHref,
+  headerBackLabel,
   headerRight,
   headerCenter,
   headerActions,
@@ -380,6 +384,8 @@ export function AppShell({
         context={headerContext ?? headerCenter}
         badge={headerBadge}
         actions={headerActions ?? headerRight}
+        backHref={headerBackHref}
+        backLabel={headerBackLabel}
         leading={
           <button
             type="button"

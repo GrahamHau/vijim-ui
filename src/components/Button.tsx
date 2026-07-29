@@ -134,6 +134,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const mappedColor = mapColor(variant, color);
     const buttonChildren = label ?? (child ? child.childChildren : children);
     const commonProps = {
+      ...props,
       ref,
       variant: mapVariant(variant),
       size,
@@ -143,7 +144,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       rightSection:
         icon && iconPosition === "end" ? icon : props.rightSection,
       fullWidth,
-      ...props,
+      style: {
+        minWidth: fullWidth ? undefined : "max-content",
+        whiteSpace: "nowrap" as const,
+        ...props.style,
+      },
     };
 
     if (child) {
