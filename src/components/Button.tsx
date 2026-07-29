@@ -158,12 +158,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           component={child.component}
           {...child.childProps}
           {...commonProps}
+          data-slot="button"
         >
           {buttonChildren}
         </AnyMantineButton>
       );
     }
 
-    return <MantineButton {...commonProps}>{buttonChildren}</MantineButton>;
+    return <MantineButton {...commonProps} data-slot="button">{buttonChildren}</MantineButton>;
   },
 );

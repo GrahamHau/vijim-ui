@@ -13,7 +13,7 @@ import {
   toDateString,
   type DateString,
 } from "../utils/date";
-import { SECTION_OFFSET } from "../theme/tokens";
+import { CONTROL_HEIGHT, FONT, SECTION_OFFSET } from "../theme/tokens";
 
 export type { DateString };
 
@@ -53,6 +53,8 @@ export const DatePickerInput = forwardRef<HTMLButtonElement, DatePickerInputProp
     },
     ref,
   ) {
+    const height = CONTROL_HEIGHT[size];
+    const fontSize = size === "xs" || size === "sm" ? FONT.sizes.xs : FONT.sizes.sm;
     const dateValue = useMemo(
       () => (value === undefined ? undefined : fromDateString(value ?? null)),
       [value],
@@ -87,6 +89,9 @@ export const DatePickerInput = forwardRef<HTMLButtonElement, DatePickerInputProp
           return {
             ...base,
             input: {
+              height,
+              minHeight: height,
+              fontSize,
               ...(typeof base === "object" && base && "input" in base
                 ? (base as { input?: object }).input
                 : {}),
@@ -96,6 +101,7 @@ export const DatePickerInput = forwardRef<HTMLButtonElement, DatePickerInputProp
           };
         }}
         {...props}
+        data-slot="date-picker-input"
       />
     );
   },
@@ -114,6 +120,8 @@ export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
     },
     ref,
   ) {
+    const height = CONTROL_HEIGHT[size];
+    const fontSize = size === "xs" || size === "sm" ? FONT.sizes.xs : FONT.sizes.sm;
     const dateValue = useMemo(
       () => (value === undefined ? undefined : fromDateString(value ?? null)),
       [value],
@@ -148,6 +156,9 @@ export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
           return {
             ...base,
             input: {
+              height,
+              minHeight: height,
+              fontSize,
               ...(typeof base === "object" && base && "input" in base
                 ? (base as { input?: object }).input
                 : {}),
@@ -157,6 +168,7 @@ export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
           };
         }}
         {...props}
+        data-slot="date-input"
       />
     );
   },

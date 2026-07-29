@@ -1154,17 +1154,19 @@ type FilterSegmentProps = {
  */
 declare function FilterSegment({ options, value, onChange, disabled, "aria-label": ariaLabel, }: FilterSegmentProps): react.JSX.Element;
 type FilterTermProps = {
-    label: string;
+    label?: string;
+    children?: ReactNode;
     count?: number | string;
     selected?: boolean;
     onClick?: () => void;
     disabled?: boolean;
+    "aria-label"?: string;
 };
 /**
  * 分面词条：无外框、无描边。选中 = 浅蓝底 + 品牌蓝字。
  * 用于平台/品类/信号等多选项 —— **不要**给二态切换用（二态用 FilterSegment）。
  */
-declare function FilterTerm({ label, count, selected, onClick, disabled, }: FilterTermProps): react.JSX.Element;
+declare function FilterTerm({ label, children, count, selected, onClick, disabled, "aria-label": ariaLabel, }: FilterTermProps): react.JSX.Element;
 type FilterFacetOption = {
     value: string;
     label: string;

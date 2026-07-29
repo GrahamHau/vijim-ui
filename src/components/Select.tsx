@@ -185,6 +185,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
           };
         }}
         {...props}
+        data-slot="select"
         data={data ?? options?.map((option) => ({ ...option }))}
         aria-label={props["aria-label"] ?? ariaLabel}
       />

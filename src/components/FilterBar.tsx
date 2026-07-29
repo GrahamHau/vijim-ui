@@ -387,11 +387,13 @@ export function FilterSegment({
 // ── FilterTerm：无边框分面词（多选/多标签行）────────────────
 
 export type FilterTermProps = {
-  label: string;
+  label?: string;
+  children?: ReactNode;
   count?: number | string;
   selected?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  "aria-label"?: string;
 };
 
 /**
@@ -400,10 +402,12 @@ export type FilterTermProps = {
  */
 export function FilterTerm({
   label,
+  children,
   count,
   selected = false,
   onClick,
   disabled = false,
+  "aria-label": ariaLabel,
 }: FilterTermProps) {
   const press = pressHandlers(disabled);
   return (
@@ -412,6 +416,7 @@ export function FilterTerm({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={selected}
+      aria-label={ariaLabel}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -451,7 +456,7 @@ export function FilterTerm({
       onMouseDown={press.onMouseDown}
       onMouseUp={press.onMouseUp}
     >
-      {label}
+      {children ?? label}
       {count !== undefined ? (
         <Text
           component="span"

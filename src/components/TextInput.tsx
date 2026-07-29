@@ -80,6 +80,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           onInputChange?.(event);
         }}
         {...props}
+        data-slot="text-input"
         aria-label={props["aria-label"] ?? ariaLabel}
       />
     );

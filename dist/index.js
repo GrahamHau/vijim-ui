@@ -1461,11 +1461,12 @@ var Button = forwardRef(
           component: child.component,
           ...child.childProps,
           ...commonProps,
+          "data-slot": "button",
           children: buttonChildren
         }
       );
     }
-    return /* @__PURE__ */ jsx3(MantineButton, { ...commonProps, children: buttonChildren });
+    return /* @__PURE__ */ jsx3(MantineButton, { ...commonProps, "data-slot": "button", children: buttonChildren });
   }
 );
 
@@ -1521,6 +1522,7 @@ var TextInput = forwardRef2(
           onInputChange?.(event);
         },
         ...props,
+        "data-slot": "text-input",
         "aria-label": props["aria-label"] ?? ariaLabel
       }
     );
@@ -1535,7 +1537,7 @@ import { forwardRef as forwardRef3 } from "react";
 import { jsx as jsx5 } from "react/jsx-runtime";
 var Textarea = forwardRef3(
   function Textarea2({ size = "sm", ...props }, ref) {
-    return /* @__PURE__ */ jsx5(MantineTextarea, { ref, size, ...props });
+    return /* @__PURE__ */ jsx5(MantineTextarea, { ref, size, ...props, "data-slot": "textarea" });
   }
 );
 
@@ -2216,6 +2218,7 @@ var Select = forwardRef5(
           };
         },
         ...props,
+        "data-slot": "select",
         data: data ?? options?.map((option) => ({ ...option })),
         "aria-label": props["aria-label"] ?? ariaLabel
       }
@@ -2329,6 +2332,8 @@ var DatePickerInput = forwardRef6(
     styles,
     ...props
   }, ref) {
+    const height = CONTROL_HEIGHT[size];
+    const fontSize = size === "xs" || size === "sm" ? FONT.sizes.xs : FONT.sizes.sm;
     const dateValue = useMemo3(
       () => value === void 0 ? void 0 : fromDateString(value ?? null),
       [value]
@@ -2355,13 +2360,17 @@ var DatePickerInput = forwardRef6(
           return {
             ...base,
             input: {
+              height,
+              minHeight: height,
+              fontSize,
               ...typeof base === "object" && base && "input" in base ? base.input : {},
               paddingInlineStart: SECTION_OFFSET.left
             },
             section: { width: SECTION_OFFSET.left }
           };
         },
-        ...props
+        ...props,
+        "data-slot": "date-picker-input"
       }
     );
   }
@@ -2376,6 +2385,8 @@ var DateInput = forwardRef6(
     styles,
     ...props
   }, ref) {
+    const height = CONTROL_HEIGHT[size];
+    const fontSize = size === "xs" || size === "sm" ? FONT.sizes.xs : FONT.sizes.sm;
     const dateValue = useMemo3(
       () => value === void 0 ? void 0 : fromDateString(value ?? null),
       [value]
@@ -2402,13 +2413,17 @@ var DateInput = forwardRef6(
           return {
             ...base,
             input: {
+              height,
+              minHeight: height,
+              fontSize,
               ...typeof base === "object" && base && "input" in base ? base.input : {},
               paddingInlineStart: SECTION_OFFSET.left
             },
             section: { width: SECTION_OFFSET.left }
           };
         },
-        ...props
+        ...props,
+        "data-slot": "date-input"
       }
     );
   }
@@ -4353,10 +4368,12 @@ function FilterSegment({
 }
 function FilterTerm({
   label,
+  children,
   count,
   selected = false,
   onClick,
-  disabled = false
+  disabled = false,
+  "aria-label": ariaLabel
 }) {
   const press = pressHandlers(disabled);
   return /* @__PURE__ */ jsxs9(
@@ -4366,6 +4383,7 @@ function FilterTerm({
       onClick,
       disabled,
       "aria-pressed": selected,
+      "aria-label": ariaLabel,
       style: {
         display: "inline-flex",
         alignItems: "center",
@@ -4405,7 +4423,7 @@ function FilterTerm({
       onMouseDown: press.onMouseDown,
       onMouseUp: press.onMouseUp,
       children: [
-        label,
+        children ?? label,
         count !== void 0 ? /* @__PURE__ */ jsx17(
           Text5,
           {
