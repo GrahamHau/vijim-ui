@@ -53,6 +53,7 @@ Material Hub 的纵向流程轴沿用 William 运行版源码的三态语义，�
 | 连接线 | `--workflow-step-connector` | `#F0F1F3` |
 
 这组颜色只用于有明确顺序的流程节点，不替代平台品牌色、按钮色或通用状态色。
+审批记录不再使用前置状态圆点；结果区的小勾使用 `--workflow-step-completed`，旁侧“已通过”文字使用可读性更高的 `--color-success`。同一审批结果不再额外叠加绿色 Badge。
 
 ## 分类词条
 
