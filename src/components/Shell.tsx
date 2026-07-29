@@ -382,7 +382,7 @@ export function AppShell({
   const brandNode =
     typeof brand === "string" ? (
       <Stack gap={2}>
-        <Text fw={650} size="sm" c={COLORS.ink} style={{ letterSpacing: "-0.01em" }}>
+        <Text fw={650} size="sm" c={COLORS.ink} style={{ letterSpacing: 0 }}>
           {brand}
         </Text>
         {brandHint ? (

@@ -117,12 +117,12 @@ declare const FONT: {
         readonly h3: "18px";
         readonly h4: "16px";
     };
-    /** 字距按尺寸：大标题收紧，正文 ~0 */
+    /** 全平台字距保持 0，避免中英文混排在窄容器中失真。 */
     readonly tracking: {
-        readonly display: "-0.022em";
-        readonly title: "-0.015em";
+        readonly display: "0";
+        readonly title: "0";
         readonly body: "0";
-        readonly caption: "0.01em";
+        readonly caption: "0";
     };
     readonly leading: {
         readonly display: 1.15;

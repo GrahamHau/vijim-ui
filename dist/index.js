@@ -78,12 +78,12 @@ var FONT = {
     h3: "18px",
     h4: "16px"
   },
-  /** 字距按尺寸：大标题收紧，正文 ~0 */
+  /** 全平台字距保持 0，避免中英文混排在窄容器中失真。 */
   tracking: {
-    display: "-0.022em",
-    title: "-0.015em",
+    display: "0",
+    title: "0",
     body: "0",
-    caption: "0.01em"
+    caption: "0"
   },
   leading: {
     display: 1.15,
@@ -567,7 +567,7 @@ var STUDIO_CSS_VARS = {
   "--vijim-display-size": FONT.sizes.h1,
   "--vijim-display-line": "1.2",
   "--vijim-display-weight": "650",
-  "--vijim-tracking": "-0.01em"
+  "--vijim-tracking": "0"
 };
 
 // src/theme/vijim-theme.ts
@@ -3024,7 +3024,7 @@ function AppShell({
     };
   }, [mobileOpen]);
   const brandNode = typeof brand === "string" ? /* @__PURE__ */ jsxs6(Stack2, { gap: 2, children: [
-    /* @__PURE__ */ jsx15(Text2, { fw: 650, size: "sm", c: COLORS.ink, style: { letterSpacing: "-0.01em" }, children: brand }),
+    /* @__PURE__ */ jsx15(Text2, { fw: 650, size: "sm", c: COLORS.ink, style: { letterSpacing: 0 }, children: brand }),
     brandHint ? /* @__PURE__ */ jsx15(Text2, { size: "xs", c: "dimmed", lineClamp: 1, children: brandHint }) : null
   ] }) : brand;
   const topbar = header ?? (withHeader && (headerTitle || headerCenter || headerRight || headerActions) ? /* @__PURE__ */ jsx15(
@@ -4992,10 +4992,25 @@ function SectionHeader2({
   );
 }
 function PageToolbar({ children, end }) {
-  return /* @__PURE__ */ jsxs10("div", { className: "material-page-toolbar", "data-slot": "page-toolbar", children: [
-    /* @__PURE__ */ jsx21("div", { children }),
-    end ? /* @__PURE__ */ jsx21("div", { "data-slot": "page-toolbar-end", children: end }) : null
-  ] });
+  return /* @__PURE__ */ jsxs10(
+    "div",
+    {
+      className: "material-page-toolbar",
+      "data-slot": "page-toolbar",
+      style: {
+        display: "flex",
+        minWidth: 0,
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        flexWrap: "wrap"
+      },
+      children: [
+        /* @__PURE__ */ jsx21("div", { style: { minWidth: 0 }, children }),
+        end ? /* @__PURE__ */ jsx21("div", { "data-slot": "page-toolbar-end", style: { minWidth: 0, marginLeft: "auto" }, children: end }) : null
+      ]
+    }
+  );
 }
 function DatePicker2({
   value,

@@ -315,9 +315,20 @@ export function SectionHeader({
 
 export function PageToolbar({ children, end }: { children?: ReactNode; end?: ReactNode }) {
   return (
-    <div className="material-page-toolbar" data-slot="page-toolbar">
-      <div>{children}</div>
-      {end ? <div data-slot="page-toolbar-end">{end}</div> : null}
+    <div
+      className="material-page-toolbar"
+      data-slot="page-toolbar"
+      style={{
+        display: "flex",
+        minWidth: 0,
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        flexWrap: "wrap",
+      }}
+    >
+      <div style={{ minWidth: 0 }}>{children}</div>
+      {end ? <div data-slot="page-toolbar-end" style={{ minWidth: 0, marginLeft: "auto" }}>{end}</div> : null}
     </div>
   );
 }

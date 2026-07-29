@@ -37,6 +37,7 @@
 | 默认不弹 | 浮层 `springish`，无 overshoot |
 | 圆角按尺寸 | term 6 · 控件 8 · 面板 12 · 弹层 16 |
 | 阴影只表海拔 | 页面内容 xs/sm 均平面 · 浮层 md · 模态 lg；状态用灰面/边线 |
+| 字距归零 | 中英文标题、正文和紧凑控件统一 `letter-spacing: 0`，不靠负字距挤压容器 |
 | 选中语义 | 中性选中 / 品牌词条选中两套，不另开色 |
 | 减动效 | `prefers-reduced-motion` 全局收短 |
 | 克制 | 无双层毛玻璃、无 confetti、无页面魔数动画 |
@@ -125,6 +126,8 @@ Material 旧页面在不改 IA / 业务 API 的前提下，仍从**同一个 `@v
 `MaterialSegmentedControl` · `MaterialSwitch` · `MaterialTable*`
 `MaterialDialog*` · `MaterialManagedDialog`。
 这些名字只承担迁移期 props 兼容；视觉实现、主题和 Mantine 边界仍归本包。
+其中 `MaterialPageToolbar` 自带左右槽位、换行和最小宽度约束，业务页只提供内容，
+不得再为同一个工具条手写 flex 对齐。
 旧 Material 页面仍使用的 `--spacing-*`、`--radius-page` 等布局变量也由
 `VijimProvider` 映射到本包令牌，业务侧不得自行补第二套数值。
 

@@ -102,12 +102,12 @@ export const FONT = {
     h3: "18px",
     h4: "16px",
   },
-  /** 字距按尺寸：大标题收紧，正文 ~0 */
+  /** 全平台字距保持 0，避免中英文混排在窄容器中失真。 */
   tracking: {
-    display: "-0.022em",
-    title: "-0.015em",
+    display: "0",
+    title: "0",
     body: "0",
-    caption: "0.01em",
+    caption: "0",
   },
   leading: {
     display: 1.15,
@@ -676,5 +676,5 @@ export const STUDIO_CSS_VARS: Record<string, string> = {
   "--vijim-display-size": FONT.sizes.h1,
   "--vijim-display-line": "1.2",
   "--vijim-display-weight": "650",
-  "--vijim-tracking": "-0.01em",
+  "--vijim-tracking": "0",
 };
