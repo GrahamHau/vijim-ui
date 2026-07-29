@@ -1056,6 +1056,25 @@ import "@mantine/notifications/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/spotlight/styles.css";
+
+// src/runtime-css.ts
+var VIJIM_RUNTIME_CSS = '/* @vijimlabs/ui \u2014 \u89E6\u611F\u4E0E\u4EA4\u4E92\u6001\uFF08\u4E0D @import Mantine\uFF0C\u7531 provider \u52A0\u8F7D\uFF09 */\n\n:root {\n  --vijim-ease-out: cubic-bezier(0.23, 1, 0.32, 1);\n  --vijim-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);\n  --vijim-press-ms: 100ms;\n  --vijim-press-scale: 0.97;\n}\n\n/* \u2500\u2500 \u6309\u94AE\u6309\u538B \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n.mantine-Button-root {\n  transition:\n    background-color var(--duration-fast, 160ms) var(--ease-out, var(--vijim-ease-out)),\n    color var(--duration-fast, 160ms) var(--ease-out, var(--vijim-ease-out)),\n    transform var(--duration-press, 100ms) var(--ease-out, var(--vijim-ease-out));\n}\n.mantine-Button-root:active:not(:disabled):not([data-disabled]) {\n  transform: scale(var(--press-scale, var(--vijim-press-scale, 0.97)));\n}\n\n/* \u2500\u2500 \u5F55\u5165 / \u4E0B\u62C9\u89E6\u53D1\u5668 hover\xB7focus \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n.mantine-Input-input,\n.mantine-TextInput-input,\n.mantine-Textarea-input,\n.mantine-Select-input,\n.mantine-PasswordInput-input,\n.mantine-NumberInput-input,\n.mantine-DatePickerInput-input,\n.mantine-DateInput-input {\n  transition: background-color var(--duration-fast, 160ms) var(--ease-out, var(--vijim-ease-out));\n}\n.mantine-Input-input:hover,\n.mantine-TextInput-input:hover,\n.mantine-Textarea-input:hover,\n.mantine-Select-input:hover,\n.mantine-PasswordInput-input:hover,\n.mantine-NumberInput-input:hover {\n  background-color: var(--field-hover-bg, rgba(18, 19, 23, 0.035));\n}\n.mantine-Input-input:focus,\n.mantine-TextInput-input:focus,\n.mantine-Textarea-input:focus,\n.mantine-Select-input:focus,\n.mantine-Select-input[data-expanded],\n.mantine-PasswordInput-input:focus,\n.mantine-NumberInput-input:focus {\n  background-color: var(--field-focus-bg, rgba(18, 19, 23, 0.05));\n  border-color: transparent;\n}\n.mantine-Input-input[data-error],\n.mantine-TextInput-input[data-error],\n.mantine-Textarea-input[data-error] {\n  background-color: var(--color-input-error-bg, rgba(224, 55, 66, 0.06));\n}\n.mantine-Input-input::placeholder,\n.mantine-TextInput-input::placeholder,\n.mantine-Textarea-input::placeholder,\n.mantine-Select-input::placeholder {\n  color: var(--faint, #a6aab2);\n}\n\n/* \u2500\u2500 \u4E0B\u62C9\u9009\u9879\u9009\u4E2D\uFF08\u54C1\u724C\u6D45\u84DD + \u84DD\u5B57\uFF09 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n.mantine-Combobox-option[data-combobox-selected],\n.mantine-Select-option[data-combobox-selected] {\n  background-color: var(--term-selected-bg, rgba(51, 112, 255, 0.08)) !important;\n  color: var(--term-selected-ink, var(--brand, #3370ff)) !important;\n  font-weight: 600;\n}\n.mantine-Combobox-option[data-combobox-active]:not([data-combobox-selected]) {\n  background-color: var(--muted, #f6f7f9);\n}\n\n/* \u2500\u2500 Segmented / Tabs \u6FC0\u6D3B \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n.mantine-SegmentedControl-root {\n  /* \u4EA7\u54C1\u89C4\u5212\u9636\u6BB5\u591A\uFF0C\u5141\u8BB8\u6362\u884C\uFF0C\u907F\u514D overflow \u88C1\u6CA1 */\n  flex-wrap: wrap;\n  height: auto !important;\n  min-height: 32px;\n}\n.mantine-SegmentedControl-label {\n  white-space: nowrap;\n}\n.mantine-SegmentedControl-label[data-active] {\n  font-weight: 600;\n  color: var(--ink, #121317);\n}\n.mantine-Tabs-tab[data-active] {\n  color: var(--ink, #121317);\n  border-color: var(--brand, #3370ff);\n}\n\n/* \u7B5B\u9009\u58F3\u53EF\u89C1\u6027\u515C\u5E95 */\n.vijim-filter-bar {\n  background: var(--surface, #fff);\n  border: 1px solid var(--line, rgba(18, 19, 23, 0.085));\n  border-radius: var(--radius-panel, 12px);\n  box-shadow: var(--shadow-sm, var(--shadow-low, none));\n}\n\n/* \u2500\u2500 \u6807\u9898\u5B57\u8DDD \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nh1, .mantine-Title-root[data-order="1"] {\n  letter-spacing: var(--tracking-display, -0.022em);\n}\nh2, h3,\n.mantine-Title-root[data-order="2"],\n.mantine-Title-root[data-order="3"] {\n  letter-spacing: var(--tracking-title, -0.015em);\n}\n\n[data-vijim-press]:active:not(:disabled):not([data-disabled]) {\n  transform: scale(var(--vijim-press-scale, 0.97));\n}\n\n@media (prefers-reduced-motion: reduce) {\n  :root {\n    --vijim-press-ms: 1ms;\n    --duration-fast: 1ms;\n    --duration-normal: 1ms;\n  }\n  *,\n  *::before,\n  *::after {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n    scroll-behavior: auto !important;\n  }\n  .mantine-Button-root:active:not(:disabled):not([data-disabled]),\n  [data-vijim-press]:active:not(:disabled):not([data-disabled]) {\n    transform: none;\n  }\n}\n\n@media (prefers-reduced-transparency: reduce) {\n  .vijim-material {\n    backdrop-filter: none !important;\n    background-color: var(--surface, #fff) !important;\n  }\n}\n\n/* ADMIN \u8FC1\u79FB\u517C\u5BB9\uFF1A\u65E7 @vijimlabs/ui@0.1 .vj-* \u7EC4\u4EF6\u6837\u5F0F */\n*, *::before, *::after { box-sizing: border-box; }\n.vijim-root { color: var(--vijim-text-primary); font-family: var(--vijim-font-body); font-size: var(--vijim-body-size); line-height: var(--vijim-body-line); }\n.vijim-root button, .vijim-root input, .vijim-root textarea, .vijim-root select { font: inherit; }\n.vijim-root ::selection { background: var(--vijim-selection); }\n.vijim-root :focus-visible { outline: 2px solid var(--vijim-focus); outline-offset: 2px; }\n\n.vj-button { appearance:none; border:0; border-radius:var(--vijim-radius-element); min-height:var(--vijim-element-md); padding:0 var(--vijim-4); display:inline-flex; align-items:center; justify-content:center; gap:var(--vijim-2); cursor:pointer; font-weight:600; transition:background var(--vijim-fast) var(--vijim-easing), color var(--vijim-fast) var(--vijim-easing), opacity var(--vijim-fast) var(--vijim-easing); }\n.vj-button[data-size="sm"]{min-height:var(--vijim-element-sm);padding:0 var(--vijim-3);font-size:var(--vijim-label-size)}\n.vj-button[data-size="lg"]{min-height:var(--vijim-element-lg);padding:0 var(--vijim-5)}\n.vj-button[data-full="true"]{width:100%}.vj-button:disabled{cursor:not-allowed;opacity:.48}\n.vj-button[data-variant="primary"]{background:var(--vijim-accent-default);color:var(--vijim-on-accent)}\n.vj-button[data-variant="primary"]:hover:not(:disabled){background:var(--vijim-accent-hover)}\n.vj-button[data-variant="secondary"]{background:var(--vijim-surface-subtle);color:var(--vijim-text-primary)}\n.vj-button[data-variant="secondary"]:hover:not(:disabled),.vj-button[data-variant="ghost"]:hover:not(:disabled){background:var(--vijim-surface-muted)}\n.vj-button[data-variant="ghost"],.vj-button[data-variant="link"]{background:transparent;color:var(--vijim-text-secondary)}\n.vj-button[data-variant="link"]{color:var(--vijim-accent-default);padding-inline:var(--vijim-1)}\n.vj-button[data-variant="danger"]{background:var(--vijim-error-default);color:var(--vijim-on-accent)}\n.vj-button-spinner{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:var(--vijim-radius-full);animation:vj-spin .7s linear infinite}@keyframes vj-spin{to{transform:rotate(360deg)}}\n\n.vj-card{background:var(--vijim-surface-default);border:1px solid var(--vijim-border-default);border-radius:var(--vijim-radius-container);box-shadow:var(--vijim-shadow-low);overflow:hidden;min-width:0}\n.vj-card__header,.vj-card__footer{padding:var(--vj-card-pad);}.vj-card__header{border-bottom:1px solid var(--vijim-border-default)}.vj-card__footer{border-top:1px solid var(--vijim-border-default);background:var(--vijim-surface-muted)}\n.vj-card__title{font-size:var(--vijim-heading-size);font-weight:var(--vijim-heading-weight);line-height:var(--vijim-heading-line)}.vj-card__body{padding:var(--vj-card-body-pad)}\n.vj-card[data-padding="sm"]{--vj-card-pad:var(--vijim-3)}.vj-card[data-padding="md"]{--vj-card-pad:var(--vijim-4)}.vj-card[data-padding="lg"]{--vj-card-pad:var(--vijim-6)}\n.vj-card[data-body-padding="none"]{--vj-card-body-pad:0}.vj-card[data-body-padding="sm"]{--vj-card-body-pad:var(--vijim-3)}.vj-card[data-body-padding="md"]{--vj-card-body-pad:var(--vijim-4)}.vj-card[data-body-padding="lg"]{--vj-card-body-pad:var(--vijim-6)}\n\n.vj-badge{display:inline-flex;align-items:center;gap:var(--vijim-1);border-radius:var(--vijim-radius-full);padding:2px var(--vijim-2);font-size:var(--vijim-supporting-size);font-weight:600;line-height:1.45;background:var(--vj-badge-bg);color:var(--vj-badge-fg)}\n.vj-badge[data-tone="neutral"]{--vj-badge-bg:var(--vijim-surface-subtle);--vj-badge-fg:var(--vijim-text-secondary)}.vj-badge[data-tone="info"]{--vj-badge-bg:var(--vijim-accent-subtle);--vj-badge-fg:var(--vijim-accent-default)}.vj-badge[data-tone="success"]{--vj-badge-bg:var(--vijim-success-subtle);--vj-badge-fg:var(--vijim-success-default)}.vj-badge[data-tone="warning"]{--vj-badge-bg:var(--vijim-warning-subtle);--vj-badge-fg:var(--vijim-warning-default)}.vj-badge[data-tone="error"]{--vj-badge-bg:var(--vijim-error-subtle);--vj-badge-fg:var(--vijim-error-default)}\n.vj-status-dot{display:inline-flex;align-items:center;gap:var(--vijim-2);color:var(--vijim-text-secondary)}.vj-status-dot::before{content:"";width:7px;height:7px;border-radius:var(--vijim-radius-full);background:var(--vj-status-color)}.vj-status-dot[data-tone="neutral"]{--vj-status-color:var(--vijim-data-reference)}.vj-status-dot[data-tone="info"]{--vj-status-color:var(--vijim-accent-default)}.vj-status-dot[data-tone="success"]{--vj-status-color:var(--vijim-success-default)}.vj-status-dot[data-tone="warning"]{--vj-status-color:var(--vijim-warning-default)}.vj-status-dot[data-tone="error"]{--vj-status-color:var(--vijim-error-default)}\n\n.vj-field{display:grid;gap:var(--vijim-2)}.vj-field__label{font-size:var(--vijim-label-size);font-weight:var(--vijim-label-weight)}.vj-field__required{color:var(--vijim-error-default)}.vj-field__message{margin:0;font-size:var(--vijim-supporting-size);color:var(--vijim-text-muted)}.vj-field__message[data-error="true"]{color:var(--vijim-error-default)}\n.vj-input{width:100%;height:var(--vijim-element-md);border:0;border-radius:var(--vijim-radius-element);background:var(--vijim-surface-subtle);color:var(--vijim-text-primary);padding:0 var(--vijim-3);outline:0}.vj-input[data-size="sm"]{height:var(--vijim-element-sm);font-size:var(--vijim-label-size)}.vj-input::placeholder{color:var(--vijim-text-disabled)}.vj-input:focus{background:var(--vijim-selection)}.vj-input[aria-invalid="true"]{background:var(--vijim-input-error)}.vj-input:disabled{color:var(--vijim-text-disabled);cursor:not-allowed}\n\n.vj-tabs{display:flex;align-items:center;gap:var(--vijim-1);border-bottom:1px solid var(--vijim-border-default)}.vj-tab{appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;padding:var(--vijim-3) var(--vijim-2);color:var(--vijim-text-muted);cursor:pointer}.vj-tab[aria-selected="true"]{border-bottom-color:var(--vijim-text-primary);color:var(--vijim-text-primary);font-weight:600}\n.vj-segmented{display:inline-flex;align-items:center;padding:3px;border-radius:var(--vijim-radius-full);background:var(--vijim-surface-subtle);gap:2px}.vj-segmented__item{appearance:none;border:0;background:transparent;border-radius:var(--vijim-radius-full);height:30px;padding:0 var(--vijim-3);color:var(--vijim-text-muted);cursor:pointer}.vj-segmented__item[aria-checked="true"]{background:var(--vijim-surface-default);color:var(--vijim-text-primary);box-shadow:var(--vijim-shadow-low);font-weight:600}\n\n.vj-list{display:flex;flex-direction:column}.vj-list[data-dividers="true"]>.vj-list-item+.vj-list-item{border-top:1px solid var(--vijim-border-default)}.vj-list-item{display:flex;align-items:center;gap:var(--vijim-3);width:100%;border:0;background:transparent;color:var(--vijim-text-primary);text-align:left;padding:var(--vijim-3);min-width:0}.vj-list[data-density="compact"] .vj-list-item{padding:var(--vijim-2) var(--vijim-3)}button.vj-list-item{cursor:pointer}button.vj-list-item:hover{background:var(--vijim-surface-muted)}.vj-list-item__body{display:grid;gap:2px;min-width:0;flex:1}.vj-list-item__label{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vj-list-item__desc{font-size:var(--vijim-supporting-size);color:var(--vijim-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vj-list-item__side{flex:none;color:var(--vijim-text-secondary)}\n.vj-table-wrap{width:100%;overflow:auto}.vj-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.vj-table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.vj-table th,.vj-table td{text-align:left;border-bottom:1px solid var(--vijim-border-default);padding:var(--vijim-3) var(--vijim-4)}.vj-table[data-density="compact"] th,.vj-table[data-density="compact"] td{padding:var(--vijim-2) var(--vijim-3);font-size:var(--vijim-label-size)}.vj-table th{color:var(--vijim-text-muted);font-size:var(--vijim-supporting-size);font-weight:600;background:var(--vijim-surface-muted)}.vj-table tr:last-child td{border-bottom:0}.vj-table__empty{text-align:center!important;color:var(--vijim-text-muted);padding:var(--vijim-8)!important}\n\n.vj-dialog{border:0;padding:0;border-radius:var(--vijim-radius-container);background:var(--vijim-surface-default);color:var(--vijim-text-primary);box-shadow:var(--vijim-shadow-overlay);width:min(520px,calc(100vw - 32px))}.vj-dialog::backdrop{background:var(--vijim-overlay)}.vj-dialog__header,.vj-dialog__body,.vj-dialog__footer{padding:var(--vijim-4)}.vj-dialog__header{border-bottom:1px solid var(--vijim-border-default)}.vj-dialog__title{margin:0;font-size:var(--vijim-heading-size)}.vj-dialog__description{margin:var(--vijim-1) 0 0;color:var(--vijim-text-muted);font-size:var(--vijim-label-size)}.vj-dialog__footer{display:flex;justify-content:flex-end;gap:var(--vijim-2);border-top:1px solid var(--vijim-border-default);background:var(--vijim-surface-muted)}\n.vj-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.vj-icon-button{width:var(--vijim-element-md);padding:0;border-radius:var(--vijim-radius-full)}.vj-icon-button[data-size="sm"]{width:var(--vijim-element-sm)}.vj-icon-button[data-size="lg"]{width:var(--vijim-element-lg)}\n.vj-stack{display:flex;flex-direction:column;gap:var(--vj-gap)}.vj-hstack{display:flex;align-items:center;gap:var(--vj-gap)}.vj-stack[data-gap="1"],.vj-hstack[data-gap="1"]{--vj-gap:var(--vijim-1)}.vj-stack[data-gap="2"],.vj-hstack[data-gap="2"]{--vj-gap:var(--vijim-2)}.vj-stack[data-gap="3"],.vj-hstack[data-gap="3"]{--vj-gap:var(--vijim-3)}.vj-stack[data-gap="4"],.vj-hstack[data-gap="4"]{--vj-gap:var(--vijim-4)}.vj-stack[data-gap="6"],.vj-hstack[data-gap="6"]{--vj-gap:var(--vijim-6)}.vj-hstack[data-justify="between"]{justify-content:space-between}.vj-hstack[data-align="start"]{align-items:flex-start}.vj-hstack[data-align="end"]{align-items:flex-end}.vj-hstack[data-wrap="true"]{flex-wrap:wrap}\n.vj-grid{display:grid;gap:var(--vj-grid-gap)}.vj-grid[data-columns="1"]{grid-template-columns:1fr}.vj-grid[data-columns="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}.vj-grid[data-columns="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}.vj-grid[data-columns="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}.vj-grid[data-gap="2"]{--vj-grid-gap:var(--vijim-2)}.vj-grid[data-gap="3"]{--vj-grid-gap:var(--vijim-3)}.vj-grid[data-gap="4"]{--vj-grid-gap:var(--vijim-4)}.vj-grid[data-gap="6"]{--vj-grid-gap:var(--vijim-6)}\n.vj-page-canvas{min-height:100%;min-width:var(--vijim-content-min);padding:var(--vijim-5);background:var(--vijim-background-canvas);display:flex;flex-direction:column;gap:var(--vijim-4)}.vj-page-header{min-height:59px;padding:0 var(--vijim-5);background:var(--vijim-surface-default);border-bottom:1px solid var(--vijim-border-default);display:flex;align-items:center;justify-content:space-between;gap:var(--vijim-4)}.vj-page-header__main{display:flex;align-items:center;gap:var(--vijim-2);min-width:0}.vj-page-header__title{margin:0;font-size:15px;line-height:1.35;font-weight:600}.vj-page-header__context{color:var(--vijim-text-muted);font-size:var(--vijim-label-size);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vj-section-header{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--vijim-4)}.vj-section-header h2{margin:0;font-size:var(--vijim-heading-size)}.vj-section-header p{margin:2px 0 0;color:var(--vijim-text-muted);font-size:var(--vijim-label-size)}\n.vj-app-shell{min-height:100vh;display:grid;grid-template-columns:var(--vijim-sidebar-expanded) minmax(0,1fr);background:var(--vijim-background-canvas)}.vj-sidebar{position:sticky;top:0;height:100vh;background:var(--vijim-surface-default);border-right:1px solid var(--vijim-border-default);padding:var(--vijim-4) var(--vijim-3);display:flex;flex-direction:column;gap:var(--vijim-5);overflow:auto}.vj-sidebar__brand{min-height:60px;display:flex;align-items:flex-start}.vj-sidebar__brand img{max-width:176px;height:auto}.vj-sidebar__section{display:grid;gap:var(--vijim-1)}.vj-sidebar__section-label{padding:0 var(--vijim-2);margin-bottom:var(--vijim-1);font-size:var(--vijim-supporting-size);color:var(--vijim-text-disabled)}.vj-sidebar__item{appearance:none;border:0;background:transparent;width:100%;min-height:38px;padding:0 var(--vijim-3);border-radius:var(--vijim-radius-element);display:flex;align-items:center;gap:var(--vijim-2);text-align:left;color:var(--vijim-text-secondary);cursor:pointer}.vj-sidebar__item:hover,.vj-sidebar__item:focus-visible{background:var(--vijim-surface-subtle);outline:0}.vj-sidebar__item[aria-current="page"]{background:var(--vijim-surface-subtle);color:var(--vijim-text-primary);font-weight:600}.vj-app-shell__main{min-width:0;display:grid;grid-template-rows:auto 1fr}.vj-mobile-nav{display:none}\n.vj-kpi-grid{display:grid;gap:var(--vijim-3)}.vj-kpi-grid[data-columns="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}.vj-kpi-grid[data-columns="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}.vj-kpi-grid[data-columns="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}.vj-stat{padding:var(--vijim-4);display:grid;gap:var(--vijim-1);background:var(--vijim-surface-default);border:1px solid var(--vijim-border-default);border-radius:var(--vijim-radius-container)}.vj-stat__value{display:flex;align-items:center;gap:var(--vijim-2);font-size:26px;line-height:1.2;font-weight:650;letter-spacing:var(--vijim-tracking);font-variant-numeric:tabular-nums}.vj-stat[data-tone="info"] .vj-stat__value{color:var(--vijim-accent-default)}.vj-stat[data-tone="error"] .vj-stat__value{color:var(--vijim-error-default)}.vj-stat__label{color:var(--vijim-text-secondary)}.vj-stat__hint{color:var(--vijim-text-disabled);font-size:var(--vijim-supporting-size)}\n.vj-dashboard-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--vijim-3)}.vj-dashboard-grid__item[data-span="4"]{grid-column:span 4}.vj-dashboard-grid__item[data-span="6"]{grid-column:span 6}.vj-dashboard-grid__item[data-span="8"]{grid-column:span 8}.vj-dashboard-grid__item[data-span="12"]{grid-column:span 12}.vj-chart{width:100%;height:260px;overflow:visible}.vj-chart text{font-family:var(--vijim-font-body);font-size:11px;fill:var(--vijim-text-muted)}.vj-chart__grid{stroke:var(--vijim-border-default);stroke-dasharray:2 3}.vj-chart__value{fill:var(--vijim-text-secondary)!important;font-variant-numeric:tabular-nums}.vj-chart-figure{margin:0}.vj-chart__bar--main{fill:var(--vijim-data-main)}.vj-chart__bar--attention{fill:var(--vijim-data-attention)}.vj-chart__bar--risk{fill:var(--vijim-data-risk)}.vj-chart__bar--reference{fill:var(--vijim-data-reference)}.vj-chart__bar--positive{fill:var(--vijim-data-positive)}\n.vj-pattern{display:flex;flex-direction:column;min-height:100%}.vj-empty-state{min-height:220px;display:grid;place-items:center;text-align:center;color:var(--vijim-text-muted)}.vj-empty-state h2{color:var(--vijim-text-primary);margin:0 0 var(--vijim-2);font-size:var(--vijim-heading-size)}.vj-empty-state p{margin:0 0 var(--vijim-4)}\n@media (max-width:880px){.vj-app-shell{grid-template-columns:1fr}.vj-sidebar{display:none}.vj-mobile-nav{display:flex;position:sticky;top:0;z-index:3;min-height:52px;padding:0 var(--vijim-4);align-items:center;justify-content:space-between;background:var(--vijim-surface-default);border-bottom:1px solid var(--vijim-border-default)}.vj-page-canvas{padding:var(--vijim-3)}.vj-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vj-dashboard-grid__item[data-span]{grid-column:span 12}.vj-grid{grid-template-columns:1fr!important}}\n@media (max-width:520px){.vj-page-header{padding:var(--vijim-3);align-items:flex-start;min-height:auto;flex-direction:column}.vj-kpi-grid{grid-template-columns:1fr}.vj-stat__value{font-size:23px}}\n\n.vj-hstack{min-width:0}.vj-hstack>.vj-input{flex:1 1 220px;min-width:0}\n.vj-textarea,.vj-select{width:100%;border:0;border-radius:var(--vijim-radius-element);background:var(--vijim-surface-subtle);color:var(--vijim-text-primary);padding:var(--vijim-3);outline:0}.vj-textarea{resize:vertical;line-height:var(--vijim-body-line)}.vj-textarea[data-rows="3"]{min-height:82px}.vj-textarea[data-rows="5"]{min-height:126px}.vj-textarea[data-rows="8"]{min-height:192px}.vj-textarea:focus,.vj-select:focus{background:var(--vijim-selection)}.vj-textarea[aria-invalid="true"],.vj-select[aria-invalid="true"]{background:var(--vijim-input-error)}.vj-select{height:var(--vijim-element-md);padding-block:0;cursor:pointer}\n.vj-check,.vj-radio{position:relative;display:flex;align-items:flex-start;gap:var(--vijim-3);cursor:pointer}.vj-check__native{position:absolute;opacity:0;pointer-events:none}.vj-check__box,.vj-radio__dot{width:18px;height:18px;flex:none;border:1px solid var(--vijim-border-emphasized);background:var(--vijim-surface-default);display:grid;place-items:center;color:var(--vijim-on-accent);font-size:12px}.vj-check__box{border-radius:var(--vijim-radius-inner)}.vj-check__native:checked+.vj-check__box,.vj-check__native[aria-checked="mixed"]+.vj-check__box{background:var(--vijim-accent-default);border-color:var(--vijim-accent-default)}.vj-check__native:focus-visible+.vj-check__box,.vj-radio input:focus-visible+.vj-radio__dot{outline:2px solid var(--vijim-focus);outline-offset:2px}.vj-check__copy{display:grid;gap:2px;min-width:0}.vj-check__label{color:var(--vijim-text-primary);font-weight:500}.vj-check__description{color:var(--vijim-text-muted);font-size:var(--vijim-supporting-size)}.vj-radio-list{display:grid;gap:var(--vijim-3)}.vj-radio-list[data-density="compact"]{gap:var(--vijim-2)}.vj-radio input{position:absolute;opacity:0}.vj-radio__dot{border-radius:var(--vijim-radius-full)}.vj-radio input:checked+.vj-radio__dot{border:5px solid var(--vijim-accent-default)}\n.vj-switch-row{display:flex;align-items:center;justify-content:space-between;gap:var(--vijim-4)}.vj-switch{width:38px;height:22px;flex:none;border:0;border-radius:var(--vijim-radius-full);padding:2px;background:var(--vijim-border-emphasized);cursor:pointer;transition:background var(--vijim-fast) var(--vijim-easing)}.vj-switch[aria-checked="true"]{background:var(--vijim-accent-default)}.vj-switch__thumb{display:block;width:18px;height:18px;border-radius:var(--vijim-radius-full);background:var(--vijim-surface-default);box-shadow:var(--vijim-shadow-low);transform:translateX(0);transition:transform var(--vijim-fast) var(--vijim-easing)}.vj-switch[aria-checked="true"] .vj-switch__thumb{transform:translateX(16px)}.vj-switch:disabled,.vj-check:has(input:disabled),.vj-radio:has(input:disabled){opacity:.48;cursor:not-allowed}\n.vj-popover{position:relative;display:inline-flex}.vj-popover__trigger{appearance:none;border:0;background:transparent;color:var(--vijim-text-secondary);min-height:var(--vijim-element-sm);padding:0 var(--vijim-2);border-radius:var(--vijim-radius-element);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.vj-popover__trigger:hover,.vj-popover__trigger[aria-expanded="true"]{background:var(--vijim-surface-subtle);color:var(--vijim-text-primary)}.vj-popover__content{position:absolute;z-index:20;top:calc(100% + var(--vijim-2));left:0;min-width:220px;padding:var(--vijim-2);background:var(--vijim-surface-popover);border:1px solid var(--vijim-border-default);border-radius:var(--vijim-radius-element);box-shadow:var(--vijim-shadow-medium)}.vj-popover__content[data-placement="end"]{left:auto;right:0}.vj-menu{display:grid;gap:2px}.vj-menu__item{appearance:none;border:0;background:transparent;color:var(--vijim-text-primary);width:100%;padding:var(--vijim-2) var(--vijim-3);border-radius:var(--vijim-radius-inner);display:flex;align-items:center;gap:var(--vijim-2);text-align:left;cursor:pointer}.vj-menu__item:hover,.vj-menu__item:focus-visible{background:var(--vijim-surface-subtle);outline:0}.vj-menu__item[data-tone="danger"]{color:var(--vijim-error-default)}.vj-menu__item:disabled{opacity:.45;cursor:not-allowed}.vj-menu__copy{display:grid;gap:1px}.vj-menu__description{font-size:var(--vijim-supporting-size);color:var(--vijim-text-muted)}\n.vj-spinner{display:inline-flex;align-items:center;justify-content:center}.vj-spinner__ring{display:block;width:18px;height:18px;border:2px solid var(--vijim-border-emphasized);border-right-color:var(--vijim-accent-default);border-radius:var(--vijim-radius-full);animation:vj-spin .7s linear infinite}.vj-spinner[data-size="sm"] .vj-spinner__ring{width:14px;height:14px}.vj-spinner[data-size="lg"] .vj-spinner__ring{width:24px;height:24px}.vj-skeleton{display:grid;gap:var(--vijim-2)}.vj-skeleton span{display:block;min-height:14px;border-radius:var(--vijim-radius-inner);background:var(--vijim-surface-subtle);animation:vj-pulse 1.4s var(--vijim-easing) infinite}.vj-skeleton span:last-child{width:72%}.vj-skeleton[data-variant="block"] span{min-height:120px;width:100%}.vj-skeleton[data-variant="avatar"] span{width:40px;height:40px;border-radius:var(--vijim-radius-full)}@keyframes vj-pulse{50%{opacity:.52}}\n.vj-progress{display:grid;gap:var(--vijim-2)}.vj-progress__meta{display:flex;justify-content:space-between;color:var(--vijim-text-secondary);font-size:var(--vijim-label-size)}.vj-progress__native{appearance:none;width:100%;height:6px;border:0;border-radius:var(--vijim-radius-full);overflow:hidden;background:var(--vijim-surface-subtle)}.vj-progress__native::-webkit-progress-bar{background:var(--vijim-surface-subtle)}.vj-progress__native::-webkit-progress-value{background:var(--vj-progress-color)}.vj-progress__native::-moz-progress-bar{background:var(--vj-progress-color)}.vj-progress__native[data-tone="info"]{--vj-progress-color:var(--vijim-accent-default)}.vj-progress__native[data-tone="success"]{--vj-progress-color:var(--vijim-success-default)}.vj-progress__native[data-tone="warning"]{--vj-progress-color:var(--vijim-warning-default)}.vj-progress__native[data-tone="error"]{--vj-progress-color:var(--vijim-error-default)}\n.vj-toast-region{position:fixed;z-index:50;right:var(--vijim-4);bottom:var(--vijim-4);width:min(360px,calc(100vw - 32px));display:grid;gap:var(--vijim-2)}.vj-toast{display:flex;align-items:flex-start;gap:var(--vijim-3);padding:var(--vijim-3);background:var(--vijim-surface-popover);border:1px solid var(--vijim-border-default);border-radius:var(--vijim-radius-element);box-shadow:var(--vijim-shadow-high)}.vj-toast__marker{width:7px;height:7px;margin-top:6px;border-radius:var(--vijim-radius-full);background:var(--vj-toast-color)}.vj-toast[data-tone="neutral"]{--vj-toast-color:var(--vijim-data-reference)}.vj-toast[data-tone="info"]{--vj-toast-color:var(--vijim-accent-default)}.vj-toast[data-tone="success"]{--vj-toast-color:var(--vijim-success-default)}.vj-toast[data-tone="warning"]{--vj-toast-color:var(--vijim-warning-default)}.vj-toast[data-tone="error"]{--vj-toast-color:var(--vijim-error-default)}.vj-toast__copy{display:grid;gap:2px;flex:1}.vj-toast__copy span{color:var(--vijim-text-muted);font-size:var(--vijim-supporting-size)}.vj-toast__close{appearance:none;border:0;background:transparent;color:var(--vijim-text-muted);cursor:pointer;font-size:18px;line-height:1}\n.vj-chart__line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.vj-chart__point{stroke:var(--vijim-surface-default);stroke-width:2}.vj-chart__area{opacity:.14}.vj-chart__stroke--main{stroke:var(--vijim-data-main)}.vj-chart__stroke--attention{stroke:var(--vijim-data-attention)}.vj-chart__stroke--risk{stroke:var(--vijim-data-risk)}.vj-chart__stroke--reference{stroke:var(--vijim-data-reference)}.vj-chart__stroke--positive{stroke:var(--vijim-data-positive)}.vj-chart__fill--main{fill:var(--vijim-data-main)}.vj-chart__fill--attention{fill:var(--vijim-data-attention)}.vj-chart__fill--risk{fill:var(--vijim-data-risk)}.vj-chart__fill--reference{fill:var(--vijim-data-reference)}.vj-chart__fill--positive{fill:var(--vijim-data-positive)}.vj-pie{margin:0;display:grid;grid-template-columns:minmax(160px,220px) 1fr;align-items:center;gap:var(--vijim-5)}.vj-pie svg{width:100%}.vj-pie__hole{fill:var(--vijim-surface-default)}.vj-pie__legend{display:grid;gap:var(--vijim-3)}.vj-pie__legend>div{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:var(--vijim-2)}.vj-pie__marker{width:8px;height:8px;border-radius:var(--vijim-radius-full)}.vj-pie__legend strong{font-variant-numeric:tabular-nums}.vj-sparkline{width:120px;height:36px;overflow:visible}\n.vj-filter-workspace{display:grid;grid-template-columns:260px minmax(0,1fr);gap:var(--vijim-4);align-items:start}.vj-filter-workspace>aside{position:sticky;top:var(--vijim-4)}.vj-pattern-section__header{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--vijim-4)}.vj-pattern-section__header h2{margin:0;font-size:var(--vijim-heading-size)}.vj-pattern-section__header p{margin:2px 0 0;color:var(--vijim-text-muted);font-size:var(--vijim-label-size)}\n@media (max-width:880px){.vj-filter-workspace{grid-template-columns:1fr}.vj-filter-workspace>aside{position:static}.vj-pie{grid-template-columns:1fr}}\n\n@media (max-width:880px){.vj-kpi-grid[data-columns]{grid-template-columns:repeat(2,minmax(0,1fr))}}\n@media (max-width:520px){.vj-kpi-grid[data-columns]{grid-template-columns:1fr}}\n.vj-avatar{display:inline-grid;place-items:center;overflow:hidden;border-radius:var(--vijim-radius-full);background:var(--vijim-surface-subtle);color:var(--vijim-text-secondary);font-weight:600}.vj-avatar[data-size="sm"]{width:28px;height:28px;font-size:11px}.vj-avatar[data-size="md"]{width:36px;height:36px;font-size:12px}.vj-avatar[data-size="lg"]{width:48px;height:48px}.vj-avatar img,.vj-thumbnail img{width:100%;height:100%;object-fit:cover}.vj-thumbnail{display:inline-grid;place-items:center;overflow:hidden;border-radius:var(--vijim-radius-element);background:var(--vijim-surface-subtle);color:var(--vijim-text-disabled);font-size:var(--vijim-supporting-size);text-align:center}.vj-thumbnail[data-size="sm"]{width:48px;height:48px}.vj-thumbnail[data-size="md"]{width:72px;height:72px}.vj-thumbnail[data-size="lg"]{width:112px;height:84px}.vj-metadata{margin:0;display:grid;gap:var(--vijim-3) var(--vijim-6)}.vj-metadata[data-columns="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}.vj-metadata>div{display:grid;grid-template-columns:minmax(90px,auto) 1fr;gap:var(--vijim-3)}.vj-metadata dt{color:var(--vijim-text-muted)}.vj-metadata dd{margin:0;color:var(--vijim-text-primary)}.vj-pagination{display:flex;align-items:center;justify-content:flex-end;gap:var(--vijim-1)}.vj-pagination button{appearance:none;min-width:32px;height:32px;border:0;border-radius:var(--vijim-radius-element);padding:0 var(--vijim-2);background:transparent;color:var(--vijim-text-secondary);cursor:pointer}.vj-pagination button:hover{background:var(--vijim-surface-subtle)}.vj-pagination button[aria-current="page"]{background:var(--vijim-text-primary);color:var(--vijim-surface-default)}.vj-pagination button:disabled{opacity:.4;cursor:not-allowed}\n.vj-tooltip{position:relative;display:inline-flex}.vj-tooltip>button{appearance:none;border:0;background:transparent;color:inherit;padding:0;display:inline-flex;cursor:help}.vj-tooltip__content{position:absolute;z-index:30;left:50%;bottom:calc(100% + var(--vijim-2));transform:translateX(-50%);width:max-content;max-width:240px;padding:var(--vijim-2) var(--vijim-3);border-radius:var(--vijim-radius-element);background:var(--vijim-text-primary);color:var(--vijim-surface-default);font-size:var(--vijim-supporting-size);box-shadow:var(--vijim-shadow-medium);opacity:0;visibility:hidden;transition:opacity var(--vijim-fast) var(--vijim-easing)}.vj-tooltip__content[data-placement="bottom"]{bottom:auto;top:calc(100% + var(--vijim-2))}.vj-tooltip:hover .vj-tooltip__content,.vj-tooltip:focus-within .vj-tooltip__content{opacity:1;visibility:visible}\n.vj-input-group{display:flex;align-items:center;gap:var(--vijim-2);height:var(--vijim-element-md);padding:0 var(--vijim-3);border-radius:var(--vijim-radius-element);background:var(--vijim-surface-subtle);color:var(--vijim-text-muted)}.vj-input-group:focus-within{background:var(--vijim-selection)}.vj-input-group[data-invalid="true"]{background:var(--vijim-input-error)}.vj-input-group input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:var(--vijim-text-primary)}.vj-slider{display:grid;gap:var(--vijim-2)}.vj-slider__meta{display:flex;justify-content:space-between;color:var(--vijim-text-secondary)}.vj-slider input{width:100%;accent-color:var(--vijim-accent-default)}.vj-date{color-scheme:inherit}.vj-search-select{position:relative}.vj-search-select__list{position:absolute;z-index:18;top:calc(100% + var(--vijim-1));left:0;right:0;max-height:220px;overflow:auto;padding:var(--vijim-1);background:var(--vijim-surface-popover);border:1px solid var(--vijim-border-default);border-radius:var(--vijim-radius-element);box-shadow:var(--vijim-shadow-medium)}.vj-search-select__list button{appearance:none;width:100%;border:0;background:transparent;color:var(--vijim-text-primary);padding:var(--vijim-2) var(--vijim-3);border-radius:var(--vijim-radius-inner);text-align:left;cursor:pointer}.vj-search-select__list button:hover,.vj-search-select__list button[aria-selected="true"]{background:var(--vijim-surface-subtle)}.vj-search-select__list>span{display:block;padding:var(--vijim-3);color:var(--vijim-text-muted)}.vj-multi-selector{display:flex;flex-wrap:wrap;gap:var(--vijim-2)}.vj-multi-selector button,.vj-tag{min-height:28px;border:0;border-radius:var(--vijim-radius-full);padding:0 var(--vijim-3);display:inline-flex;align-items:center;gap:var(--vijim-1);background:var(--vijim-surface-subtle);color:var(--vijim-text-secondary)}.vj-multi-selector button{cursor:pointer}.vj-multi-selector button[aria-pressed="true"],.vj-tag[data-tone="info"]{background:var(--vijim-accent-subtle);color:var(--vijim-accent-default)}.vj-tag button{appearance:none;border:0;background:transparent;color:inherit;padding:0;cursor:pointer;font-size:16px;line-height:1}\n\n.vj-mobile-nav select{min-width:0;max-width:150px;height:32px;border:0;border-radius:var(--vijim-radius-element);padding:0 var(--vijim-2);background:var(--vijim-surface-subtle);color:var(--vijim-text-primary)}\n\n\n/* \u5168\u5E73\u53F0\u552F\u4E00\u58F3\u5C42\u51E0\u4F55 \u2014\u2014 \u4E0E Studio \u5BF9\u9F50 */\n.vj-platform-shell {\n  min-height: 100vh;\n  display: flex;\n  flex-direction: row;\n  background: var(--bg, #F1F3F6);\n  color: var(--ink, #121317);\n  font-family: var(--font-sans, inherit);\n}\n.vj-platform-shell__sidebar {\n  width: 246px;\n  flex: none;\n  align-self: flex-start;\n  position: sticky;\n  top: 0;\n  height: 100vh;\n  overflow-y: auto;\n  display: flex;\n  flex-direction: column;\n  background: var(--surface, #fff);\n  border-right: 1px solid var(--line, rgba(18,19,23,0.085));\n}\n.vj-platform-shell__brand {\n  height: 76px;\n  min-height: 76px;\n  display: flex;\n  align-items: center;\n  padding: 0 12px 0 26px;\n  flex: none;\n}\n.vj-platform-shell__brand a,\n.vj-platform-shell__brand > * {\n  min-width: 0;\n  text-decoration: none;\n  color: inherit;\n}\n.vj-platform-shell__nav {\n  flex: 1 1 auto;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 12px 12px 18px;\n  display: flex;\n  flex-direction: column;\n  gap: 0;\n  scrollbar-width: thin;\n}\n.vj-platform-shell__section + .vj-platform-shell__section {\n  margin-top: 10px;\n}\n.vj-platform-shell__section-label {\n  display: flex;\n  align-items: center;\n  min-height: 28px;\n  margin: 0 6px 5px;\n  padding: 7px 0 6px;\n  border-bottom: 1px solid var(--line, rgba(18,19,23,0.085));\n  color: var(--faint, #A6AAB2);\n  font-size: 11.5px;\n  font-weight: 650;\n  letter-spacing: 0.2px;\n  line-height: 1.25;\n}\n.vj-platform-shell__item {\n  appearance: none;\n  position: relative;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-height: 36px;\n  margin: 0 0 3px;\n  padding: 8px 13px;\n  border: 1px solid transparent;\n  border-radius: 8px;\n  width: 100%;\n  text-align: left;\n  text-decoration: none;\n  cursor: pointer;\n  background: transparent;\n  color: var(--ink-2, #3D4047);\n  font: inherit;\n  font-size: 13.5px;\n  font-weight: 500;\n  line-height: 1.35;\n  transition: background-color 0.15s ease, color 0.15s ease;\n}\n.vj-platform-shell__item:hover,\n.vj-platform-shell__item:focus-visible {\n  background: var(--surface-2, #FAFAFB);\n  color: var(--ink, #121317);\n  outline: 0;\n}\n.vj-platform-shell__item[data-active="true"],\n.vj-platform-shell__item[aria-current="page"] {\n  background: var(--state-selected-bg, rgba(18,19,23,0.07));\n  color: var(--state-selected-ink, #121317);\n  font-weight: 600;\n}\n.vj-platform-shell__item-icon {\n  width: 18px;\n  height: 18px;\n  flex: none;\n  display: inline-grid;\n  place-items: center;\n  color: currentColor;\n}\n.vj-platform-shell__item-label {\n  min-width: 0;\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.vj-platform-shell__item-meta {\n  margin-left: auto;\n  flex: none;\n}\n.vj-platform-shell__footer {\n  margin-top: auto;\n  padding: 12px;\n  border-top: 1px solid var(--line, rgba(18,19,23,0.085));\n  flex: none;\n}\n.vj-platform-shell__main {\n  min-width: 0;\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  min-height: 100vh;\n  background: var(--bg, #F1F3F6);\n}\n.vj-platform-shell__topbar {\n  flex: none;\n  height: 60px;\n  min-height: 60px;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 0 24px;\n  border-bottom: 1px solid var(--line, rgba(18,19,23,0.085));\n  background: var(--surface, #fff);\n}\n.vj-platform-shell__topbar-title {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  flex: 1;\n}\n.vj-platform-shell__topbar-title > strong {\n  margin: 0;\n  color: var(--ink-2, #3D4047);\n  font-size: 14px;\n  font-weight: 580;\n  line-height: 1.2;\n  white-space: nowrap;\n}\n.vj-platform-shell__topbar-context {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--faint, #A6AAB2);\n  font-size: 12px;\n}\n.vj-platform-shell__topbar-actions {\n  margin-left: auto;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: none;\n}\n.vj-platform-shell__content {\n  flex: 1;\n  min-width: 0;\n  width: 100%;\n  box-sizing: border-box;\n  padding: 20px 22px 40px;\n  background: var(--bg, #F1F3F6);\n}\n.vj-platform-shell__menu-button {\n  display: none;\n  appearance: none;\n  border: 0;\n  background: transparent;\n  color: var(--ink-2, #3D4047);\n  width: 34px;\n  height: 34px;\n  border-radius: 8px;\n  place-items: center;\n  cursor: pointer;\n}\n.vj-platform-shell__menu-button:hover,\n.vj-platform-shell__menu-button:focus-visible {\n  background: var(--surface-2, #FAFAFB);\n  outline: 0;\n}\n.vj-platform-shell__drawer {\n  display: none;\n}\n@media (max-width: 900px) {\n  .vj-platform-shell__sidebar {\n    display: none;\n  }\n  .vj-platform-shell__menu-button {\n    display: grid;\n  }\n  .vj-platform-shell__topbar {\n    padding: 0 14px;\n  }\n  .vj-platform-shell__content {\n    padding: 18px 14px 40px;\n  }\n  .vj-platform-shell__drawer {\n    position: fixed;\n    inset: 0;\n    z-index: 80;\n    display: block;\n    visibility: hidden;\n    pointer-events: none;\n  }\n  .vj-platform-shell__drawer[data-open="true"] {\n    visibility: visible;\n    pointer-events: auto;\n  }\n  .vj-platform-shell__drawer-backdrop {\n    position: absolute;\n    inset: 0;\n    border: 0;\n    background: rgba(18, 19, 23, 0.28);\n    opacity: 0;\n    transition: opacity 160ms ease;\n  }\n  .vj-platform-shell__drawer[data-open="true"] .vj-platform-shell__drawer-backdrop {\n    opacity: 1;\n  }\n  .vj-platform-shell__drawer-panel {\n    position: absolute;\n    inset: 0 auto 0 0;\n    display: flex;\n    width: min(286px, 86vw);\n    flex-direction: column;\n    background: var(--surface, #fff);\n    border-right: 1px solid var(--line, rgba(18,19,23,0.085));\n    transform: translateX(-100%);\n    transition: transform 220ms ease;\n  }\n  .vj-platform-shell__drawer[data-open="true"] .vj-platform-shell__drawer-panel {\n    transform: translateX(0);\n  }\n  .vj-platform-shell__drawer-panel .vj-platform-shell__brand {\n    justify-content: space-between;\n    padding-right: 12px;\n  }\n  .vj-platform-shell__drawer-panel .vj-platform-shell__nav {\n    flex: 1;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .vj-platform-shell__item,\n  .vj-platform-shell__drawer-backdrop,\n  .vj-platform-shell__drawer-panel {\n    transition: none;\n  }\n}\n\n/* \u517C\u5BB9\u65E7 ADMIN \u7C7B\u540D\uFF1A\u51E0\u4F55\u7EDF\u4E00\u5230\u5E73\u53F0\u58F3 */\n.vj-app-shell {\n  min-height: 100vh;\n  display: grid;\n  grid-template-columns: 246px minmax(0, 1fr);\n  background: var(--vijim-background-canvas, var(--bg, #F1F3F6));\n}\n.vj-sidebar {\n  position: sticky;\n  top: 0;\n  height: 100vh;\n  background: var(--vijim-surface-default, var(--surface, #fff));\n  border-right: 1px solid var(--vijim-border-default, var(--line, rgba(18,19,23,0.085)));\n  padding: 0;\n  display: flex;\n  flex-direction: column;\n  gap: 0;\n  overflow: auto;\n}\n.vj-sidebar__brand {\n  min-height: 76px;\n  height: 76px;\n  display: flex;\n  align-items: center;\n  padding: 0 12px 0 26px;\n}\n.vj-sidebar__brand img {\n  max-width: 148px;\n  height: auto;\n}\n.vj-sidebar__section {\n  display: grid;\n  gap: 3px;\n  padding: 0 12px;\n}\n.vj-sidebar__section + .vj-sidebar__section {\n  margin-top: 10px;\n}\n.vj-sidebar__section-label {\n  margin: 0 6px 5px;\n  padding: 7px 0 6px;\n  border-bottom: 1px solid var(--vijim-border-default, var(--line, rgba(18,19,23,0.085)));\n  font-size: 11.5px;\n  font-weight: 650;\n  color: var(--vijim-text-disabled, var(--faint, #A6AAB2));\n}\n.vj-sidebar__item {\n  appearance: none;\n  border: 0;\n  background: transparent;\n  width: 100%;\n  min-height: 36px;\n  padding: 8px 13px;\n  border-radius: 8px;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  text-align: left;\n  color: var(--vijim-text-secondary, var(--ink-2, #3D4047));\n  cursor: pointer;\n  font-size: 13.5px;\n  font-weight: 500;\n}\n.vj-sidebar__item:hover,\n.vj-sidebar__item:focus-visible {\n  background: var(--vijim-surface-muted, var(--surface-2, #FAFAFB));\n  outline: 0;\n}\n.vj-sidebar__item[aria-current="page"] {\n  background: var(--state-selected-bg, rgba(18,19,23,0.07));\n  color: var(--state-selected-ink, #121317);\n  font-weight: 600;\n}\n.vj-app-shell__main {\n  min-width: 0;\n  display: grid;\n  grid-template-rows: auto 1fr;\n  background: var(--vijim-background-canvas, var(--bg, #F1F3F6));\n}\n.vj-mobile-nav {\n  display: none;\n}\n.vj-page-header {\n  min-height: 60px;\n  height: 60px;\n  padding: 0 24px;\n  background: var(--vijim-surface-default, var(--surface, #fff));\n  border-bottom: 1px solid var(--vijim-border-default, var(--line, rgba(18,19,23,0.085)));\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n.vj-page-canvas {\n  min-height: 100%;\n  padding: 20px 22px 40px;\n  background: var(--vijim-background-canvas, var(--bg, #F1F3F6));\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n@media (max-width: 900px) {\n  .vj-app-shell {\n    grid-template-columns: 1fr;\n  }\n  .vj-sidebar {\n    display: none;\n  }\n  .vj-mobile-nav {\n    display: flex;\n    position: sticky;\n    top: 0;\n    z-index: 3;\n    min-height: 52px;\n    padding: 0 14px;\n    align-items: center;\n    justify-content: space-between;\n    background: var(--vijim-surface-default, var(--surface, #fff));\n    border-bottom: 1px solid var(--vijim-border-default, var(--line, rgba(18,19,23,0.085)));\n  }\n  .vj-page-header {\n    padding: 0 14px;\n  }\n  .vj-page-canvas {\n    padding: 18px 14px 40px;\n  }\n}\n';
+
+// src/shell-responsive-css.ts
+var VIJIM_SHELL_RESPONSIVE_CSS = `
+@media (max-width: 560px) {
+  .vj-platform-shell__topbar-title {
+    gap: 6px;
+  }
+
+  .vj-platform-shell__topbar-context,
+  .vj-platform-shell__topbar-context-separator {
+    display: none;
+  }
+}
+`;
+
+// src/provider.tsx
 import { MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { Notifications } from "@mantine/notifications";
@@ -1096,6 +1115,15 @@ function VijimProvider({
         dangerouslySetInnerHTML: { __html: rootCss }
       }
     ) : null,
+    /* @__PURE__ */ jsx(
+      "style",
+      {
+        dangerouslySetInnerHTML: {
+          __html: `${VIJIM_RUNTIME_CSS}
+${VIJIM_SHELL_RESPONSIVE_CSS}`
+        }
+      }
+    ),
     withModals ? /* @__PURE__ */ jsx(ModalsProvider, { children: tree }) : tree
   ] });
 }
@@ -2393,8 +2421,8 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { Checkbox, Group as Group2, Text as Text3 } from "@mantine/core";
-import { useMemo as useMemo5, useState as useState4 } from "react";
+import { Checkbox, Group as Group3, Text as Text4 } from "@mantine/core";
+import { useMemo as useMemo5, useState as useState5 } from "react";
 
 // src/components/Table.tsx
 import {
@@ -2451,10 +2479,442 @@ function Spinner({ label, size = "sm" }) {
   ] }) });
 }
 
+// src/components/Shell.tsx
+import {
+  Box as Box2,
+  Group,
+  Stack as Stack2,
+  Text as Text2,
+  UnstyledButton
+} from "@mantine/core";
+import { useEffect as useEffect2, useId as useId2, useRef as useRef3, useState as useState3 } from "react";
+import { Fragment, jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
+var SHELL_GEOMETRY = {
+  headerH: 60,
+  brandH: 76,
+  navbarW: 246,
+  contentPadX: 22,
+  contentPadY: 20,
+  sideItemRadius: 8,
+  sideItemMinH: 36
+};
+function TopBar({
+  title,
+  context,
+  badge,
+  actions,
+  backHref,
+  backLabel = "\u8FD4\u56DE",
+  sticky = true,
+  onBack,
+  leading
+}) {
+  return /* @__PURE__ */ jsxs6(
+    Box2,
+    {
+      component: "header",
+      className: "vj-platform-shell__topbar",
+      style: {
+        boxSizing: "border-box",
+        position: sticky ? "sticky" : "relative",
+        top: sticky ? 0 : void 0,
+        zIndex: sticky ? 30 : void 0
+      },
+      children: [
+        leading,
+        backHref != null || onBack ? /* @__PURE__ */ jsxs6(Fragment, { children: [
+          /* @__PURE__ */ jsxs6(
+            UnstyledButton,
+            {
+              component: backHref ? "a" : "button",
+              href: backHref,
+              onClick: onBack,
+              style: {
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                height: 32,
+                paddingInline: 10,
+                borderRadius: RADIUS.element,
+                color: COLORS.mutedFg,
+                fontSize: 13,
+                fontWeight: 500,
+                fontFamily: FONT.family,
+                textDecoration: "none"
+              },
+              children: [
+                /* @__PURE__ */ jsx14("span", { "aria-hidden": true, children: "\u2190" }),
+                backLabel
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsx14(
+            Box2,
+            {
+              "aria-hidden": true,
+              style: {
+                width: 1,
+                height: 24,
+                background: COLORS.border,
+                flex: "none"
+              }
+            }
+          )
+        ] }) : null,
+        /* @__PURE__ */ jsxs6(Group, { gap: 8, align: "center", className: "vj-platform-shell__topbar-title", wrap: "nowrap", children: [
+          /* @__PURE__ */ jsx14(
+            Text2,
+            {
+              component: "h1",
+              style: {
+                margin: 0,
+                flex: "none",
+                color: COLORS.inkSecondary,
+                fontSize: 14,
+                fontWeight: 580,
+                lineHeight: 1.2,
+                fontFamily: FONT.family
+              },
+              children: title
+            }
+          ),
+          badge,
+          context != null ? /* @__PURE__ */ jsxs6(Fragment, { children: [
+            /* @__PURE__ */ jsx14(
+              Text2,
+              {
+                c: "dimmed",
+                size: "xs",
+                className: "vj-platform-shell__topbar-context-separator",
+                style: { flex: "none" },
+                children: "\xB7"
+              }
+            ),
+            /* @__PURE__ */ jsx14(
+              Text2,
+              {
+                size: "xs",
+                c: "dimmed",
+                className: "vj-platform-shell__topbar-context",
+                children: context
+              }
+            )
+          ] }) : null
+        ] }),
+        actions != null ? /* @__PURE__ */ jsx14(Group, { gap: 8, align: "center", className: "vj-platform-shell__topbar-actions", children: actions }) : null
+      ]
+    }
+  );
+}
+function normalizeSections(navigation, navItems) {
+  if (navigation && navigation.length > 0) return [...navigation];
+  if (!navItems || navItems.length === 0) return [];
+  const sections = [];
+  let current = { items: [] };
+  for (const item of navItems) {
+    if (item.section) {
+      if (current.items.length > 0 || current.label) sections.push(current);
+      current = { label: item.section, items: [] };
+      continue;
+    }
+    current = {
+      ...current,
+      items: [...current.items, item]
+    };
+  }
+  if (current.items.length > 0 || current.label) sections.push(current);
+  return sections;
+}
+function NavTree({
+  sections,
+  onNavigate
+}) {
+  return /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__nav", children: sections.map((section, index) => /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__section", children: [
+    section.label ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__section-label", children: section.label }) : null,
+    section.items.map((item) => {
+      const key = item.key ?? item.id ?? item.label;
+      const active = Boolean(item.active);
+      const disabled = Boolean(item.disabled);
+      const handle = (event) => {
+        if (disabled) {
+          event.preventDefault();
+          return;
+        }
+        item.onClick?.();
+        item.onSelect?.();
+        onNavigate?.();
+      };
+      const content = /* @__PURE__ */ jsxs6(Fragment, { children: [
+        item.icon ? /* @__PURE__ */ jsx14("span", { className: "vj-platform-shell__item-icon", children: item.icon }) : null,
+        /* @__PURE__ */ jsx14("span", { className: "vj-platform-shell__item-label", children: item.label }),
+        item.meta ? /* @__PURE__ */ jsx14("span", { className: "vj-platform-shell__item-meta", children: item.meta }) : null
+      ] });
+      if (item.href && !disabled) {
+        return /* @__PURE__ */ jsx14(
+          "a",
+          {
+            href: item.href,
+            className: "vj-platform-shell__item",
+            "data-active": active ? "true" : "false",
+            "aria-current": active ? "page" : void 0,
+            onClick: handle,
+            children: content
+          },
+          key
+        );
+      }
+      return /* @__PURE__ */ jsx14(
+        "button",
+        {
+          type: "button",
+          className: "vj-platform-shell__item",
+          "data-active": active ? "true" : "false",
+          "aria-current": active ? "page" : void 0,
+          disabled,
+          onClick: handle,
+          children: content
+        },
+        key
+      );
+    })
+  ] }, section.label ?? `section-${index}`)) });
+}
+function AppShell({
+  product,
+  brand = product ? `VIJIM ${product}` : "VIJIM",
+  brandHint,
+  navigation,
+  navItems = [],
+  user,
+  footer,
+  header,
+  headerTitle,
+  headerContext,
+  headerBadge,
+  headerRight,
+  headerCenter,
+  headerActions,
+  children,
+  contentPadding = true,
+  withHeader = true
+}) {
+  const sections = normalizeSections(navigation, navItems);
+  const [mobileOpen, setMobileOpen] = useState3(false);
+  const closeRef = useRef3(null);
+  const panelRef = useRef3(null);
+  const drawerTitleId = useId2();
+  const foot = footer ?? user;
+  useEffect2(() => {
+    const desktopQuery = window.matchMedia("(min-width: 901px)");
+    const closeAtDesktop = (event) => {
+      if (event.matches) setMobileOpen(false);
+    };
+    closeAtDesktop(desktopQuery);
+    desktopQuery.addEventListener("change", closeAtDesktop);
+    return () => desktopQuery.removeEventListener("change", closeAtDesktop);
+  }, []);
+  useEffect2(() => {
+    if (!mobileOpen) return;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const frame = window.requestAnimationFrame(() => closeRef.current?.focus());
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll(
+          'a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => el.getClientRects().length > 0);
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("keydown", onKeyDown);
+      previous?.focus();
+    };
+  }, [mobileOpen]);
+  const brandNode = typeof brand === "string" ? /* @__PURE__ */ jsxs6(Stack2, { gap: 2, children: [
+    /* @__PURE__ */ jsx14(Text2, { fw: 650, size: "sm", c: COLORS.ink, style: { letterSpacing: "-0.01em" }, children: brand }),
+    brandHint ? /* @__PURE__ */ jsx14(Text2, { size: "xs", c: "dimmed", lineClamp: 1, children: brandHint }) : null
+  ] }) : brand;
+  const topbar = header ?? (withHeader && (headerTitle || headerCenter || headerRight || headerActions) ? /* @__PURE__ */ jsx14(
+    TopBar,
+    {
+      title: headerTitle ?? (typeof brand === "string" ? brand : product ?? "VIJIM"),
+      context: headerContext ?? headerCenter,
+      badge: headerBadge,
+      actions: headerActions ?? headerRight,
+      leading: /* @__PURE__ */ jsx14(
+        "button",
+        {
+          type: "button",
+          className: "vj-platform-shell__menu-button",
+          "aria-label": "\u6253\u5F00\u5BFC\u822A",
+          "aria-expanded": mobileOpen,
+          onClick: () => setMobileOpen(true),
+          children: /* @__PURE__ */ jsx14(Icon, { name: "panel", size: 18 })
+        }
+      )
+    }
+  ) : withHeader ? /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__topbar", children: [
+    /* @__PURE__ */ jsx14(
+      "button",
+      {
+        type: "button",
+        className: "vj-platform-shell__menu-button",
+        "aria-label": "\u6253\u5F00\u5BFC\u822A",
+        "aria-expanded": mobileOpen,
+        onClick: () => setMobileOpen(true),
+        children: /* @__PURE__ */ jsx14(Icon, { name: "panel", size: 18 })
+      }
+    ),
+    /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__topbar-title", children: /* @__PURE__ */ jsx14("strong", { children: typeof brand === "string" ? brand : product ?? "VIJIM" }) }),
+    headerActions ?? headerRight
+  ] }) : null);
+  return /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell", "data-product": product, children: [
+    /* @__PURE__ */ jsxs6("aside", { className: "vj-platform-shell__sidebar", "aria-label": `${product ?? "VIJIM"} \u4E3B\u5BFC\u822A`, children: [
+      /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__brand", children: brandNode }),
+      /* @__PURE__ */ jsx14(NavTree, { sections }),
+      foot ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__footer", children: foot }) : null
+    ] }),
+    /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__drawer", "data-open": mobileOpen ? "true" : "false", children: [
+      /* @__PURE__ */ jsx14(
+        "button",
+        {
+          type: "button",
+          className: "vj-platform-shell__drawer-backdrop",
+          "aria-label": "\u5173\u95ED\u5BFC\u822A",
+          tabIndex: -1,
+          onClick: () => setMobileOpen(false)
+        }
+      ),
+      /* @__PURE__ */ jsxs6(
+        "aside",
+        {
+          ref: panelRef,
+          className: "vj-platform-shell__drawer-panel",
+          "aria-label": "\u79FB\u52A8\u7AEF\u4E3B\u5BFC\u822A",
+          "aria-modal": "true",
+          role: "dialog",
+          "aria-labelledby": drawerTitleId,
+          children: [
+            /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__brand", id: drawerTitleId, children: [
+              brandNode,
+              /* @__PURE__ */ jsx14(
+                "button",
+                {
+                  ref: closeRef,
+                  type: "button",
+                  className: "vj-platform-shell__menu-button",
+                  "aria-label": "\u5173\u95ED\u5BFC\u822A",
+                  onClick: () => setMobileOpen(false),
+                  style: { display: "grid" },
+                  children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 18 })
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsx14(NavTree, { sections, onNavigate: () => setMobileOpen(false) }),
+            foot ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__footer", children: foot }) : null
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs6(
+      "div",
+      {
+        className: "vj-platform-shell__main",
+        "aria-hidden": mobileOpen ? true : void 0,
+        ...mobileOpen ? { inert: true } : {},
+        children: [
+          topbar,
+          contentPadding ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__content", children }) : children
+        ]
+      }
+    )
+  ] });
+}
+function PageShell({
+  title,
+  description,
+  context,
+  badge,
+  actions,
+  backHref,
+  backLabel,
+  children,
+  maxWidth
+}) {
+  return /* @__PURE__ */ jsxs6(Box2, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
+    /* @__PURE__ */ jsx14(
+      TopBar,
+      {
+        title,
+        context: context ?? description,
+        badge,
+        actions,
+        backHref,
+        backLabel
+      }
+    ),
+    /* @__PURE__ */ jsx14(
+      Box2,
+      {
+        className: "vj-platform-shell__content",
+        style: {
+          maxWidth: maxWidth ?? void 0
+        },
+        children: /* @__PURE__ */ jsx14(Stack2, { gap: "md", children })
+      }
+    )
+  ] });
+}
+function ShellTabs({ items }) {
+  return /* @__PURE__ */ jsx14(Group, { gap: 2, align: "stretch", h: SHELL_GEOMETRY.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx14(
+    Box2,
+    {
+      component: item.href ? "a" : "button",
+      href: item.href,
+      onClick: item.onClick,
+      style: {
+        display: "inline-flex",
+        alignItems: "center",
+        height: "100%",
+        paddingInline: 14,
+        border: "none",
+        background: "transparent",
+        cursor: "pointer",
+        fontFamily: FONT.family,
+        fontSize: 13,
+        fontWeight: item.active ? 600 : 500,
+        color: item.active ? COLORS.ink : COLORS.mutedFg,
+        textDecoration: "none",
+        boxShadow: item.active ? `inset 0 -2px 0 ${COLORS.brand}` : "inset 0 -2px 0 transparent",
+        transition: "color 0.12s ease, box-shadow 0.12s ease"
+      },
+      children: item.label
+    },
+    item.key
+  )) });
+}
+
 // src/components/AdminCompat.tsx
 import {
   Card as MantineCard,
-  Group,
+  Group as Group2,
   SimpleGrid,
   Stack as MantineStack
 } from "@mantine/core";
@@ -2462,12 +2922,12 @@ import {
   cloneElement,
   forwardRef as forwardRef7,
   isValidElement as isValidElement2,
-  useEffect as useEffect2,
-  useId as useId2,
-  useRef as useRef3,
-  useState as useState3
+  useEffect as useEffect3,
+  useId as useId3,
+  useRef as useRef4,
+  useState as useState4
 } from "react";
-import { Fragment, jsx as jsx14, jsxs as jsxs6 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
 function normalizeTone(tone = "neutral") {
   if (tone === "accent") return "info";
   if (tone === "danger") return "error";
@@ -2484,11 +2944,11 @@ function Card({
   ...props
 }) {
   if (header == null && footer == null && bodyPadding == null && !scrollBody) {
-    return /* @__PURE__ */ jsx14(MantineCard, { padding, ...props, children });
+    return /* @__PURE__ */ jsx15(MantineCard, { padding, ...props, children });
   }
   const outerPad = typeof padding === "string" && padding in PAD ? PAD[padding] : typeof padding === "number" ? padding : PAD.md;
   const innerPad = bodyPadding === "none" ? 0 : bodyPadding && bodyPadding in PAD ? PAD[bodyPadding] : outerPad;
-  return /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs7(
     MantineCard,
     {
       padding: 0,
@@ -2503,8 +2963,8 @@ function Card({
         ...props.style
       },
       children: [
-        header != null ? /* @__PURE__ */ jsx14("div", { className: "vj-card__header", style: { padding: outerPad }, children: typeof header === "string" ? /* @__PURE__ */ jsx14("div", { className: "vj-card__title", children: header }) : header }) : null,
-        /* @__PURE__ */ jsx14(
+        header != null ? /* @__PURE__ */ jsx15("div", { className: "vj-card__header", style: { padding: outerPad }, children: typeof header === "string" ? /* @__PURE__ */ jsx15("div", { className: "vj-card__title", children: header }) : header }) : null,
+        /* @__PURE__ */ jsx15(
           "div",
           {
             className: "vj-card__body",
@@ -2517,16 +2977,16 @@ function Card({
             children
           }
         ),
-        footer != null ? /* @__PURE__ */ jsx14("div", { className: "vj-card__footer", style: { padding: outerPad }, children: footer }) : null
+        footer != null ? /* @__PURE__ */ jsx15("div", { className: "vj-card__footer", style: { padding: outerPad }, children: footer }) : null
       ]
     }
   );
 }
 function Badge({ label, children, tone = "neutral" }) {
-  return /* @__PURE__ */ jsx14("span", { className: "vj-badge", "data-tone": normalizeTone(tone), children: label ?? children });
+  return /* @__PURE__ */ jsx15("span", { className: "vj-badge", "data-tone": normalizeTone(tone), children: label ?? children });
 }
 function StatusDot({ label, tone = "neutral" }) {
-  return /* @__PURE__ */ jsx14("span", { className: "vj-status-dot", "data-tone": normalizeTone(tone), children: label });
+  return /* @__PURE__ */ jsx15("span", { className: "vj-status-dot", "data-tone": normalizeTone(tone), children: label });
 }
 function TrendBadge({
   direction,
@@ -2535,10 +2995,10 @@ function TrendBadge({
 }) {
   const tone = direction === "flat" ? "neutral" : direction === positiveDirection ? "success" : "error";
   const marker = direction === "up" ? "\u2191" : direction === "down" ? "\u2193" : "\u2014";
-  return /* @__PURE__ */ jsxs6(Badge, { tone, children: [
-    /* @__PURE__ */ jsx14("span", { "aria-hidden": true, children: marker }),
+  return /* @__PURE__ */ jsxs7(Badge, { tone, children: [
+    /* @__PURE__ */ jsx15("span", { "aria-hidden": true, children: marker }),
     value,
-    /* @__PURE__ */ jsxs6("span", { className: "vj-visually-hidden", children: [
+    /* @__PURE__ */ jsxs7("span", { className: "vj-visually-hidden", children: [
       "\uFF0C\u8D8B\u52BF",
       direction === "up" ? "\u4E0A\u5347" : direction === "down" ? "\u4E0B\u964D" : "\u6301\u5E73"
     ] })
@@ -2551,7 +3011,7 @@ function FormField({
   error,
   required = false
 }) {
-  const generated = useId2();
+  const generated = useId3();
   const inputId = children.props.id ?? `${generated}-control`;
   const messageId = `${generated}-message`;
   const controlProps = {
@@ -2561,16 +3021,16 @@ function FormField({
   };
   if (description || error) controlProps["aria-describedby"] = messageId;
   const control = isValidElement2(children) ? cloneElement(children, controlProps) : children;
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-field", children: [
-    /* @__PURE__ */ jsxs6("label", { className: "vj-field__label", htmlFor: inputId, children: [
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-field", children: [
+    /* @__PURE__ */ jsxs7("label", { className: "vj-field__label", htmlFor: inputId, children: [
       label,
-      required ? /* @__PURE__ */ jsxs6("span", { className: "vj-field__required", "aria-hidden": true, children: [
+      required ? /* @__PURE__ */ jsxs7("span", { className: "vj-field__required", "aria-hidden": true, children: [
         " ",
         "*"
       ] }) : null
     ] }),
     control,
-    error || description ? /* @__PURE__ */ jsx14(
+    error || description ? /* @__PURE__ */ jsx15(
       "p",
       {
         className: "vj-field__message",
@@ -2595,7 +3055,7 @@ function TextArea({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     "textarea",
     {
       className: "vj-textarea",
@@ -2630,7 +3090,7 @@ function NumberInput({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     "input",
     {
       className: "vj-input",
@@ -2659,7 +3119,7 @@ function List({
   dividers = false,
   ariaLabel
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     "div",
     {
       className: "vj-list",
@@ -2679,15 +3139,15 @@ function ListItem({
   onClick,
   disabled
 }) {
-  const content = /* @__PURE__ */ jsxs6(Fragment, { children: [
-    startContent ? /* @__PURE__ */ jsx14("span", { className: "vj-list-item__side", children: startContent }) : null,
-    /* @__PURE__ */ jsxs6("span", { className: "vj-list-item__body", children: [
-      /* @__PURE__ */ jsx14("span", { className: "vj-list-item__label", children: label }),
-      description ? /* @__PURE__ */ jsx14("span", { className: "vj-list-item__desc", children: description }) : null
+  const content = /* @__PURE__ */ jsxs7(Fragment2, { children: [
+    startContent ? /* @__PURE__ */ jsx15("span", { className: "vj-list-item__side", children: startContent }) : null,
+    /* @__PURE__ */ jsxs7("span", { className: "vj-list-item__body", children: [
+      /* @__PURE__ */ jsx15("span", { className: "vj-list-item__label", children: label }),
+      description ? /* @__PURE__ */ jsx15("span", { className: "vj-list-item__desc", children: description }) : null
     ] }),
-    endContent ? /* @__PURE__ */ jsx14("span", { className: "vj-list-item__side", children: endContent }) : null
+    endContent ? /* @__PURE__ */ jsx15("span", { className: "vj-list-item__side", children: endContent }) : null
   ] });
-  return onClick ? /* @__PURE__ */ jsx14(
+  return onClick ? /* @__PURE__ */ jsx15(
     "button",
     {
       className: "vj-list-item",
@@ -2697,7 +3157,7 @@ function ListItem({
       onClick,
       children: content
     }
-  ) : /* @__PURE__ */ jsx14("div", { className: "vj-list-item", role: "listitem", children: content });
+  ) : /* @__PURE__ */ jsx15("div", { className: "vj-list-item", role: "listitem", children: content });
 }
 function LegacyDataTable({
   columns,
@@ -2707,10 +3167,10 @@ function LegacyDataTable({
   density = "default",
   emptyLabel = "\u6682\u65E0\u6570\u636E"
 }) {
-  return /* @__PURE__ */ jsx14("div", { className: "vj-table-wrap", children: /* @__PURE__ */ jsxs6("table", { className: "vj-table", "data-density": density, children: [
-    /* @__PURE__ */ jsx14("caption", { children: ariaLabel }),
-    /* @__PURE__ */ jsx14("thead", { children: /* @__PURE__ */ jsx14("tr", { children: columns.map((column) => /* @__PURE__ */ jsx14("th", { scope: "col", "data-align": column.align, children: column.header }, column.key)) }) }),
-    /* @__PURE__ */ jsx14("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx14("tr", { children: /* @__PURE__ */ jsx14("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : data.map((row) => /* @__PURE__ */ jsx14("tr", { children: columns.map((column) => /* @__PURE__ */ jsx14("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
+  return /* @__PURE__ */ jsx15("div", { className: "vj-table-wrap", children: /* @__PURE__ */ jsxs7("table", { className: "vj-table", "data-density": density, children: [
+    /* @__PURE__ */ jsx15("caption", { children: ariaLabel }),
+    /* @__PURE__ */ jsx15("thead", { children: /* @__PURE__ */ jsx15("tr", { children: columns.map((column) => /* @__PURE__ */ jsx15("th", { scope: "col", "data-align": column.align, children: column.header }, column.key)) }) }),
+    /* @__PURE__ */ jsx15("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx15("tr", { children: /* @__PURE__ */ jsx15("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : data.map((row) => /* @__PURE__ */ jsx15("tr", { children: columns.map((column) => /* @__PURE__ */ jsx15("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
   ] }) });
 }
 function Dialog({
@@ -2721,14 +3181,14 @@ function Dialog({
   children,
   footer
 }) {
-  const ref = useRef3(null);
-  useEffect2(() => {
+  const ref = useRef4(null);
+  useEffect3(() => {
     const dialog = ref.current;
     if (!dialog) return;
     if (open && !dialog.open) dialog.showModal();
     if (!open && dialog.open) dialog.close();
   }, [open]);
-  return /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs7(
     "dialog",
     {
       ref,
@@ -2741,12 +3201,12 @@ function Dialog({
       "aria-labelledby": "vj-dialog-title",
       "aria-describedby": description ? "vj-dialog-description" : void 0,
       children: [
-        /* @__PURE__ */ jsxs6("header", { className: "vj-dialog__header", children: [
-          /* @__PURE__ */ jsx14("h2", { className: "vj-dialog__title", id: "vj-dialog-title", children: title }),
-          description ? /* @__PURE__ */ jsx14("p", { className: "vj-dialog__description", id: "vj-dialog-description", children: description }) : null
+        /* @__PURE__ */ jsxs7("header", { className: "vj-dialog__header", children: [
+          /* @__PURE__ */ jsx15("h2", { className: "vj-dialog__title", id: "vj-dialog-title", children: title }),
+          description ? /* @__PURE__ */ jsx15("p", { className: "vj-dialog__description", id: "vj-dialog-description", children: description }) : null
         ] }),
-        /* @__PURE__ */ jsx14("div", { className: "vj-dialog__body", children }),
-        /* @__PURE__ */ jsx14("footer", { className: "vj-dialog__footer", children: footer ?? /* @__PURE__ */ jsx14(Button, { variant: "secondary", label: "\u5173\u95ED", onClick: () => onOpenChange(false) }) })
+        /* @__PURE__ */ jsx15("div", { className: "vj-dialog__body", children }),
+        /* @__PURE__ */ jsx15("footer", { className: "vj-dialog__footer", children: footer ?? /* @__PURE__ */ jsx15(Button, { variant: "secondary", label: "\u5173\u95ED", onClick: () => onOpenChange(false) }) })
       ]
     }
   );
@@ -2761,15 +3221,15 @@ function AlertDialog({
   onConfirm,
   loading = false
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     Dialog,
     {
       open,
       onOpenChange,
       title,
       description,
-      footer: /* @__PURE__ */ jsxs6(Fragment, { children: [
-        /* @__PURE__ */ jsx14(
+      footer: /* @__PURE__ */ jsxs7(Fragment2, { children: [
+        /* @__PURE__ */ jsx15(
           Button,
           {
             variant: "secondary",
@@ -2777,7 +3237,7 @@ function AlertDialog({
             onClick: () => onOpenChange(false)
           }
         ),
-        /* @__PURE__ */ jsx14(
+        /* @__PURE__ */ jsx15(
           Button,
           {
             variant: "danger",
@@ -2798,8 +3258,8 @@ function mapGap(gap) {
   if (gap === "6") return 24;
   return gap;
 }
-var Stack2 = forwardRef7(function Stack3({ gap = "md", ...props }, ref) {
-  return /* @__PURE__ */ jsx14(MantineStack, { ref, gap: mapGap(gap), ...props });
+var Stack3 = forwardRef7(function Stack4({ gap = "md", ...props }, ref) {
+  return /* @__PURE__ */ jsx15(MantineStack, { ref, gap: mapGap(gap), ...props });
 });
 function HStack({
   children,
@@ -2808,8 +3268,8 @@ function HStack({
   align = "center",
   wrap = false
 }) {
-  return /* @__PURE__ */ jsx14(
-    Group,
+  return /* @__PURE__ */ jsx15(
+    Group2,
     {
       gap: mapGap(gap),
       justify: justify === "between" ? "space-between" : justify,
@@ -2820,17 +3280,17 @@ function HStack({
   );
 }
 function Grid({ children, gap = "4", columns = 2 }) {
-  return /* @__PURE__ */ jsx14(SimpleGrid, { cols: { base: 1, sm: columns }, spacing: mapGap(gap), children });
+  return /* @__PURE__ */ jsx15(SimpleGrid, { cols: { base: 1, sm: columns }, spacing: mapGap(gap), children });
 }
 function PageCanvas({ children }) {
-  return /* @__PURE__ */ jsx14("main", { className: "vj-page-canvas", children });
+  return /* @__PURE__ */ jsx15("main", { className: "vj-page-canvas", children });
 }
 function PageHeader({ title, scope, context, actions }) {
-  return /* @__PURE__ */ jsxs6("header", { className: "vj-page-header", children: [
-    /* @__PURE__ */ jsxs6("div", { className: "vj-page-header__main", children: [
-      /* @__PURE__ */ jsx14("h1", { className: "vj-page-header__title", children: title }),
+  return /* @__PURE__ */ jsxs7("header", { className: "vj-page-header", children: [
+    /* @__PURE__ */ jsxs7("div", { className: "vj-page-header__main", children: [
+      /* @__PURE__ */ jsx15("h1", { className: "vj-page-header__title", children: title }),
       scope,
-      context ? /* @__PURE__ */ jsxs6("span", { className: "vj-page-header__context", children: [
+      context ? /* @__PURE__ */ jsxs7("span", { className: "vj-page-header__context", children: [
         "\xB7 ",
         context
       ] }) : null
@@ -2845,10 +3305,10 @@ function SectionHeader({
   actions
 }) {
   const copy = description ?? subtitle;
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-section-header", children: [
-    /* @__PURE__ */ jsxs6("div", { children: [
-      /* @__PURE__ */ jsx14("h2", { children: title }),
-      copy ? /* @__PURE__ */ jsx14("p", { children: copy }) : null
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-section-header", children: [
+    /* @__PURE__ */ jsxs7("div", { children: [
+      /* @__PURE__ */ jsx15("h2", { children: title }),
+      copy ? /* @__PURE__ */ jsx15("p", { children: copy }) : null
     ] }),
     actions
   ] });
@@ -2860,23 +3320,23 @@ function DashboardPage({
   actions,
   children
 }) {
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-pattern", children: [
-    /* @__PURE__ */ jsx14(PageHeader, { title, scope, context, actions }),
-    /* @__PURE__ */ jsx14(PageCanvas, { children })
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-pattern", children: [
+    /* @__PURE__ */ jsx15(PageHeader, { title, scope, context, actions }),
+    /* @__PURE__ */ jsx15(PageCanvas, { children })
   ] });
 }
 var ListPage = DashboardPage;
 var DetailPage = DashboardPage;
 var SettingsPage = DashboardPage;
 function EmptyState({ title, description, action }) {
-  return /* @__PURE__ */ jsx14("section", { className: "vj-empty-state", children: /* @__PURE__ */ jsxs6("div", { children: [
-    /* @__PURE__ */ jsx14("h2", { children: title }),
-    /* @__PURE__ */ jsx14("p", { children: description }),
+  return /* @__PURE__ */ jsx15("section", { className: "vj-empty-state", children: /* @__PURE__ */ jsxs7("div", { children: [
+    /* @__PURE__ */ jsx15("h2", { children: title }),
+    /* @__PURE__ */ jsx15("p", { children: description }),
     action
   ] }) });
 }
 function PermissionDeniedState({ action }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     EmptyState,
     {
       title: "\u6CA1\u6709\u8BBF\u95EE\u6743\u9650",
@@ -2886,7 +3346,7 @@ function PermissionDeniedState({ action }) {
   );
 }
 function ErrorState({ action }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     EmptyState,
     {
       title: "\u5185\u5BB9\u6682\u65F6\u65E0\u6CD5\u52A0\u8F7D",
@@ -2900,9 +3360,9 @@ function FilterWorkspace({
   children,
   filterLabel = "\u7B5B\u9009\u6761\u4EF6"
 }) {
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-filter-workspace", children: [
-    /* @__PURE__ */ jsx14("aside", { "aria-label": filterLabel, children: filters }),
-    /* @__PURE__ */ jsx14("section", { children })
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-filter-workspace", children: [
+    /* @__PURE__ */ jsx15("aside", { "aria-label": filterLabel, children: filters }),
+    /* @__PURE__ */ jsx15("section", { children })
   ] });
 }
 function DataSection({
@@ -2912,10 +3372,10 @@ function DataSection({
   children,
   bodyPadding = "none"
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     Card,
     {
-      header: /* @__PURE__ */ jsx14(SectionHeader, { title, description, actions }),
+      header: /* @__PURE__ */ jsx15(SectionHeader, { title, description, actions }),
       bodyPadding,
       children
     }
@@ -2927,24 +3387,7 @@ function FormSection({
   children,
   footer
 }) {
-  return /* @__PURE__ */ jsx14(Card, { header: /* @__PURE__ */ jsx14(SectionHeader, { title, description }), footer, children });
-}
-function AppShell({
-  product,
-  brand,
-  navigation,
-  user,
-  header,
-  children
-}) {
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-app-shell", children: [
-    /* @__PURE__ */ jsx14(SideNav, { product, brand, navigation, user }),
-    /* @__PURE__ */ jsxs6("div", { className: "vj-app-shell__main", children: [
-      /* @__PURE__ */ jsx14(MobileNav, { product, navigation, user }),
-      header,
-      children
-    ] })
-  ] });
+  return /* @__PURE__ */ jsx15(Card, { header: /* @__PURE__ */ jsx15(SectionHeader, { title, description }), footer, children });
 }
 function SideNav({
   product,
@@ -2952,16 +3395,16 @@ function SideNav({
   navigation,
   user
 }) {
-  return /* @__PURE__ */ jsxs6("aside", { className: "vj-sidebar", "aria-label": `${product} \u4E3B\u5BFC\u822A`, children: [
-    /* @__PURE__ */ jsx14("div", { className: "vj-sidebar__brand", children: brand }),
-    navigation.map((section, index) => /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs7("aside", { className: "vj-sidebar", "aria-label": `${product} \u4E3B\u5BFC\u822A`, children: [
+    /* @__PURE__ */ jsx15("div", { className: "vj-sidebar__brand", children: brand }),
+    navigation.map((section, index) => /* @__PURE__ */ jsxs7(
       "nav",
       {
         className: "vj-sidebar__section",
         "aria-label": section.label,
         children: [
-          section.label ? /* @__PURE__ */ jsx14("div", { className: "vj-sidebar__section-label", children: section.label }) : null,
-          section.items.map((item) => /* @__PURE__ */ jsxs6(
+          section.label ? /* @__PURE__ */ jsx15("div", { className: "vj-sidebar__section-label", children: section.label }) : null,
+          section.items.map((item) => /* @__PURE__ */ jsxs7(
             "button",
             {
               className: "vj-sidebar__item",
@@ -2980,35 +3423,19 @@ function SideNav({
       },
       section.label ?? index
     )),
-    user ? /* @__PURE__ */ jsx14("div", { children: user }) : null
+    user ? /* @__PURE__ */ jsx15("div", { children: user }) : null
   ] });
 }
 function MobileNav({
-  product,
-  navigation,
-  user
+  product
 }) {
-  const items = navigation?.flatMap((section) => section.items).filter((item) => !item.disabled) ?? [];
-  const active = items.find((item) => item.active)?.id ?? items[0]?.id ?? "";
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-mobile-nav", children: [
-    /* @__PURE__ */ jsx14("strong", { children: product }),
-    items.length > 0 ? /* @__PURE__ */ jsx14(
-      "select",
-      {
-        "aria-label": "\u9875\u9762\u5BFC\u822A",
-        value: active,
-        onChange: (event) => items.find((item) => item.id === event.currentTarget.value)?.onSelect?.(),
-        children: items.map((item) => /* @__PURE__ */ jsx14("option", { value: item.id, children: item.label }, item.id))
-      }
-    ) : null,
-    user
-  ] });
+  return /* @__PURE__ */ jsx15("div", { className: "vj-mobile-nav", children: /* @__PURE__ */ jsx15("strong", { children: product }) });
 }
 function KpiGrid({
   children,
   columns = 4
 }) {
-  return /* @__PURE__ */ jsx14("div", { className: "vj-kpi-grid", "data-columns": columns, children });
+  return /* @__PURE__ */ jsx15("div", { className: "vj-kpi-grid", "data-columns": columns, children });
 }
 function StatCard({
   value,
@@ -3017,27 +3444,27 @@ function StatCard({
   trend,
   tone = "neutral"
 }) {
-  return /* @__PURE__ */ jsxs6("article", { className: "vj-stat", "data-tone": normalizeTone(tone), children: [
-    /* @__PURE__ */ jsxs6("div", { className: "vj-stat__value", children: [
+  return /* @__PURE__ */ jsxs7("article", { className: "vj-stat", "data-tone": normalizeTone(tone), children: [
+    /* @__PURE__ */ jsxs7("div", { className: "vj-stat__value", children: [
       value,
       trend
     ] }),
-    /* @__PURE__ */ jsx14("div", { className: "vj-stat__label", children: label }),
-    hint ? /* @__PURE__ */ jsx14("div", { className: "vj-stat__hint", children: hint }) : null
+    /* @__PURE__ */ jsx15("div", { className: "vj-stat__label", children: label }),
+    hint ? /* @__PURE__ */ jsx15("div", { className: "vj-stat__hint", children: hint }) : null
   ] });
 }
 function DashboardGrid({ children }) {
-  return /* @__PURE__ */ jsx14("div", { className: "vj-dashboard-grid", children });
+  return /* @__PURE__ */ jsx15("div", { className: "vj-dashboard-grid", children });
 }
 function DashboardGridItem({
   children,
   span = 6
 }) {
-  return /* @__PURE__ */ jsx14("div", { className: "vj-dashboard-grid__item", "data-span": span, children });
+  return /* @__PURE__ */ jsx15("div", { className: "vj-dashboard-grid__item", "data-span": span, children });
 }
 var IconButton = forwardRef7(
   function IconButton2({ label, icon, variant = "ghost", size = "md", disabled, onClick }, ref) {
-    return /* @__PURE__ */ jsx14(
+    return /* @__PURE__ */ jsx15(
       "button",
       {
         ref,
@@ -3062,15 +3489,15 @@ function ProgressBar({
 }) {
   const safeMax = Math.max(1, max);
   const percent = Math.min(100, Math.max(0, value / safeMax * 100));
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-progress", children: [
-    /* @__PURE__ */ jsxs6("div", { className: "vj-progress__meta", children: [
-      /* @__PURE__ */ jsx14("span", { children: label }),
-      showValue ? /* @__PURE__ */ jsxs6("span", { children: [
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-progress", children: [
+    /* @__PURE__ */ jsxs7("div", { className: "vj-progress__meta", children: [
+      /* @__PURE__ */ jsx15("span", { children: label }),
+      showValue ? /* @__PURE__ */ jsxs7("span", { children: [
         Math.round(percent),
         "%"
       ] }) : null
     ] }),
-    /* @__PURE__ */ jsxs6(
+    /* @__PURE__ */ jsxs7(
       "progress",
       {
         className: "vj-progress__native",
@@ -3089,14 +3516,14 @@ function ThemeProvider({
   theme = "light",
   children
 }) {
-  return /* @__PURE__ */ jsx14("div", { className: "vijim-root", "data-vijim-theme": theme, children });
+  return /* @__PURE__ */ jsx15("div", { className: "vijim-root", "data-vijim-theme": theme, children });
 }
 function BrandLockup({
   product,
   background = "light",
   alt = `VIJIM ${product}`
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     "img",
     {
       src: `/brand/vijimlabs-${product.toLowerCase()}-lockup${background === "dark" ? "-dark" : ""}.svg`,
@@ -3136,7 +3563,7 @@ function ChartCard({
   children,
   footer
 }) {
-  return /* @__PURE__ */ jsx14(Card, { header: /* @__PURE__ */ jsx14(SectionHeader, { title, description }), footer, children });
+  return /* @__PURE__ */ jsx15(Card, { header: /* @__PURE__ */ jsx15(SectionHeader, { title, description }), footer, children });
 }
 function Avatar({
   src,
@@ -3144,8 +3571,8 @@ function Avatar({
   fallback,
   size = "md"
 }) {
-  const [failed, setFailed] = useState3(false);
-  return /* @__PURE__ */ jsx14("span", { className: "vj-avatar", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx14("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx14("span", { "aria-label": alt, children: fallback.slice(0, 2) }) });
+  const [failed, setFailed] = useState4(false);
+  return /* @__PURE__ */ jsx15("span", { className: "vj-avatar", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx15("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx15("span", { "aria-label": alt, children: fallback.slice(0, 2) }) });
 }
 function Thumbnail({
   src,
@@ -3153,17 +3580,17 @@ function Thumbnail({
   size = "md",
   fallbackLabel = "\u6682\u65E0\u56FE\u7247"
 }) {
-  const [failed, setFailed] = useState3(false);
-  return /* @__PURE__ */ jsx14("span", { className: "vj-thumbnail", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx14("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx14("span", { role: "img", "aria-label": `${alt}\uFF1A${fallbackLabel}`, children: fallbackLabel }) });
+  const [failed, setFailed] = useState4(false);
+  return /* @__PURE__ */ jsx15("span", { className: "vj-thumbnail", "data-size": size, children: src && !failed ? /* @__PURE__ */ jsx15("img", { src, alt, onError: () => setFailed(true) }) : /* @__PURE__ */ jsx15("span", { role: "img", "aria-label": `${alt}\uFF1A${fallbackLabel}`, children: fallbackLabel }) });
 }
 function MetadataList({
   items,
   columns = 1,
   ariaLabel
 }) {
-  return /* @__PURE__ */ jsx14("dl", { className: "vj-metadata", "data-columns": columns, "aria-label": ariaLabel, children: items.map((item) => /* @__PURE__ */ jsxs6("div", { children: [
-    /* @__PURE__ */ jsx14("dt", { children: item.label }),
-    /* @__PURE__ */ jsx14("dd", { children: item.value })
+  return /* @__PURE__ */ jsx15("dl", { className: "vj-metadata", "data-columns": columns, "aria-label": ariaLabel, children: items.map((item) => /* @__PURE__ */ jsxs7("div", { children: [
+    /* @__PURE__ */ jsx15("dt", { children: item.label }),
+    /* @__PURE__ */ jsx15("dd", { children: item.value })
   ] }, item.label)) });
 }
 function MultiSelector({
@@ -3176,7 +3603,7 @@ function MultiSelector({
   const toggle = (value) => onChange(
     values.includes(value) ? values.filter((item) => item !== value) : [...values, value]
   );
-  return /* @__PURE__ */ jsx14("div", { className: "vj-multi-selector", role: "group", "aria-label": label, children: options.map((option) => /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15("div", { className: "vj-multi-selector", role: "group", "aria-label": label, children: options.map((option) => /* @__PURE__ */ jsx15(
     "button",
     {
       type: "button",
@@ -3194,9 +3621,9 @@ function Tag({
   onRemove,
   removeLabel = `\u79FB\u9664${label}`
 }) {
-  return /* @__PURE__ */ jsxs6("span", { className: "vj-tag", "data-tone": tone, children: [
-    /* @__PURE__ */ jsx14("span", { children: label }),
-    onRemove ? /* @__PURE__ */ jsx14("button", { type: "button", "aria-label": removeLabel, onClick: onRemove, children: "\xD7" }) : null
+  return /* @__PURE__ */ jsxs7("span", { className: "vj-tag", "data-tone": tone, children: [
+    /* @__PURE__ */ jsx15("span", { children: label }),
+    onRemove ? /* @__PURE__ */ jsx15("button", { type: "button", "aria-label": removeLabel, onClick: onRemove, children: "\xD7" }) : null
   ] });
 }
 function InputGroup({
@@ -3212,9 +3639,9 @@ function InputGroup({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-input-group", "data-invalid": invalid || void 0, children: [
-    prefix ? /* @__PURE__ */ jsx14("span", { children: prefix }) : null,
-    /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsxs7("div", { className: "vj-input-group", "data-invalid": invalid || void 0, children: [
+    prefix ? /* @__PURE__ */ jsx15("span", { children: prefix }) : null,
+    /* @__PURE__ */ jsx15(
       "input",
       {
         value,
@@ -3228,7 +3655,7 @@ function InputGroup({
         "aria-invalid": invalid
       }
     ),
-    suffix ? /* @__PURE__ */ jsx14("span", { children: suffix }) : null
+    suffix ? /* @__PURE__ */ jsx15("span", { children: suffix }) : null
   ] });
 }
 function Slider({
@@ -3241,12 +3668,12 @@ function Slider({
   showValue = true,
   disabled
 }) {
-  return /* @__PURE__ */ jsxs6("label", { className: "vj-slider", children: [
-    /* @__PURE__ */ jsxs6("span", { className: "vj-slider__meta", children: [
-      /* @__PURE__ */ jsx14("span", { children: label }),
-      showValue ? /* @__PURE__ */ jsx14("strong", { children: value }) : null
+  return /* @__PURE__ */ jsxs7("label", { className: "vj-slider", children: [
+    /* @__PURE__ */ jsxs7("span", { className: "vj-slider__meta", children: [
+      /* @__PURE__ */ jsx15("span", { children: label }),
+      showValue ? /* @__PURE__ */ jsx15("strong", { children: value }) : null
     ] }),
-    /* @__PURE__ */ jsx14(
+    /* @__PURE__ */ jsx15(
       "input",
       {
         type: "range",
@@ -3272,7 +3699,7 @@ function DatePicker({
   "aria-describedby": describedBy,
   "aria-invalid": invalid
 }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx15(
     "input",
     {
       className: "vj-input vj-date",
@@ -3292,12 +3719,12 @@ function DatePicker({
 }
 
 // src/components/DataTable.tsx
-import { jsx as jsx15, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs8 } from "react/jsx-runtime";
 function DataTable(props) {
   if ("rowKey" in props) {
-    return /* @__PURE__ */ jsx15(LegacyDataTable, { ...props });
+    return /* @__PURE__ */ jsx16(LegacyDataTable, { ...props });
   }
-  return /* @__PURE__ */ jsx15(ModernDataTable, { ...props });
+  return /* @__PURE__ */ jsx16(ModernDataTable, { ...props });
 }
 function ModernDataTable({
   data,
@@ -3314,11 +3741,11 @@ function ModernDataTable({
   loading = false,
   maxHeight
 }) {
-  const [sorting, setSorting] = useState4([]);
-  const [internalSelection, setInternalSelection] = useState4(
+  const [sorting, setSorting] = useState5([]);
+  const [internalSelection, setInternalSelection] = useState5(
     {}
   );
-  const [pagination, setPagination] = useState4({
+  const [pagination, setPagination] = useState5({
     pageIndex: 0,
     pageSize: pageSize ?? 20
   });
@@ -3329,7 +3756,7 @@ function ModernDataTable({
     const selectCol = {
       id: "__select",
       size: 40,
-      header: ({ table: table2 }) => /* @__PURE__ */ jsx15(
+      header: ({ table: table2 }) => /* @__PURE__ */ jsx16(
         Checkbox,
         {
           "aria-label": "\u5168\u9009",
@@ -3338,7 +3765,7 @@ function ModernDataTable({
           onChange: table2.getToggleAllPageRowsSelectedHandler()
         }
       ),
-      cell: ({ row }) => /* @__PURE__ */ jsx15(
+      cell: ({ row }) => /* @__PURE__ */ jsx16(
         Checkbox,
         {
           "aria-label": "\u9009\u62E9\u884C",
@@ -3371,9 +3798,9 @@ function ModernDataTable({
   });
   const rows = table.getRowModel().rows;
   const pageCount = table.getPageCount();
-  return /* @__PURE__ */ jsxs7("div", { children: [
-    toolbar ? /* @__PURE__ */ jsx15("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
-    /* @__PURE__ */ jsx15(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs7(
+  return /* @__PURE__ */ jsxs8("div", { children: [
+    toolbar ? /* @__PURE__ */ jsx16("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
+    /* @__PURE__ */ jsx16(Table.ScrollContainer, { minWidth: 640, maxHeight, children: /* @__PURE__ */ jsxs8(
       Table,
       {
         highlightOnHover: true,
@@ -3381,7 +3808,7 @@ function ModernDataTable({
         verticalSpacing: "sm",
         stickyHeader: Boolean(maxHeight),
         children: [
-          /* @__PURE__ */ jsx15(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx15(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs7(
+          /* @__PURE__ */ jsx16(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx16(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs8(
             Table.Th,
             {
               style: {
@@ -3403,7 +3830,7 @@ function ModernDataTable({
             },
             header.id
           )) }, hg.id)) }),
-          /* @__PURE__ */ jsx15(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx15(Table.Tr, { children: /* @__PURE__ */ jsx15(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx15(Text3, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx15(Table.Tr, { children: /* @__PURE__ */ jsx15(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx15(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx15(
+          /* @__PURE__ */ jsx16(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx16(Table.Tr, { children: /* @__PURE__ */ jsx16(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx16(Text4, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx16(Table.Tr, { children: /* @__PURE__ */ jsx16(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx16(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx16(
             Table.Tr,
             {
               "data-selected": row.getIsSelected() || void 0,
@@ -3412,7 +3839,7 @@ function ModernDataTable({
                 backgroundColor: row.getIsSelected() ? "rgba(51, 112, 255, 0.06)" : void 0
               },
               onClick: () => onRowClick?.(row.original),
-              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx15(Table.Td, { children: flexRender(
+              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx16(Table.Td, { children: flexRender(
                 cell.column.columnDef.cell,
                 cell.getContext()
               ) }, cell.id))
@@ -3422,13 +3849,13 @@ function ModernDataTable({
         ]
       }
     ) }),
-    pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs7(Group2, { justify: "space-between", mt: "md", children: [
-      /* @__PURE__ */ jsxs7(Text3, { size: "sm", c: "dimmed", children: [
+    pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs8(Group3, { justify: "space-between", mt: "md", children: [
+      /* @__PURE__ */ jsxs8(Text4, { size: "sm", c: "dimmed", children: [
         "\u5171 ",
         data.length,
         " \u6761"
       ] }),
-      /* @__PURE__ */ jsx15(
+      /* @__PURE__ */ jsx16(
         Pagination,
         {
           total: pageCount,
@@ -3441,8 +3868,8 @@ function ModernDataTable({
 }
 
 // src/components/FilterBar.tsx
-import { Box as Box2, Group as Group3, Stack as Stack4, Text as Text4, UnstyledButton } from "@mantine/core";
-import { jsx as jsx16, jsxs as jsxs8 } from "react/jsx-runtime";
+import { Box as Box3, Group as Group4, Stack as Stack5, Text as Text5, UnstyledButton as UnstyledButton2 } from "@mantine/core";
+import { jsx as jsx17, jsxs as jsxs9 } from "react/jsx-runtime";
 var PANEL = {
   bg: COLORS.surface,
   border: `1px solid ${COLORS.border}`,
@@ -3468,8 +3895,8 @@ function FilterBar({
   onClear,
   clearLabel = "\u6E05\u9664\u7B5B\u9009"
 }) {
-  return /* @__PURE__ */ jsxs8(
-    Box2,
+  return /* @__PURE__ */ jsxs9(
+    Box3,
     {
       className: "vijim-filter-bar",
       style: {
@@ -3480,9 +3907,9 @@ function FilterBar({
         marginBottom: 16
       },
       children: [
-        /* @__PURE__ */ jsx16(Box2, { px: "md", py: "md", children }),
-        active != null || onClear ? /* @__PURE__ */ jsx16(
-          Box2,
+        /* @__PURE__ */ jsx17(Box3, { px: "md", py: "md", children }),
+        active != null || onClear ? /* @__PURE__ */ jsx17(
+          Box3,
           {
             px: "md",
             py: "xs",
@@ -3491,9 +3918,9 @@ function FilterBar({
               backgroundColor: COLORS.surface2,
               borderRadius: `0 0 ${PANEL.radius} ${PANEL.radius}`
             },
-            children: /* @__PURE__ */ jsxs8(Group3, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
-              /* @__PURE__ */ jsx16(Box2, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
-              onClear ? /* @__PURE__ */ jsx16(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
+            children: /* @__PURE__ */ jsxs9(Group4, { justify: "space-between", align: "center", gap: "sm", wrap: "wrap", children: [
+              /* @__PURE__ */ jsx17(Box3, { style: { flex: 1, minWidth: 0 }, children: active ?? /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", children: "\u672A\u8BBE\u7F6E\u7B5B\u9009" }) }),
+              onClear ? /* @__PURE__ */ jsx17(Button, { variant: "subtle", color: "gray", size: "sm", onClick: onClear, children: clearLabel }) : null
             ] })
           }
         ) : null
@@ -3508,11 +3935,11 @@ function FilterToolbar({
   resultText,
   extras
 }) {
-  return /* @__PURE__ */ jsxs8(Stack4, { gap: "sm", children: [
-    /* @__PURE__ */ jsxs8(Group3, { align: "center", gap: "md", wrap: "wrap", children: [
-      /* @__PURE__ */ jsx16(Box2, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
-      /* @__PURE__ */ jsxs8(Group3, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
-        resultText ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
+  return /* @__PURE__ */ jsxs9(Stack5, { gap: "sm", children: [
+    /* @__PURE__ */ jsxs9(Group4, { align: "center", gap: "md", wrap: "wrap", children: [
+      /* @__PURE__ */ jsx17(Box3, { style: { flex: "1 1 260px", minWidth: 200, maxWidth: 480 }, children: search }),
+      /* @__PURE__ */ jsxs9(Group4, { gap: "xs", wrap: "nowrap", ml: "auto", align: "center", children: [
+        resultText ? /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", ff: "monospace", children: resultText }) : null,
         actions
       ] })
     ] }),
@@ -3525,8 +3952,8 @@ function FilterBatchBar({
   children
 }) {
   if (selectedCount <= 0) return null;
-  return /* @__PURE__ */ jsxs8(
-    Group3,
+  return /* @__PURE__ */ jsxs9(
+    Group4,
     {
       gap: "sm",
       px: "md",
@@ -3538,21 +3965,21 @@ function FilterBatchBar({
         borderRadius: PANEL.radius
       },
       children: [
-        /* @__PURE__ */ jsxs8(Text4, { size: "sm", c: COLORS.inkSecondary, children: [
+        /* @__PURE__ */ jsxs9(Text5, { size: "sm", c: COLORS.inkSecondary, children: [
           "\u5DF2\u9009",
           " ",
-          /* @__PURE__ */ jsx16(Text4, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
+          /* @__PURE__ */ jsx17(Text5, { span: true, fw: 650, c: COLORS.ink, ff: "monospace", children: selectedCount }),
           " ",
           "\u9879"
         ] }),
-        /* @__PURE__ */ jsx16(Group3, { gap: "xs", children })
+        /* @__PURE__ */ jsx17(Group4, { gap: "xs", children })
       ]
     }
   );
 }
 function FilterRow({ children, label }) {
-  return /* @__PURE__ */ jsxs8(Group3, { gap: 6, align: "center", wrap: "wrap", children: [
-    label ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+  return /* @__PURE__ */ jsxs9(Group4, { gap: 6, align: "center", wrap: "wrap", children: [
+    label ? /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
     children
   ] });
 }
@@ -3564,21 +3991,21 @@ function FilterField({
   layout = "inline"
 }) {
   if (layout === "stack") {
-    return /* @__PURE__ */ jsxs8(Stack4, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
-      label ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
+    return /* @__PURE__ */ jsxs9(Stack5, { gap: 4, style: { flex: grow ? "1 1 200px" : void 0, minWidth }, children: [
+      label ? /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", fw: 500, children: label }) : null,
       children
     ] });
   }
-  return /* @__PURE__ */ jsxs8(
-    Group3,
+  return /* @__PURE__ */ jsxs9(
+    Group4,
     {
       gap: 6,
       align: "center",
       wrap: "nowrap",
       style: { flex: grow ? "1 1 200px" : void 0, minWidth },
       children: [
-        label ? /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
-        /* @__PURE__ */ jsx16(Box2, { style: { flex: 1, minWidth: 0 }, children })
+        label ? /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", style: { flex: "none" }, children: label }) : null,
+        /* @__PURE__ */ jsx17(Box3, { style: { flex: 1, minWidth: 0 }, children })
       ]
     }
   );
@@ -3590,8 +4017,8 @@ function FilterSegment({
   disabled = false,
   "aria-label": ariaLabel
 }) {
-  return /* @__PURE__ */ jsx16(
-    Group3,
+  return /* @__PURE__ */ jsx17(
+    Group4,
     {
       gap: 2,
       align: "center",
@@ -3609,8 +4036,8 @@ function FilterSegment({
       children: options.map((opt) => {
         const selected = opt.value === value;
         const press = pressHandlers(disabled);
-        return /* @__PURE__ */ jsxs8(
-          UnstyledButton,
+        return /* @__PURE__ */ jsxs9(
+          UnstyledButton2,
           {
             type: "button",
             role: "radio",
@@ -3659,8 +4086,8 @@ function FilterSegment({
             onMouseUp: press.onMouseUp,
             children: [
               opt.label,
-              opt.count !== void 0 ? /* @__PURE__ */ jsx16(
-                Text4,
+              opt.count !== void 0 ? /* @__PURE__ */ jsx17(
+                Text5,
                 {
                   component: "span",
                   ff: "monospace",
@@ -3690,8 +4117,8 @@ function FilterTerm({
   disabled = false
 }) {
   const press = pressHandlers(disabled);
-  return /* @__PURE__ */ jsxs8(
-    UnstyledButton,
+  return /* @__PURE__ */ jsxs9(
+    UnstyledButton2,
     {
       type: "button",
       onClick,
@@ -3737,8 +4164,8 @@ function FilterTerm({
       onMouseUp: press.onMouseUp,
       children: [
         label,
-        count !== void 0 ? /* @__PURE__ */ jsx16(
-          Text4,
+        count !== void 0 ? /* @__PURE__ */ jsx17(
+          Text5,
           {
             component: "span",
             ff: "monospace",
@@ -3766,9 +4193,9 @@ function FilterFacet({
   showAll = true,
   allLabel = "\u5168\u90E8"
 }) {
-  return /* @__PURE__ */ jsxs8(Group3, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
-    /* @__PURE__ */ jsx16(
-      Text4,
+  return /* @__PURE__ */ jsxs9(Group4, { gap: 14, align: "flex-start", wrap: "nowrap", children: [
+    /* @__PURE__ */ jsx17(
+      Text5,
       {
         size: "xs",
         c: "dimmed",
@@ -3781,8 +4208,8 @@ function FilterFacet({
         children: nested ? `\u2514 ${label}` : label
       }
     ),
-    /* @__PURE__ */ jsxs8(Group3, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
-      showAll ? /* @__PURE__ */ jsx16(
+    /* @__PURE__ */ jsxs9(Group4, { gap: 4, align: "center", wrap: "wrap", style: { flex: 1, minWidth: 0 }, children: [
+      showAll ? /* @__PURE__ */ jsx17(
         FilterTerm,
         {
           label: allLabel,
@@ -3790,7 +4217,7 @@ function FilterFacet({
           onClick: () => onChange(null)
         }
       ) : null,
-      options.map((opt) => /* @__PURE__ */ jsx16(
+      options.map((opt) => /* @__PURE__ */ jsx17(
         FilterTerm,
         {
           label: opt.label,
@@ -3809,12 +4236,12 @@ function FilterActive({
   emptyText = "\u672A\u8BBE\u7F6E\u7B5B\u9009"
 }) {
   if (items.length === 0) {
-    return /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", children: emptyText });
+    return /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", children: emptyText });
   }
-  return /* @__PURE__ */ jsxs8(Group3, { gap: "sm", align: "center", wrap: "wrap", children: [
-    /* @__PURE__ */ jsx16(Text4, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
-    items.map((item) => /* @__PURE__ */ jsxs8(
-      Group3,
+  return /* @__PURE__ */ jsxs9(Group4, { gap: "sm", align: "center", wrap: "wrap", children: [
+    /* @__PURE__ */ jsx17(Text5, { size: "xs", c: "dimmed", style: { flex: "none" }, children: "\u5DF2\u9009" }),
+    items.map((item) => /* @__PURE__ */ jsxs9(
+      Group4,
       {
         gap: 4,
         align: "center",
@@ -3829,9 +4256,9 @@ function FilterActive({
           boxShadow: "0 1px 2px rgba(18,19,23,0.03)"
         },
         children: [
-          /* @__PURE__ */ jsx16(Text4, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
-          item.onRemove ? /* @__PURE__ */ jsx16(
-            UnstyledButton,
+          /* @__PURE__ */ jsx17(Text5, { size: "xs", c: COLORS.ink, fw: 500, children: item.label }),
+          item.onRemove ? /* @__PURE__ */ jsx17(
+            UnstyledButton2,
             {
               type: "button",
               "aria-label": `\u79FB\u9664 ${item.label}`,
@@ -3854,8 +4281,8 @@ function FilterActive({
       },
       item.key
     )),
-    onClearAll ? /* @__PURE__ */ jsx16(
-      UnstyledButton,
+    onClearAll ? /* @__PURE__ */ jsx17(
+      UnstyledButton2,
       {
         type: "button",
         onClick: onClearAll,
@@ -3869,204 +4296,6 @@ function FilterActive({
       }
     ) : null
   ] });
-}
-
-// src/components/Shell.tsx
-import {
-  AppShell as MantineAppShell,
-  Box as Box3,
-  Burger,
-  Group as Group4,
-  Stack as Stack5,
-  Text as Text5,
-  UnstyledButton as UnstyledButton2
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Fragment as Fragment2, jsx as jsx17, jsxs as jsxs9 } from "react/jsx-runtime";
-var SHELL = {
-  headerH: 60,
-  brandH: 76,
-  navbarW: 246,
-  contentPadX: 24,
-  contentPadY: 20,
-  sideItemRadius: 8,
-  sideItemMinH: 36
-};
-function TopBar({
-  title,
-  context,
-  badge,
-  actions,
-  backHref,
-  backLabel = "\u8FD4\u56DE",
-  sticky = true,
-  onBack
-}) {
-  return /* @__PURE__ */ jsxs9(
-    Box3,
-    {
-      component: "header",
-      style: {
-        boxSizing: "border-box",
-        position: sticky ? "sticky" : "relative",
-        top: sticky ? 0 : void 0,
-        zIndex: sticky ? 30 : void 0,
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        minWidth: 0,
-        height: SHELL.headerH,
-        gap: 12,
-        padding: `0 ${SHELL.contentPadX}px`,
-        borderBottom: `1px solid ${COLORS.border}`,
-        background: COLORS.surface
-      },
-      children: [
-        backHref != null || onBack ? /* @__PURE__ */ jsxs9(Fragment2, { children: [
-          /* @__PURE__ */ jsxs9(
-            UnstyledButton2,
-            {
-              component: backHref ? "a" : "button",
-              href: backHref,
-              onClick: onBack,
-              style: {
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                height: 32,
-                paddingInline: 10,
-                borderRadius: RADIUS.element,
-                color: COLORS.mutedFg,
-                fontSize: 13,
-                fontWeight: 500,
-                fontFamily: FONT.family,
-                textDecoration: "none"
-              },
-              children: [
-                /* @__PURE__ */ jsx17("span", { "aria-hidden": true, children: "\u2190" }),
-                backLabel
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsx17(
-            Box3,
-            {
-              "aria-hidden": true,
-              style: {
-                width: 1,
-                height: 24,
-                background: COLORS.border,
-                flex: "none"
-              }
-            }
-          )
-        ] }) : null,
-        /* @__PURE__ */ jsxs9(Group4, { gap: 8, align: "center", style: { flex: 1, minWidth: 0 }, wrap: "nowrap", children: [
-          /* @__PURE__ */ jsx17(
-            Text5,
-            {
-              component: "h1",
-              style: {
-                margin: 0,
-                flex: "none",
-                color: COLORS.inkSecondary,
-                fontSize: 14,
-                fontWeight: 580,
-                lineHeight: 1.2,
-                fontFamily: FONT.family
-              },
-              children: title
-            }
-          ),
-          badge,
-          context != null ? /* @__PURE__ */ jsxs9(Fragment2, { children: [
-            /* @__PURE__ */ jsx17(Text5, { c: "dimmed", size: "xs", style: { flex: "none" }, children: "\xB7" }),
-            /* @__PURE__ */ jsx17(
-              Text5,
-              {
-                size: "xs",
-                c: "dimmed",
-                style: {
-                  minWidth: 0,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
-                },
-                children: context
-              }
-            )
-          ] }) : null
-        ] }),
-        actions != null ? /* @__PURE__ */ jsx17(Group4, { gap: 8, align: "center", style: { flex: "none", marginLeft: "auto" }, children: actions }) : null
-      ]
-    }
-  );
-}
-function PageShell({
-  title,
-  description,
-  context,
-  badge,
-  actions,
-  backHref,
-  backLabel,
-  children,
-  maxWidth
-}) {
-  return /* @__PURE__ */ jsxs9(Box3, { style: { minHeight: "100%", display: "flex", flexDirection: "column" }, children: [
-    /* @__PURE__ */ jsx17(
-      TopBar,
-      {
-        title,
-        context: context ?? description,
-        badge,
-        actions,
-        backHref,
-        backLabel
-      }
-    ),
-    /* @__PURE__ */ jsx17(
-      Box3,
-      {
-        style: {
-          flex: 1,
-          padding: `${SHELL.contentPadY}px ${SHELL.contentPadX}px`,
-          maxWidth: maxWidth ?? void 0,
-          width: "100%",
-          boxSizing: "border-box"
-        },
-        children: /* @__PURE__ */ jsx17(Stack5, { gap: "md", children })
-      }
-    )
-  ] });
-}
-function ShellTabs({ items }) {
-  return /* @__PURE__ */ jsx17(Group4, { gap: 2, align: "stretch", h: SHELL.headerH, wrap: "nowrap", children: items.map((item) => /* @__PURE__ */ jsx17(
-    Box3,
-    {
-      component: item.href ? "a" : "button",
-      href: item.href,
-      onClick: item.onClick,
-      style: {
-        display: "inline-flex",
-        alignItems: "center",
-        height: "100%",
-        paddingInline: 14,
-        border: "none",
-        background: "transparent",
-        cursor: "pointer",
-        fontFamily: FONT.family,
-        fontSize: 13,
-        fontWeight: item.active ? 600 : 500,
-        color: item.active ? COLORS.ink : COLORS.mutedFg,
-        textDecoration: "none",
-        boxShadow: item.active ? `inset 0 -2px 0 ${COLORS.brand}` : "inset 0 -2px 0 transparent",
-        transition: "color 0.12s ease, box-shadow 0.12s ease"
-      },
-      children: item.label
-    },
-    item.key
-  )) });
 }
 
 // src/components/notifications.ts
@@ -4153,7 +4382,7 @@ import {
   ActionIcon as ActionIcon2
 } from "@mantine/core";
 import {
-  useDisclosure as useDisclosure2,
+  useDisclosure,
   useMediaQuery,
   useDebouncedValue
 } from "@mantine/hooks";
@@ -4180,6 +4409,529 @@ function DefaultThemeProvider({ children }) {
 }
 function IconSearch4(props) {
   return /* @__PURE__ */ jsx19(TablerIconSearch, { size: props.size ?? 16, stroke: props.stroke ?? 1.5 });
+}
+
+// src/components/MaterialCompat.tsx
+import {
+  Children,
+  cloneElement as cloneElement2,
+  createContext,
+  isValidElement as isValidElement3,
+  useContext,
+  useMemo as useMemo6,
+  useState as useState6
+} from "react";
+import { Fragment as Fragment3, jsx as jsx20, jsxs as jsxs10 } from "react/jsx-runtime";
+var UiButtonAny = Button;
+var UiBadgeAny = Badge;
+var UiSelectAny = Select;
+var UiSearchInputAny = SearchInput;
+var UiSearchableSelectAny = SearchableSelect;
+var UiSegmentedControlAny = SegmentedControl;
+function mergeClassName(...names) {
+  return names.filter(Boolean).join(" ") || void 0;
+}
+function mapButtonVariant(variant) {
+  if (variant === "outline") return "outline";
+  if (variant === "ghost" || variant === "link") return "ghost";
+  if (variant === "secondary") return "light";
+  if (variant === "destructive") return "light";
+  return "filled";
+}
+function mapButtonSize(size) {
+  if (size === "xs" || size === "icon-xs") return "xs";
+  if (size === "lg" || size === "icon-lg") return "lg";
+  return "sm";
+}
+function Button3({
+  asChild,
+  variant,
+  size,
+  color,
+  children,
+  className,
+  ...props
+}) {
+  const mappedVariant = mapButtonVariant(variant);
+  const mappedSize = mapButtonSize(size);
+  const mappedColor = color ?? (variant === "destructive" ? "red" : "brand");
+  if (asChild && isValidElement3(children)) {
+    const child = children;
+    const childProps = child.props;
+    return /* @__PURE__ */ jsx20(
+      UiButtonAny,
+      {
+        component: child.type,
+        variant: mappedVariant,
+        size: mappedSize,
+        color: mappedColor,
+        "data-slot": "button",
+        "data-variant": variant ?? "default",
+        "data-size": size ?? "default",
+        className: mergeClassName(className, childProps.className),
+        ...props,
+        ...childProps,
+        children: childProps.children
+      }
+    );
+  }
+  return /* @__PURE__ */ jsx20(
+    UiButtonAny,
+    {
+      variant: mappedVariant,
+      size: mappedSize,
+      color: mappedColor,
+      "data-slot": "button",
+      "data-variant": variant ?? "default",
+      "data-size": size ?? "default",
+      className,
+      ...props,
+      children
+    }
+  );
+}
+function Badge2({
+  variant = "default",
+  asChild,
+  children,
+  ...props
+}) {
+  const color = variant === "destructive" ? "red" : variant === "secondary" ? "gray" : "brand";
+  const mappedVariant = variant === "outline" ? "outline" : variant === "default" ? "light" : "light";
+  if (asChild && isValidElement3(children)) {
+    const child = children;
+    return /* @__PURE__ */ jsx20(
+      UiBadgeAny,
+      {
+        component: child.type,
+        color,
+        variant: mappedVariant,
+        "data-slot": "badge",
+        "data-variant": variant,
+        ...props,
+        ...child.props,
+        children: child.props.children
+      }
+    );
+  }
+  return /* @__PURE__ */ jsx20(UiBadgeAny, { color, variant: mappedVariant, "data-slot": "badge", "data-variant": variant, ...props, children });
+}
+function Icon2({
+  name,
+  size = 16,
+  strokeWidth,
+  style,
+  className
+}) {
+  return /* @__PURE__ */ jsx20(
+    Icon,
+    {
+      name,
+      size,
+      ...strokeWidth === void 0 ? {} : { strokeWidth },
+      className: className ? `material-ds-icon ${className}` : "material-ds-icon",
+      ...style ? { style } : {}
+    }
+  );
+}
+function EmptyState2({
+  icon = "board",
+  title,
+  description,
+  action
+}) {
+  return /* @__PURE__ */ jsxs10("div", { className: "material-empty", children: [
+    /* @__PURE__ */ jsx20("span", { className: "material-empty__icon", "aria-hidden": "true", children: typeof icon === "string" ? /* @__PURE__ */ jsx20(Icon2, { name: icon, size: 18 }) : icon }),
+    /* @__PURE__ */ jsx20("strong", { children: title }),
+    description ? /* @__PURE__ */ jsx20("p", { children: description }) : null,
+    action ? /* @__PURE__ */ jsx20("div", { className: "material-empty__action", children: action }) : null
+  ] });
+}
+function PageHeader2({
+  eyebrow,
+  title,
+  description,
+  actions,
+  backAction
+}) {
+  return /* @__PURE__ */ jsxs10("header", { className: "material-page-header", "data-slot": "page-header", children: [
+    backAction ? /* @__PURE__ */ jsx20("div", { className: "material-page-header__back", children: backAction }) : null,
+    /* @__PURE__ */ jsxs10("div", { children: [
+      eyebrow ? /* @__PURE__ */ jsx20("p", { className: "material-eyebrow", children: eyebrow }) : null,
+      /* @__PURE__ */ jsx20("h1", { children: title }),
+      description ? /* @__PURE__ */ jsx20("p", { children: description }) : null
+    ] }),
+    actions ? /* @__PURE__ */ jsx20("div", { className: "material-page-header__actions", children: actions }) : null
+  ] });
+}
+function SectionHeader2({
+  title,
+  description,
+  actions,
+  action,
+  divider
+}) {
+  return /* @__PURE__ */ jsxs10("header", { className: "material-section-header", "data-slot": "section-header", "data-divider": divider ? "true" : "false", children: [
+    /* @__PURE__ */ jsxs10("div", { children: [
+      /* @__PURE__ */ jsx20("h2", { children: title }),
+      description ? /* @__PURE__ */ jsx20("p", { children: description }) : null
+    ] }),
+    actions ?? action ? /* @__PURE__ */ jsx20("div", { className: "material-section-header__actions", children: actions ?? action }) : null
+  ] });
+}
+function PageToolbar({ children, end }) {
+  return /* @__PURE__ */ jsxs10("div", { className: "material-page-toolbar", "data-slot": "page-toolbar", children: [
+    /* @__PURE__ */ jsx20("div", { children }),
+    end ? /* @__PURE__ */ jsx20("div", { "data-slot": "page-toolbar-end", children: end }) : null
+  ] });
+}
+function DatePicker2({
+  value,
+  onChange,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx20(
+    DatePickerInput,
+    {
+      value: value || null,
+      onChange: (next) => onChange(next ?? ""),
+      clearable: props.clearable ?? true,
+      ...props
+    }
+  );
+}
+function Input({
+  controlSize: _controlSize,
+  onChange,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx20(
+    TextInput,
+    {
+      "data-slot": "input",
+      ...props,
+      ...onChange ? { onInputChange: onChange } : {}
+    }
+  );
+}
+function Textarea3(props) {
+  return /* @__PURE__ */ jsx20(Textarea, { "data-slot": "textarea", ...props });
+}
+function Label(props) {
+  return /* @__PURE__ */ jsx20("label", { "data-slot": "label", ...props });
+}
+function FormField2({
+  label,
+  children,
+  htmlFor,
+  description,
+  status,
+  statusText,
+  required,
+  full
+}) {
+  return /* @__PURE__ */ jsxs10("div", { className: full ? "material-field material-field--wide" : "material-field", "data-status": status, children: [
+    /* @__PURE__ */ jsxs10(Label, { ...htmlFor ? { htmlFor } : {}, children: [
+      label,
+      required ? /* @__PURE__ */ jsx20("span", { "aria-hidden": "true", children: " *" }) : null
+    ] }),
+    description ? /* @__PURE__ */ jsx20("p", { className: "material-field-hint", children: description }) : null,
+    children,
+    statusText ? /* @__PURE__ */ jsx20("p", { className: "material-field-hint", children: statusText }) : null
+  ] });
+}
+function FormGrid({
+  children,
+  columns = 2,
+  gap
+}) {
+  return /* @__PURE__ */ jsx20("div", { className: "material-form-grid", "data-columns": columns, "data-gap": gap ?? "md", children });
+}
+function FormSection2({ title, description, children }) {
+  return /* @__PURE__ */ jsx20(FormSection, { title, ...description ? { description } : {}, children });
+}
+function FormActions({ children }) {
+  return /* @__PURE__ */ jsx20("div", { className: "material-action-row", children });
+}
+var SelectContext = createContext(null);
+function collectSelectItems(children) {
+  const items = [];
+  Children.forEach(children, (child) => {
+    if (!isValidElement3(child)) return;
+    if (child.type === SelectItem) {
+      const props = child.props;
+      items.push({
+        value: props.value,
+        label: Children.toArray(props.children).join(""),
+        ...props.disabled !== void 0 ? { disabled: props.disabled } : {}
+      });
+      return;
+    }
+    items.push(...collectSelectItems(child.props.children));
+  });
+  return items;
+}
+function findSelectPlaceholder(children) {
+  let placeholder;
+  Children.forEach(children, (child) => {
+    if (!isValidElement3(child) || placeholder) return;
+    if (child.type === SelectValue) {
+      placeholder = child.props.placeholder;
+      return;
+    }
+    placeholder = findSelectPlaceholder(child.props.children);
+  });
+  return placeholder;
+}
+function Select3({
+  value,
+  onValueChange,
+  children
+}) {
+  return /* @__PURE__ */ jsx20(SelectContext.Provider, { value: { value, onValueChange, children: children ?? null }, children });
+}
+function SelectTrigger({
+  id,
+  fullWidth,
+  size,
+  children,
+  "aria-label": ariaLabel
+}) {
+  const ctx = useContext(SelectContext);
+  const data = useMemo6(() => collectSelectItems(ctx?.children), [ctx?.children]);
+  const placeholder = findSelectPlaceholder(children);
+  return /* @__PURE__ */ jsx20(
+    UiSelectAny,
+    {
+      id,
+      "aria-label": ariaLabel,
+      data,
+      value: ctx?.value || null,
+      onChange: (next) => ctx?.onValueChange?.(next ?? ""),
+      clearable: false,
+      size: size === "sm" ? "sm" : "md",
+      density: size === "sm" ? "compact" : "default",
+      style: fullWidth ? { width: "100%" } : void 0,
+      ...placeholder ? { placeholder } : {}
+    }
+  );
+}
+function SelectValue(_props) {
+  return null;
+}
+function SelectContent({ children }) {
+  return /* @__PURE__ */ jsx20(Fragment3, { children });
+}
+function SelectItem(_props) {
+  return null;
+}
+function SearchableSelect2({
+  name,
+  label,
+  value,
+  options,
+  placeholder,
+  emptyLabel,
+  onPick
+}) {
+  return /* @__PURE__ */ jsx20(
+    UiSearchableSelectAny,
+    {
+      name,
+      label,
+      value: value ?? "",
+      options,
+      ...placeholder ? { placeholder } : {},
+      ...emptyLabel ? { emptyLabel } : {},
+      ...onPick ? { onPick } : {}
+    }
+  );
+}
+function SegmentedControl2({
+  options,
+  value,
+  onChange,
+  disabled,
+  fullWidth,
+  ariaLabel,
+  size = "md"
+}) {
+  return /* @__PURE__ */ jsx20(
+    UiSegmentedControlAny,
+    {
+      data: options.map((option) => ({
+        value: option.value,
+        label: /* @__PURE__ */ jsxs10("span", { className: "material-segment-label", children: [
+          option.icon,
+          /* @__PURE__ */ jsx20("span", { children: option.label }),
+          option.meta !== void 0 ? /* @__PURE__ */ jsx20("small", { children: option.meta }) : null
+        ] })
+      })),
+      value,
+      onChange: onChange ?? (() => void 0),
+      ...disabled !== void 0 ? { disabled } : {},
+      ...fullWidth !== void 0 ? { fullWidth } : {},
+      "aria-label": ariaLabel,
+      size: size === "lg" ? "md" : size
+    }
+  );
+}
+function SearchField({ children }) {
+  return /* @__PURE__ */ jsx20("div", { className: "material-search-field", children });
+}
+function SearchFieldInput(props) {
+  return /* @__PURE__ */ jsx20(UiSearchInputAny, { ...props, className: "material-search-field__input", variant: "filter" });
+}
+function Switch2({
+  checked,
+  onCheckedChange,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx20(
+    Switch,
+    {
+      checked,
+      onChange: (event) => onCheckedChange?.(event.currentTarget.checked),
+      ...props
+    }
+  );
+}
+function Table2(props) {
+  return /* @__PURE__ */ jsx20(Table, { "data-slot": "table", ...props });
+}
+TableHeader.displayName = "TableHeader";
+function TableHeader(props) {
+  return /* @__PURE__ */ jsx20(Table.Thead, { "data-slot": "table-header", ...props });
+}
+function TableBody(props) {
+  return /* @__PURE__ */ jsx20(Table.Tbody, { "data-slot": "table-body", ...props });
+}
+function TableRow(props) {
+  return /* @__PURE__ */ jsx20(Table.Tr, { "data-slot": "table-row", ...props });
+}
+function TableHead(props) {
+  return /* @__PURE__ */ jsx20(Table.Th, { "data-slot": "table-head", ...props });
+}
+function TableCell(props) {
+  return /* @__PURE__ */ jsx20(Table.Td, { "data-slot": "table-cell", ...props });
+}
+function TableFooter(props) {
+  return /* @__PURE__ */ jsx20(Table.Tfoot, { "data-slot": "table-footer", ...props });
+}
+function TableCaption(props) {
+  const Caption = Table.Caption;
+  return /* @__PURE__ */ jsx20(Caption, { "data-slot": "table-caption", ...props });
+}
+var DialogContext = createContext(null);
+function Dialog2({
+  open,
+  onOpenChange,
+  children
+}) {
+  const [innerOpen, setInnerOpen] = useState6(false);
+  const actualOpen = open ?? innerOpen;
+  const setOpen = (next) => {
+    if (onOpenChange) onOpenChange(next);
+    else setInnerOpen(next);
+  };
+  return /* @__PURE__ */ jsx20(DialogContext.Provider, { value: { open: actualOpen, setOpen }, children });
+}
+function DialogTrigger({ asChild, children }) {
+  const ctx = useContext(DialogContext);
+  if (asChild && isValidElement3(children)) {
+    const child = children;
+    return cloneElement2(child, {
+      onClick: (event) => {
+        child.props.onClick?.(event);
+        ctx?.setOpen(true);
+      }
+    });
+  }
+  return /* @__PURE__ */ jsx20(Button3, { type: "button", onClick: () => ctx?.setOpen(true), children });
+}
+function DialogContent({
+  children,
+  className,
+  onPointerDownOutside,
+  onEscapeKeyDown,
+  showCloseButton = true
+}) {
+  const ctx = useContext(DialogContext);
+  return /* @__PURE__ */ jsx20(
+    Modal,
+    {
+      opened: ctx?.open ?? false,
+      onClose: () => ctx?.setOpen(false),
+      className,
+      closeOnClickOutside: !onPointerDownOutside,
+      closeOnEscape: !onEscapeKeyDown,
+      withCloseButton: showCloseButton,
+      size: "lg",
+      centered: true,
+      children: /* @__PURE__ */ jsx20("div", { "data-slot": "dialog-content", className, children })
+    }
+  );
+}
+function DialogHeader(props) {
+  return /* @__PURE__ */ jsx20("div", { "data-slot": "dialog-header", ...props });
+}
+function DialogTitle(props) {
+  return /* @__PURE__ */ jsx20("h2", { "data-slot": "dialog-title", ...props });
+}
+function DialogDescription(props) {
+  return /* @__PURE__ */ jsx20("p", { "data-slot": "dialog-description", ...props });
+}
+function DialogFooter({
+  showCloseButton,
+  children,
+  ...props
+}) {
+  const ctx = useContext(DialogContext);
+  return /* @__PURE__ */ jsxs10("div", { "data-slot": "dialog-footer", ...props, children: [
+    children,
+    showCloseButton ? /* @__PURE__ */ jsx20(Button3, { type: "button", variant: "outline", onClick: () => ctx?.setOpen(false), children: "\u5173\u95ED" }) : null
+  ] });
+}
+function ManagedDialog({
+  open,
+  onOpenChange,
+  trigger,
+  title,
+  description,
+  children,
+  footer,
+  size = "md",
+  closeOnOverlay = true,
+  closeOnEscape = true,
+  showCloseButton = true
+}) {
+  const triggerElement = trigger ? cloneElement2(trigger, {
+    onClick: (event) => {
+      trigger.props.onClick?.(event);
+      onOpenChange(true);
+    }
+  }) : null;
+  return /* @__PURE__ */ jsxs10(Fragment3, { children: [
+    triggerElement,
+    /* @__PURE__ */ jsxs10(
+      Modal,
+      {
+        opened: open,
+        onClose: () => onOpenChange(false),
+        title,
+        size,
+        closeOnClickOutside: closeOnOverlay,
+        closeOnEscape,
+        withCloseButton: showCloseButton,
+        centered: true,
+        children: [
+          description ? /* @__PURE__ */ jsx20("p", { className: "material-dialog-description", children: description }) : null,
+          children,
+          footer ? /* @__PURE__ */ jsx20("div", { "data-slot": "dialog-footer", children: footer }) : null
+        ]
+      }
+    )
+  ] });
 }
 export {
   ActionIcon2 as ActionIcon,
@@ -4243,6 +4995,47 @@ export {
   ListItem,
   ListPage,
   MOTION,
+  Badge2 as MaterialBadge,
+  Button3 as MaterialButton,
+  DatePicker2 as MaterialDatePicker,
+  Dialog2 as MaterialDialog,
+  DialogContent as MaterialDialogContent,
+  DialogDescription as MaterialDialogDescription,
+  DialogFooter as MaterialDialogFooter,
+  DialogHeader as MaterialDialogHeader,
+  DialogTitle as MaterialDialogTitle,
+  DialogTrigger as MaterialDialogTrigger,
+  EmptyState2 as MaterialEmptyState,
+  FormActions as MaterialFormActions,
+  FormField2 as MaterialFormField,
+  FormGrid as MaterialFormGrid,
+  FormSection2 as MaterialFormSection,
+  Icon2 as MaterialIcon,
+  Input as MaterialInput,
+  Label as MaterialLabel,
+  ManagedDialog as MaterialManagedDialog,
+  PageHeader2 as MaterialPageHeader,
+  PageToolbar as MaterialPageToolbar,
+  SearchField as MaterialSearchField,
+  SearchFieldInput as MaterialSearchFieldInput,
+  SearchableSelect2 as MaterialSearchableSelect,
+  SectionHeader2 as MaterialSectionHeader,
+  SegmentedControl2 as MaterialSegmentedControl,
+  Select3 as MaterialSelect,
+  SelectContent as MaterialSelectContent,
+  SelectItem as MaterialSelectItem,
+  SelectTrigger as MaterialSelectTrigger,
+  SelectValue as MaterialSelectValue,
+  Switch2 as MaterialSwitch,
+  Table2 as MaterialTable,
+  TableBody as MaterialTableBody,
+  TableCaption as MaterialTableCaption,
+  TableCell as MaterialTableCell,
+  TableFooter as MaterialTableFooter,
+  TableHead as MaterialTableHead,
+  TableHeader as MaterialTableHeader,
+  TableRow as MaterialTableRow,
+  Textarea3 as MaterialTextarea,
   Menu,
   MetadataList,
   MobileNav,
@@ -4259,6 +5052,7 @@ export {
   ProgressBar,
   RADIUS,
   SHADOWS,
+  SHELL_GEOMETRY,
   SearchInput,
   SearchableSelect,
   SectionHeader,
@@ -4272,7 +5066,7 @@ export {
   Slider,
   Spinner,
   SpotlightSearch,
-  Stack2 as Stack,
+  Stack3 as Stack,
   StatCard,
   StatusDot,
   Switch,
@@ -4299,7 +5093,7 @@ export {
   spotlight,
   useCombobox,
   useDebouncedValue,
-  useDisclosure2 as useDisclosure,
+  useDisclosure,
   useForm,
   useMediaQuery,
   vijimTheme

@@ -6,10 +6,9 @@ import "@mantine/notifications/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/dropzone/styles.css";
 import "@mantine/spotlight/styles.css";
-/** 本包触感层：按压变量 + reduced-motion */
-import "./styles.css";
-/** ADMIN 旧 .vj-* 控制台组件兼容层 */
-import "./admin-compat.css";
+/** 触感 + 壳层 + ADMIN 兼容：走 runtime 字符串注入，避免 tsup 抽 CSS 后业务加载不到 */
+import { VIJIM_RUNTIME_CSS } from "./runtime-css";
+import { VIJIM_SHELL_RESPONSIVE_CSS } from "./shell-responsive-css";
 
 import { MantineProvider, type MantineThemeOverride } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
@@ -74,6 +73,12 @@ export function VijimProvider({
           dangerouslySetInnerHTML={{ __html: rootCss }}
         />
       ) : null}
+      <style
+        // 壳层 / 触感 / ADMIN 兼容样式；必须随 Provider 自动挂载
+        dangerouslySetInnerHTML={{
+          __html: `${VIJIM_RUNTIME_CSS}\n${VIJIM_SHELL_RESPONSIVE_CSS}`,
+        }}
+      />
       {withModals ? <ModalsProvider>{tree}</ModalsProvider> : tree}
     </MantineProvider>
   );

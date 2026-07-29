@@ -17,6 +17,7 @@ VIJIM Labs **唯一业务 UI 出口**。
 | 新 variant 只改本包联合类型 + theme | 复制 shadcn / 再开第二套组件库 |
 | 存量页只换控件、保留结构 | 重画整站 IA / 改业务 API |
 | `VijimProvider` 包一层 | 业务自己挂 `MantineProvider` |
+| 壳层只用 `AppShell` / `TopBar` / `PageShell` | 业务自写 sidebar/topbar 布局 CSS |
 
 没有 `VijimProvider` 的区域 = 主题与触感不生效。
 

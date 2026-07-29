@@ -78,8 +78,10 @@
 `Stack` · `Group` · `Box` · `SimpleGrid` · `Divider` · `Paper` · `Card`
 `Text` · `Title` · `Anchor` · `Badge` · `ActionIcon`
 
-### 壳
+### 壳（全平台唯一）
 `AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
+几何：侧栏 246 · 品牌区 76 · 顶栏 60 · 内容区 20/22。
+业务只填导航 / 品牌 / 用户 / 顶栏动作，**禁止**再写本地 shell CSS。
 
 ### ADMIN 迁移兼容
 Admin 旧控制台模式仍从 **同一个 `@vijimlabs/ui` root 出口**取用，不再依赖
@@ -88,6 +90,19 @@ Admin 旧控制台模式仍从 **同一个 `@vijimlabs/ui` root 出口**取用�
 `StatusDot` · `FormField` · `TextArea` · `Dialog` · `AlertDialog`
 `List` · `ListItem` · `HStack` · `Grid`。
 新业务优先使用上方短清单；迁移完成后再逐步收敛这些兼容名。
+
+### MATERIAL 迁移兼容
+
+Material 旧页面在不改 IA / 业务 API 的前提下，仍从**同一个 `@vijimlabs/ui` 根出口**
+取用 `Material*` 前缀的迁移别名，不再保留业务侧 `components/ds`：
+`MaterialButton` · `MaterialBadge` · `MaterialIcon` · `MaterialEmptyState`
+`MaterialPageHeader` · `MaterialPageToolbar` · `MaterialSectionHeader`
+`MaterialDatePicker` · `MaterialInput` · `MaterialTextarea` · `MaterialLabel`
+`MaterialFormField` · `MaterialFormGrid` · `MaterialFormSection` · `MaterialFormActions`
+`MaterialSelect*` · `MaterialSearchableSelect` · `MaterialSearchField*`
+`MaterialSegmentedControl` · `MaterialSwitch` · `MaterialTable*`
+`MaterialDialog*` · `MaterialManagedDialog`。
+这些名字只承担迁移期 props 兼容；视觉实现、主题和 Mantine 边界仍归本包。
 
 ### 钩子
 `useForm` · `isNotEmpty` · `isEmail` · `hasLength`

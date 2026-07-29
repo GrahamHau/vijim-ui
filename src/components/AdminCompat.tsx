@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  AppShell as PlatformAppShell,
+  type AppShellProps as PlatformAppShellProps,
+} from "./Shell";
+
+import {
   Card as MantineCard,
   Group,
   SimpleGrid,
@@ -818,6 +823,8 @@ export type NavigationItem = {
   active?: boolean;
   disabled?: boolean;
   onSelect?: () => void;
+  href?: string;
+  meta?: ReactNode;
 };
 
 export type NavigationSection = {
@@ -825,41 +832,33 @@ export type NavigationSection = {
   items: readonly NavigationItem[];
 };
 
-export type AppShellProps = {
-  product: "STUDIO" | "GTM" | "ADMIN" | "PORTAL" | string;
-  brand: ReactNode;
-  navigation: readonly NavigationSection[];
-  user?: ReactNode;
-  header?: ReactNode;
-  children?: ReactNode;
-};
+export type AppShellProps = PlatformAppShellProps;
 
-export function AppShell({
-  product,
-  brand,
-  navigation,
-  user,
-  header,
-  children,
-}: AppShellProps) {
+export function AppShell(props: AppShellProps) {
+  // ADMIN 旧调用不希望再包一层内容 padding；页面自己用 PageCanvas
+  const contentPadding = props.contentPadding ?? false;
+  const withHeader = props.withHeader ?? false;
   return (
-    <div className="vj-app-shell">
-      <SideNav product={product} brand={brand} navigation={navigation} user={user} />
-      <div className="vj-app-shell__main">
-        <MobileNav product={product} navigation={navigation} user={user} />
-        {header}
-        {children}
-      </div>
-    </div>
+    <PlatformAppShell
+      {...props}
+      contentPadding={contentPadding}
+      withHeader={withHeader}
+    />
   );
 }
 
+/** @deprecated 侧栏已并入 AppShell；保留给极少数直接调用 */
 export function SideNav({
   product,
   brand,
   navigation,
   user,
-}: Omit<AppShellProps, "children" | "header">) {
+}: {
+  product: string;
+  brand: ReactNode;
+  navigation: readonly NavigationSection[];
+  user?: ReactNode;
+}) {
   return (
     <aside className="vj-sidebar" aria-label={`${product} 主导航`}>
       <div className="vj-sidebar__brand">{brand}</div>
@@ -892,38 +891,17 @@ export function SideNav({
   );
 }
 
+/** @deprecated 移动导航已内建在 AppShell */
 export function MobileNav({
   product,
-  navigation,
-  user,
 }: {
   product: string;
   navigation?: readonly NavigationSection[];
   user?: ReactNode;
 }) {
-  const items =
-    navigation?.flatMap((section) => section.items).filter((item) => !item.disabled) ??
-    [];
-  const active = items.find((item) => item.active)?.id ?? items[0]?.id ?? "";
   return (
     <div className="vj-mobile-nav">
       <strong>{product}</strong>
-      {items.length > 0 ? (
-        <select
-          aria-label="页面导航"
-          value={active}
-          onChange={(event) =>
-            items.find((item) => item.id === event.currentTarget.value)?.onSelect?.()
-          }
-        >
-          {items.map((item) => (
-            <option value={item.id} key={item.id}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-      ) : null}
-      {user}
     </div>
   );
 }
