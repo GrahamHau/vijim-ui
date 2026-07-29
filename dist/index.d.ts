@@ -4,6 +4,9 @@ export { ActionIcon, Alert, Anchor, Box, Checkbox, Combobox, ComboboxProps, Comb
 import * as react from 'react';
 import { ReactNode, CSSProperties, ChangeEventHandler, KeyboardEvent, ReactElement, MouseEventHandler, ComponentProps } from 'react';
 import { IconProps as IconProps$1 } from '@tabler/icons-react';
+import * as recharts_types_util_types from 'recharts/types/util/types';
+import * as recharts from 'recharts';
+import { CartesianGrid, LabelList, Tooltip as Tooltip$1, TooltipContentProps } from 'recharts';
 import { DateInputProps as DateInputProps$1, DatePickerInputProps as DatePickerInputProps$1 } from '@mantine/dates';
 import * as node_modules__mantine_core_lib_components_Menu_MenuDivider_MenuDivider from 'node_modules/@mantine/core/lib/components/Menu/MenuDivider/MenuDivider';
 import * as node_modules__mantine_core_lib_components_Menu_MenuLabel_MenuLabel from 'node_modules/@mantine/core/lib/components/Menu/MenuLabel/MenuLabel';
@@ -212,7 +215,7 @@ type VijimProviderProps = {
  */
 declare function VijimProvider({ children, theme, withNotifications, withModals, }: VijimProviderProps): react.JSX.Element;
 
-type IconName = "arrow" | "back" | "board" | "chart" | "check" | "chevron" | "clock" | "close" | "cube" | "database" | "doc" | "feed" | "grid" | "layers" | "note" | "panel" | "pkg" | "plus" | "refresh" | "search" | "settings" | "shield" | "sparkle" | "sync" | "tag" | "upload" | "users" | "video" | "warn";
+type IconName = "archive" | "arrow" | "back" | "board" | "calendar" | "cart" | "category" | "chart" | "chart-line" | "chart-pie" | "chart-trend" | "check" | "checklist" | "chevron" | "clock" | "close" | "clipboard" | "cube" | "database" | "doc" | "fail" | "feed" | "flame" | "grid" | "home" | "info" | "layers" | "list-check" | "message-check" | "money" | "note" | "panel" | "percent" | "pkg" | "plus" | "refresh" | "rocket" | "search" | "settings" | "shield" | "star" | "sparkle" | "sync" | "tag" | "target" | "upload" | "user-star" | "users" | "video" | "waiting" | "warehouse" | "world" | "warn";
 type IconProps = {
     name: IconName;
     size?: number;
@@ -221,6 +224,27 @@ type IconProps = {
     style?: CSSProperties;
 } & Pick<IconProps$1, "color">;
 declare function Icon$1({ name, size, strokeWidth, className, style, color, }: IconProps): react.JSX.Element;
+
+declare const ChartPrimitives: {
+    readonly Bar: <DataPointType = any, ValueAxisType = any>(props: recharts.BarProps<DataPointType, ValueAxisType>) => react.ReactElement;
+    readonly CartesianGrid: typeof CartesianGrid;
+    readonly ComposedChart: <DataPointType = any>(props: recharts_types_util_types.CartesianChartProps<DataPointType> & {
+        ref?: React.Ref<SVGSVGElement>;
+    }) => React.ReactElement;
+    readonly LabelList: typeof LabelList;
+    readonly Line: {
+        <DataPointType = any, ValueAxisType = any>(props: recharts.LineProps<DataPointType, ValueAxisType>): react.ReactElement;
+        (props: recharts.LineProps<any, any>): react.ReactElement;
+    };
+    readonly LineChart: <DataPointType = any>(props: recharts_types_util_types.CartesianChartProps<DataPointType> & {
+        ref?: React.Ref<SVGSVGElement>;
+    }) => React.ReactElement;
+    readonly ResponsiveContainer: react.ForwardRefExoticComponent<recharts.ResponsiveContainerProps & react.RefAttributes<HTMLDivElement>>;
+    readonly Tooltip: typeof Tooltip$1;
+    readonly XAxis: <DataPointType = any, DataValueType = any>(props: recharts.XAxisProps<DataPointType, DataValueType>) => react.ReactElement;
+    readonly YAxis: <DataPointType = any, DataValueType = any>(props: recharts.YAxisProps<DataPointType, DataValueType>) => react.ReactElement;
+};
+type ChartTooltipContentProps = TooltipContentProps;
 
 /**
  * 按钮变体收敛（业务只认这些，不跟 Mantine 文档散开）：
@@ -535,9 +559,10 @@ declare const SHELL_GEOMETRY: {
     readonly sideItemMinH: 36;
 };
 type TopBarProps = {
-    title: string;
+    title: ReactNode;
     context?: ReactNode;
     badge?: ReactNode;
+    center?: ReactNode;
     actions?: ReactNode;
     backHref?: string;
     backLabel?: string;
@@ -545,7 +570,7 @@ type TopBarProps = {
     onBack?: () => void;
     leading?: ReactNode;
 };
-declare function TopBar({ title, context, badge, actions, backHref, backLabel, sticky, onBack, leading, }: TopBarProps): react.JSX.Element;
+declare function TopBar({ title, context, badge, center, actions, backHref, backLabel, sticky, onBack, leading, }: TopBarProps): react.JSX.Element;
 type AppShellNavItem = {
     key?: string;
     id?: string;
@@ -575,7 +600,7 @@ type AppShellProps = {
     user?: ReactNode;
     footer?: ReactNode;
     header?: ReactNode;
-    headerTitle?: string;
+    headerTitle?: ReactNode;
     headerContext?: ReactNode;
     headerBadge?: ReactNode;
     headerBackHref?: string;
@@ -586,8 +611,11 @@ type AppShellProps = {
     children: ReactNode;
     contentPadding?: boolean;
     withHeader?: boolean;
+    className?: string;
+    contentClassName?: string;
+    viewport?: "page" | "fixed";
 };
-declare function AppShell({ product, brand, brandHint, navigation, navItems, user, footer, header, headerTitle, headerContext, headerBadge, headerBackHref, headerBackLabel, headerRight, headerCenter, headerActions, children, contentPadding, withHeader, }: AppShellProps): react.JSX.Element;
+declare function AppShell({ product, brand, brandHint, navigation, navItems, user, footer, header, headerTitle, headerContext, headerBadge, headerBackHref, headerBackLabel, headerRight, headerCenter, headerActions, children, contentPadding, withHeader, className, contentClassName, viewport, }: AppShellProps): react.JSX.Element;
 type PageShellProps = {
     title: string;
     description?: string;
@@ -1410,4 +1438,4 @@ declare function ManagedDialog({ open, onOpenChange, trigger, title, description
     showCloseButton?: boolean;
 }): react.JSX.Element;
 
-export { AlertDialog, type AlertDialogProps, AppShell, type AppShellNavItem, type AppShellNavSection, type AppShellProps, Avatar, Badge$1 as Badge, type BadgeProps, BrandLockup, type BrandProduct, Button$1 as Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, Card, type CardProps, ChartCard, DashboardGrid, DashboardGridItem, DashboardPage, DataSection, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePicker$1 as DatePicker, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, DetailPage, Dialog$1 as Dialog, type DialogProps, Drawer, type DrawerProps, Empty, type EmptyProps, EmptyState$1 as EmptyState, ErrorState, FONT, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FilterWorkspace, FormField$1 as FormField, type FormFieldProps, FormSection$1 as FormSection, type FormSectionProps, Grid, type GridProps, HStack, type HStackProps, Icon$1 as Icon, IconButton, type IconName, type IconProps, IconSearch, ImageGalleryUpload, type ImageGalleryUploadProps, type ImageGalleryUploadResult, InputGroup, KpiGrid, List, ListItem, type ListItemProps, ListPage, type ListProps, MOTION, Badge as MaterialBadge, Button as MaterialButton, DatePicker as MaterialDatePicker, Dialog as MaterialDialog, DialogContent as MaterialDialogContent, DialogDescription as MaterialDialogDescription, DialogFooter as MaterialDialogFooter, DialogHeader as MaterialDialogHeader, DialogTitle as MaterialDialogTitle, DialogTrigger as MaterialDialogTrigger, EmptyState as MaterialEmptyState, FormActions as MaterialFormActions, FormField as MaterialFormField, FormGrid as MaterialFormGrid, FormSection as MaterialFormSection, Icon as MaterialIcon, Input as MaterialInput, Label as MaterialLabel, ManagedDialog as MaterialManagedDialog, PageHeader as MaterialPageHeader, PageToolbar as MaterialPageToolbar, SearchField as MaterialSearchField, SearchFieldInput as MaterialSearchFieldInput, SearchableSelect as MaterialSearchableSelect, type SearchableSelectOption as MaterialSearchableSelectOption, SectionHeader as MaterialSectionHeader, SegmentedControl as MaterialSegmentedControl, Select as MaterialSelect, SelectContent as MaterialSelectContent, SelectItem as MaterialSelectItem, SelectTrigger as MaterialSelectTrigger, SelectValue as MaterialSelectValue, Switch as MaterialSwitch, Table as MaterialTable, TableBody as MaterialTableBody, TableCaption as MaterialTableCaption, TableCell as MaterialTableCell, TableFooter as MaterialTableFooter, TableHead as MaterialTableHead, TableHeader as MaterialTableHeader, TableRow as MaterialTableRow, Textarea as MaterialTextarea, Menu, MetadataList, MobileNav, Modal, type ModalProps, MultiSelector, type NavigationItem, type NavigationSection, type NotifyOptions, NumberInput, type NumberInputProps, PageCanvas, type PageCanvasProps, PageHeader$1 as PageHeader, type PageHeaderProps, PageShell, type PageShellProps, Pagination, PermissionDeniedState, Popover, ProgressBar, RADIUS, SHADOWS, SHELL_GEOMETRY, SearchInput, type SearchInputProps, SearchableSelect$1 as SearchableSelect, type SearchableSelectOption$1 as SearchableSelectOption, type SearchableSelectProps, SectionHeader$1 as SectionHeader, type SectionHeaderProps, SegmentedControl$1 as SegmentedControl, Select$1 as Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, SettingsPage, type ShellTabItem, ShellTabs, type ShellTabsProps, SideNav, Skeleton, type SkeletonProps, Slider, type Space, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Stack, type StackProps, StatCard, StatusDot, type StatusDotProps, Table$1 as Table, type TableProps, Tabs, Tag, TextArea, type TextAreaProps, TextInput, type TextInputProps, Textarea$1 as Textarea, type TextareaProps, type Theme, ThemeProvider, Thumbnail, ToastRegion, type Tone, Tooltip, TopBar, type TopBarProps, TrendBadge, type TrendBadgeProps, VijimProvider, type VijimProviderProps, WORKFLOW_STEP_COLORS, notify, publicComponents, vijimTheme };
+export { AlertDialog, type AlertDialogProps, AppShell, type AppShellNavItem, type AppShellNavSection, type AppShellProps, Avatar, Badge$1 as Badge, type BadgeProps, BrandLockup, type BrandProduct, Button$1 as Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, Card, type CardProps, ChartCard, ChartPrimitives, type ChartTooltipContentProps, DashboardGrid, DashboardGridItem, DashboardPage, DataSection, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePicker$1 as DatePicker, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, DetailPage, Dialog$1 as Dialog, type DialogProps, Drawer, type DrawerProps, Empty, type EmptyProps, EmptyState$1 as EmptyState, ErrorState, FONT, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FilterWorkspace, FormField$1 as FormField, type FormFieldProps, FormSection$1 as FormSection, type FormSectionProps, Grid, type GridProps, HStack, type HStackProps, Icon$1 as Icon, IconButton, type IconName, type IconProps, IconSearch, ImageGalleryUpload, type ImageGalleryUploadProps, type ImageGalleryUploadResult, InputGroup, KpiGrid, List, ListItem, type ListItemProps, ListPage, type ListProps, MOTION, Badge as MaterialBadge, Button as MaterialButton, DatePicker as MaterialDatePicker, Dialog as MaterialDialog, DialogContent as MaterialDialogContent, DialogDescription as MaterialDialogDescription, DialogFooter as MaterialDialogFooter, DialogHeader as MaterialDialogHeader, DialogTitle as MaterialDialogTitle, DialogTrigger as MaterialDialogTrigger, EmptyState as MaterialEmptyState, FormActions as MaterialFormActions, FormField as MaterialFormField, FormGrid as MaterialFormGrid, FormSection as MaterialFormSection, Icon as MaterialIcon, Input as MaterialInput, Label as MaterialLabel, ManagedDialog as MaterialManagedDialog, PageHeader as MaterialPageHeader, PageToolbar as MaterialPageToolbar, SearchField as MaterialSearchField, SearchFieldInput as MaterialSearchFieldInput, SearchableSelect as MaterialSearchableSelect, type SearchableSelectOption as MaterialSearchableSelectOption, SectionHeader as MaterialSectionHeader, SegmentedControl as MaterialSegmentedControl, Select as MaterialSelect, SelectContent as MaterialSelectContent, SelectItem as MaterialSelectItem, SelectTrigger as MaterialSelectTrigger, SelectValue as MaterialSelectValue, Switch as MaterialSwitch, Table as MaterialTable, TableBody as MaterialTableBody, TableCaption as MaterialTableCaption, TableCell as MaterialTableCell, TableFooter as MaterialTableFooter, TableHead as MaterialTableHead, TableHeader as MaterialTableHeader, TableRow as MaterialTableRow, Textarea as MaterialTextarea, Menu, MetadataList, MobileNav, Modal, type ModalProps, MultiSelector, type NavigationItem, type NavigationSection, type NotifyOptions, NumberInput, type NumberInputProps, PageCanvas, type PageCanvasProps, PageHeader$1 as PageHeader, type PageHeaderProps, PageShell, type PageShellProps, Pagination, PermissionDeniedState, Popover, ProgressBar, RADIUS, SHADOWS, SHELL_GEOMETRY, SearchInput, type SearchInputProps, SearchableSelect$1 as SearchableSelect, type SearchableSelectOption$1 as SearchableSelectOption, type SearchableSelectProps, SectionHeader$1 as SectionHeader, type SectionHeaderProps, SegmentedControl$1 as SegmentedControl, Select$1 as Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, SettingsPage, type ShellTabItem, ShellTabs, type ShellTabsProps, SideNav, Skeleton, type SkeletonProps, Slider, type Space, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Stack, type StackProps, StatCard, StatusDot, type StatusDotProps, Table$1 as Table, type TableProps, Tabs, Tag, TextArea, type TextAreaProps, TextInput, type TextInputProps, Textarea$1 as Textarea, type TextareaProps, type Theme, ThemeProvider, Thumbnail, ToastRegion, type Tone, Tooltip, TopBar, type TopBarProps, TrendBadge, type TrendBadgeProps, VijimProvider, type VijimProviderProps, WORKFLOW_STEP_COLORS, notify, publicComponents, vijimTheme };

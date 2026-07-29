@@ -19,6 +19,10 @@ export {
 } from "./theme/tokens";
 export { VijimProvider, type VijimProviderProps } from "./provider";
 export { Icon, type IconProps, type IconName } from "./components/Icon";
+export {
+  ChartPrimitives,
+  type ChartTooltipContentProps,
+} from "./components/ChartPrimitives";
 
 // ── 录入 ───────────────────────────────────────────────
 export {

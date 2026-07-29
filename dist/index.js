@@ -1103,6 +1103,28 @@ var VIJIM_RUNTIME_CSS = '/* @vijimlabs/ui \u2014 \u89E6\u611F\u4E0E\u4EA4\u4E92\
 
 // src/shell-responsive-css.ts
 var VIJIM_SHELL_RESPONSIVE_CSS = `
+.vj-platform-shell__topbar-center {
+  min-width: 180px;
+  flex: 0 1 420px;
+}
+
+.vj-platform-shell[data-viewport="fixed"] {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.vj-platform-shell[data-viewport="fixed"] .vj-platform-shell__main {
+  height: 100%;
+  min-height: 0;
+}
+
+.vj-platform-shell[data-viewport="fixed"] .vj-platform-shell__content {
+  min-height: 0;
+  overflow: auto;
+}
+
 @media (max-width: 560px) {
   .vj-platform-shell__topbar-title {
     gap: 6px;
@@ -1110,6 +1132,10 @@ var VIJIM_SHELL_RESPONSIVE_CSS = `
 
   .vj-platform-shell__topbar-context,
   .vj-platform-shell__topbar-context-separator {
+    display: none;
+  }
+
+  .vj-platform-shell__topbar-center {
     display: none;
   }
 }
@@ -1172,66 +1198,114 @@ ${VIJIM_SHELL_RESPONSIVE_CSS}`
 // src/components/Icon.tsx
 import {
   IconAlertTriangle,
+  IconArchive,
   IconArrowLeft,
   IconArrowRight,
   IconArrowsExchange,
   IconBox,
+  IconBoxOff,
+  IconBuildingWarehouse,
+  IconCalendar,
+  IconCategory,
   IconChartBar,
+  IconChartBarPopular,
+  IconChartLine,
+  IconChartPie,
   IconCheck,
+  IconChecklist,
   IconChevronDown,
   IconCircle,
   IconClock,
+  IconClockHour4,
+  IconClipboardText,
   IconDatabase,
   IconFileText,
+  IconFlame,
+  IconHome,
+  IconInfoCircle,
   IconLayoutGrid,
   IconLayoutKanban,
   IconLayoutSidebar,
   IconLayersSubtract,
+  IconListCheck,
   IconListDetails,
+  IconMessageCheck,
+  IconMoneybag,
   IconNote,
   IconPackage,
+  IconPercentage,
   IconPlus,
   IconRefresh,
+  IconRocket,
   IconSearch,
   IconSettings,
   IconShieldCheck,
+  IconShoppingCartCheck,
   IconSparkles,
+  IconStar,
   IconTag,
+  IconTargetArrow,
   IconUpload,
   IconUsersGroup,
+  IconUserStar,
   IconVideo,
+  IconWorld,
   IconX
 } from "@tabler/icons-react";
 import { jsx as jsx2 } from "react/jsx-runtime";
 var ICONS = {
+  archive: IconArchive,
   arrow: IconArrowRight,
   back: IconArrowLeft,
   board: IconLayoutKanban,
+  calendar: IconCalendar,
+  cart: IconShoppingCartCheck,
+  category: IconCategory,
   chart: IconChartBar,
+  "chart-line": IconChartLine,
+  "chart-pie": IconChartPie,
+  "chart-trend": IconChartBarPopular,
   check: IconCheck,
+  checklist: IconChecklist,
   chevron: IconChevronDown,
   clock: IconClock,
   close: IconX,
+  clipboard: IconClipboardText,
   cube: IconBox,
   database: IconDatabase,
   doc: IconFileText,
+  fail: IconBoxOff,
   feed: IconListDetails,
+  flame: IconFlame,
   grid: IconLayoutGrid,
+  home: IconHome,
+  info: IconInfoCircle,
   layers: IconLayersSubtract,
+  "list-check": IconListCheck,
+  "message-check": IconMessageCheck,
+  money: IconMoneybag,
   note: IconNote,
   panel: IconLayoutSidebar,
+  percent: IconPercentage,
   pkg: IconPackage,
   plus: IconPlus,
   refresh: IconRefresh,
+  rocket: IconRocket,
   search: IconSearch,
   settings: IconSettings,
   shield: IconShieldCheck,
+  star: IconStar,
   sparkle: IconSparkles,
   sync: IconArrowsExchange,
   tag: IconTag,
+  target: IconTargetArrow,
   upload: IconUpload,
+  "user-star": IconUserStar,
   users: IconUsersGroup,
   video: IconVideo,
+  waiting: IconClockHour4,
+  warehouse: IconBuildingWarehouse,
+  world: IconWorld,
   warn: IconAlertTriangle
 };
 function Icon({
@@ -1255,6 +1329,32 @@ function Icon({
     }
   );
 }
+
+// src/components/ChartPrimitives.ts
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  LabelList,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from "recharts";
+var ChartPrimitives = {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  LabelList,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+};
 
 // src/components/Button.tsx
 import {
@@ -2120,7 +2220,7 @@ import {
   DatePickerInput as MantineDatePickerInput,
   DateInput as MantineDateInput
 } from "@mantine/dates";
-import { IconCalendar } from "@tabler/icons-react";
+import { IconCalendar as IconCalendar2 } from "@tabler/icons-react";
 import { forwardRef as forwardRef6, useMemo as useMemo3 } from "react";
 
 // src/utils/date.ts
@@ -2180,7 +2280,7 @@ var DatePickerInput = forwardRef6(
         valueFormat: "YYYY-MM-DD",
         value: dateValue,
         defaultValue: defaultDate,
-        leftSection: leftSection ?? /* @__PURE__ */ jsx9(IconCalendar, { size: 16, stroke: 1.5 }),
+        leftSection: leftSection ?? /* @__PURE__ */ jsx9(IconCalendar2, { size: 16, stroke: 1.5 }),
         leftSectionPointerEvents: "none",
         onChange: (next) => {
           onChange?.(toDateString(next));
@@ -2227,7 +2327,7 @@ var DateInput = forwardRef6(
         valueFormat: "YYYY-MM-DD",
         value: dateValue,
         defaultValue: defaultDate,
-        leftSection: leftSection ?? /* @__PURE__ */ jsx9(IconCalendar, { size: 16, stroke: 1.5 }),
+        leftSection: leftSection ?? /* @__PURE__ */ jsx9(IconCalendar2, { size: 16, stroke: 1.5 }),
         leftSectionPointerEvents: "none",
         onChange: (next) => {
           onChange?.(toDateString(next));
@@ -2438,7 +2538,7 @@ function Popover(props) {
 }
 Popover.Target = MantinePopover.Target;
 Popover.Dropdown = MantinePopover.Dropdown;
-function Tooltip(props) {
+function Tooltip2(props) {
   if ("trigger" in props) {
     const id = useId();
     return /* @__PURE__ */ jsxs4("span", { className: "vj-tooltip", children: [
@@ -2548,6 +2648,7 @@ function TopBar({
   title,
   context,
   badge,
+  center,
   actions,
   backHref,
   backLabel = "\u8FD4\u56DE",
@@ -2647,6 +2748,7 @@ function TopBar({
             )
           ] }) : null
         ] }),
+        center != null ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__topbar-center", children: center }) : null,
         actions != null ? /* @__PURE__ */ jsx14(Group, { gap: 8, align: "center", className: "vj-platform-shell__topbar-actions", children: actions }) : null
       ]
     }
@@ -2744,7 +2846,10 @@ function AppShell({
   headerActions,
   children,
   contentPadding = true,
-  withHeader = true
+  withHeader = true,
+  className,
+  contentClassName,
+  viewport = "page"
 }) {
   const sections = normalizeSections(navigation, navItems);
   const [mobileOpen, setMobileOpen] = useState3(false);
@@ -2803,7 +2908,8 @@ function AppShell({
     TopBar,
     {
       title: headerTitle ?? (typeof brand === "string" ? brand : product ?? "VIJIM"),
-      context: headerContext ?? headerCenter,
+      context: headerContext,
+      center: headerCenter,
       badge: headerBadge,
       actions: headerActions ?? headerRight,
       backHref: headerBackHref,
@@ -2835,67 +2941,75 @@ function AppShell({
     /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__topbar-title", children: /* @__PURE__ */ jsx14("strong", { children: typeof brand === "string" ? brand : product ?? "VIJIM" }) }),
     headerActions ?? headerRight
   ] }) : null);
-  return /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell", "data-product": product, children: [
-    /* @__PURE__ */ jsxs6("aside", { className: "vj-platform-shell__sidebar", "aria-label": `${product ?? "VIJIM"} \u4E3B\u5BFC\u822A`, children: [
-      /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__brand", children: brandNode }),
-      /* @__PURE__ */ jsx14(NavTree, { sections }),
-      foot ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__footer", children: foot }) : null
-    ] }),
-    /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__drawer", "data-open": mobileOpen ? "true" : "false", children: [
-      /* @__PURE__ */ jsx14(
-        "button",
-        {
-          type: "button",
-          className: "vj-platform-shell__drawer-backdrop",
-          "aria-label": "\u5173\u95ED\u5BFC\u822A",
-          tabIndex: -1,
-          onClick: () => setMobileOpen(false)
-        }
-      ),
-      /* @__PURE__ */ jsxs6(
-        "aside",
-        {
-          ref: panelRef,
-          className: "vj-platform-shell__drawer-panel",
-          "aria-label": "\u79FB\u52A8\u7AEF\u4E3B\u5BFC\u822A",
-          "aria-modal": "true",
-          role: "dialog",
-          "aria-labelledby": drawerTitleId,
-          children: [
-            /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__brand", id: drawerTitleId, children: [
-              brandNode,
-              /* @__PURE__ */ jsx14(
-                "button",
-                {
-                  ref: closeRef,
-                  type: "button",
-                  className: "vj-platform-shell__menu-button",
-                  "aria-label": "\u5173\u95ED\u5BFC\u822A",
-                  onClick: () => setMobileOpen(false),
-                  style: { display: "grid" },
-                  children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 18 })
-                }
-              )
-            ] }),
-            /* @__PURE__ */ jsx14(NavTree, { sections, onNavigate: () => setMobileOpen(false) }),
-            foot ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__footer", children: foot }) : null
-          ]
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxs6(
-      "div",
-      {
-        className: "vj-platform-shell__main",
-        "aria-hidden": mobileOpen ? true : void 0,
-        ...mobileOpen ? { inert: true } : {},
-        children: [
-          topbar,
-          contentPadding ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__content", children }) : children
-        ]
-      }
-    )
-  ] });
+  return /* @__PURE__ */ jsxs6(
+    "div",
+    {
+      className: ["vj-platform-shell", className].filter(Boolean).join(" "),
+      "data-product": product,
+      "data-viewport": viewport,
+      children: [
+        /* @__PURE__ */ jsxs6("aside", { className: "vj-platform-shell__sidebar", "aria-label": `${product ?? "VIJIM"} \u4E3B\u5BFC\u822A`, children: [
+          /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__brand", children: brandNode }),
+          /* @__PURE__ */ jsx14(NavTree, { sections }),
+          foot ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__footer", children: foot }) : null
+        ] }),
+        /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__drawer", "data-open": mobileOpen ? "true" : "false", children: [
+          /* @__PURE__ */ jsx14(
+            "button",
+            {
+              type: "button",
+              className: "vj-platform-shell__drawer-backdrop",
+              "aria-label": "\u5173\u95ED\u5BFC\u822A",
+              tabIndex: -1,
+              onClick: () => setMobileOpen(false)
+            }
+          ),
+          /* @__PURE__ */ jsxs6(
+            "aside",
+            {
+              ref: panelRef,
+              className: "vj-platform-shell__drawer-panel",
+              "aria-label": "\u79FB\u52A8\u7AEF\u4E3B\u5BFC\u822A",
+              "aria-modal": "true",
+              role: "dialog",
+              "aria-labelledby": drawerTitleId,
+              children: [
+                /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__brand", id: drawerTitleId, children: [
+                  brandNode,
+                  /* @__PURE__ */ jsx14(
+                    "button",
+                    {
+                      ref: closeRef,
+                      type: "button",
+                      className: "vj-platform-shell__menu-button",
+                      "aria-label": "\u5173\u95ED\u5BFC\u822A",
+                      onClick: () => setMobileOpen(false),
+                      style: { display: "grid" },
+                      children: /* @__PURE__ */ jsx14(Icon, { name: "close", size: 18 })
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsx14(NavTree, { sections, onNavigate: () => setMobileOpen(false) }),
+                foot ? /* @__PURE__ */ jsx14("div", { className: "vj-platform-shell__footer", children: foot }) : null
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxs6(
+          "div",
+          {
+            className: "vj-platform-shell__main",
+            "aria-hidden": mobileOpen ? true : void 0,
+            ...mobileOpen ? { inert: true } : {},
+            children: [
+              topbar,
+              contentPadding ? /* @__PURE__ */ jsx14("div", { className: ["vj-platform-shell__content", contentClassName].filter(Boolean).join(" "), children }) : children
+            ]
+          }
+        )
+      ]
+    }
+  );
 }
 function PageShell({
   title,
@@ -5085,6 +5199,7 @@ export {
   CONTROL_PADDING_X,
   Card,
   ChartCard,
+  ChartPrimitives,
   Checkbox2 as Checkbox,
   Combobox,
   DashboardGrid,
@@ -5215,7 +5330,7 @@ export {
   Thumbnail,
   Title,
   ToastRegion,
-  Tooltip,
+  Tooltip2 as Tooltip,
   TopBar,
   TrendBadge,
   VijimProvider,

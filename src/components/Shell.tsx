@@ -31,9 +31,10 @@ export const SHELL_GEOMETRY = {
 // ── TopBar ─────────────────────────────────────────────
 
 export type TopBarProps = {
-  title: string;
+  title: ReactNode;
   context?: ReactNode;
   badge?: ReactNode;
+  center?: ReactNode;
   actions?: ReactNode;
   backHref?: string;
   backLabel?: string;
@@ -46,6 +47,7 @@ export function TopBar({
   title,
   context,
   badge,
+  center,
   actions,
   backHref,
   backLabel = "返回",
@@ -137,6 +139,10 @@ export function TopBar({
         ) : null}
       </Group>
 
+      {center != null ? (
+        <div className="vj-platform-shell__topbar-center">{center}</div>
+      ) : null}
+
       {actions != null ? (
         <Group gap={8} align="center" className="vj-platform-shell__topbar-actions">
           {actions}
@@ -179,7 +185,7 @@ export type AppShellProps = {
   user?: ReactNode;
   footer?: ReactNode;
   header?: ReactNode;
-  headerTitle?: string;
+  headerTitle?: ReactNode;
   headerContext?: ReactNode;
   headerBadge?: ReactNode;
   headerBackHref?: string;
@@ -190,6 +196,9 @@ export type AppShellProps = {
   children: ReactNode;
   contentPadding?: boolean;
   withHeader?: boolean;
+  className?: string;
+  contentClassName?: string;
+  viewport?: "page" | "fixed";
 };
 
 function normalizeSections(
@@ -307,6 +316,9 @@ export function AppShell({
   children,
   contentPadding = true,
   withHeader = true,
+  className,
+  contentClassName,
+  viewport = "page",
 }: AppShellProps) {
   const sections = normalizeSections(navigation, navItems);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -381,7 +393,8 @@ export function AppShell({
     (withHeader && (headerTitle || headerCenter || headerRight || headerActions) ? (
       <TopBar
         title={headerTitle ?? (typeof brand === "string" ? brand : product ?? "VIJIM")}
-        context={headerContext ?? headerCenter}
+        context={headerContext}
+        center={headerCenter}
         badge={headerBadge}
         actions={headerActions ?? headerRight}
         backHref={headerBackHref}
@@ -417,7 +430,11 @@ export function AppShell({
     ) : null);
 
   return (
-    <div className="vj-platform-shell" data-product={product}>
+    <div
+      className={["vj-platform-shell", className].filter(Boolean).join(" ")}
+      data-product={product}
+      data-viewport={viewport}
+    >
       <aside className="vj-platform-shell__sidebar" aria-label={`${product ?? "VIJIM"} 主导航`}>
         <div className="vj-platform-shell__brand">{brandNode}</div>
         <NavTree sections={sections} />
@@ -465,7 +482,9 @@ export function AppShell({
       >
         {topbar}
         {contentPadding ? (
-          <div className="vj-platform-shell__content">{children}</div>
+          <div className={["vj-platform-shell__content", contentClassName].filter(Boolean).join(" ")}>
+            {children}
+          </div>
         ) : (
           children
         )}

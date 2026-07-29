@@ -70,7 +70,8 @@
 ### 数据
 `DataTable`（列表唯一）
 `Table`（极少数手写表头 / 对照页；**新列表禁止**）
-`AreaChart` · `BarChart`（仅这两种图）
+`AreaChart` · `BarChart`（常规语义图仅这两种）
+`ChartPrimitives`（仅既有复杂分析图；一个受控命名空间，不向业务散落 Recharts 零件）
 
 ### 反馈
 `Empty` · `Skeleton` · `Spinner` · `notify` · `Alert` · `SpotlightSearch`
@@ -82,7 +83,7 @@
 ### 壳（全平台唯一）
 `AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
 几何：侧栏 246 · 品牌区 76 · 顶栏 60 · 内容区 20/22。
-业务只填导航 / 品牌 / 用户 / 顶栏动作，**禁止**再写本地 shell CSS。
+业务只填导航 / 品牌 / 用户 / 顶栏标题、中部、动作槽位，**禁止**再写本地 shell CSS。
 面板内标题用 `SectionHeader contained`，内边距与下分隔线由本包负责，业务不补选择器。
 
 ### ADMIN 迁移兼容
