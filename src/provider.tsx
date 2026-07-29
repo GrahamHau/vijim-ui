@@ -9,6 +9,7 @@ import "@mantine/spotlight/styles.css";
 /** 触感 + 壳层 + ADMIN 兼容：走 runtime 字符串注入，避免 tsup 抽 CSS 后业务加载不到 */
 import { VIJIM_RUNTIME_CSS } from "./runtime-css";
 import { VIJIM_SHELL_RESPONSIVE_CSS } from "./shell-responsive-css";
+import { VIJIM_MATERIAL_COMPAT_CSS } from "./material-compat-css";
 
 import { MantineProvider, type MantineThemeOverride } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
@@ -18,7 +19,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { vijimTheme } from "./theme/vijim-theme";
-import { COLORS, FONT, STUDIO_CSS_VARS } from "./theme/tokens";
+import { COLORS, FONT, STUDIO_CSS_VARS, TYPOGRAPHY } from "./theme/tokens";
 
 dayjs.locale("zh-cn");
 
@@ -36,7 +37,9 @@ function buildRootCss(): string {
     .join(";");
   return (
     `:root{color-scheme:light;font-family:${FONT.family};${decls}}` +
-    `html,body{background:${COLORS.background};color:${COLORS.ink}}`
+    `html{font-family:${FONT.family};-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}` +
+    `body{background:${COLORS.background};color:${COLORS.ink};font-family:${FONT.family};font-size:${TYPOGRAPHY.body.fontSize};font-weight:${TYPOGRAPHY.body.fontWeight};line-height:${TYPOGRAPHY.body.lineHeight};letter-spacing:0}` +
+    `button,input,textarea,select{font-family:inherit;letter-spacing:0}`
   );
 }
 
@@ -86,7 +89,7 @@ export function VijimProvider({
       <style
         // 壳层 / 触感 / ADMIN 兼容样式；必须随 Provider 自动挂载
         dangerouslySetInnerHTML={{
-          __html: `${VIJIM_RUNTIME_CSS}\n${VIJIM_SHELL_RESPONSIVE_CSS}`,
+          __html: `${VIJIM_RUNTIME_CSS}\n${VIJIM_SHELL_RESPONSIVE_CSS}\n${VIJIM_MATERIAL_COMPAT_CSS}`,
         }}
       />
       {withModals ? <ModalsProvider>{tree}</ModalsProvider> : tree}

@@ -9,7 +9,7 @@ import {
   type SkeletonProps as MantineSkeletonProps,
 } from "@mantine/core";
 import type { ReactNode } from "react";
-import { COLORS } from "../theme/tokens";
+import { COLORS, FORM_LAYOUT } from "../theme/tokens";
 import { Button } from "./Button";
 
 export type EmptyProps = {
@@ -33,7 +33,7 @@ export function Empty({
       data-scope={scope}
       mih={scope === "page" ? 420 : inline ? 72 : 120}
       py={scope === "page" ? 64 : inline ? 12 : 32}
-      px="md"
+      px={inline ? FORM_LAYOUT.sectionInline : "md"}
       style={inline ? { justifyContent: "flex-start" } : undefined}
     >
       <Stack align={inline ? "flex-start" : "center"} gap={inline ? 2 : "sm"} maw={360}>

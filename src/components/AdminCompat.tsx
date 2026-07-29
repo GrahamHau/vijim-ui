@@ -28,6 +28,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { FORM_LAYOUT, TYPOGRAPHY } from "../theme/tokens";
 import { Button } from "./Button";
 
 export type Tone =
@@ -721,13 +722,28 @@ export function SectionHeader({
       data-slot="section-header"
       data-contained={contained ? "true" : undefined}
       style={contained ? {
-        padding: "15px 18px 14px",
+        padding: `${FORM_LAYOUT.sectionBlock}px ${FORM_LAYOUT.sectionInline}px`,
         borderBottom: "1px solid var(--line)",
       } : undefined}
     >
-      <div>
-        <h2>{title}</h2>
-        {copy ? <p>{copy}</p> : null}
+      <div style={{ minWidth: 0 }}>
+        <h2 style={{
+          margin: 0,
+          fontFamily: "var(--font-sans)",
+          fontSize: TYPOGRAPHY.sectionTitle.fontSize,
+          fontWeight: TYPOGRAPHY.sectionTitle.fontWeight,
+          lineHeight: TYPOGRAPHY.sectionTitle.lineHeight,
+          letterSpacing: 0,
+        }}>{title}</h2>
+        {copy ? <p style={{
+          margin: "3px 0 0",
+          color: "var(--muted-foreground)",
+          fontFamily: "var(--font-sans)",
+          fontSize: TYPOGRAPHY.supporting.fontSize,
+          fontWeight: TYPOGRAPHY.supporting.fontWeight,
+          lineHeight: TYPOGRAPHY.supporting.lineHeight,
+          letterSpacing: 0,
+        }}>{copy}</p> : null}
       </div>
       {actions}
     </div>

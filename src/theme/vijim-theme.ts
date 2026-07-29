@@ -6,6 +6,8 @@ import {
   CONTROL_PADDING_X,
   DANGER_SCALE,
   FONT,
+  FORM_LAYOUT,
+  TYPOGRAPHY,
   GRAY_SCALE,
   MOTION,
   NEUTRAL_PRIMARY,
@@ -19,7 +21,9 @@ import {
 const fieldInput = {
   height: CONTROL_HEIGHT.md,
   minHeight: CONTROL_HEIGHT.md,
-  fontSize: FONT.sizes.sm,
+  fontSize: TYPOGRAPHY.label.fontSize,
+  fontWeight: TYPOGRAPHY.body.fontWeight,
+  lineHeight: String(TYPOGRAPHY.label.lineHeight),
   paddingInline: CONTROL_PADDING_X.md,
   backgroundColor: COLORS.surfaceMuted,
   borderColor: "transparent",
@@ -368,11 +372,29 @@ export const vijimTheme: MantineThemeOverride = createTheme({
           borderRadius: RADIUS.overlay,
           boxShadow: SHADOWS.lg,
         },
+        header: {
+          height: 56,
+          minHeight: 56,
+          padding: `0 ${FORM_LAYOUT.sectionInline}px`,
+          alignItems: "center",
+        },
+        body: {
+          padding: `0 ${FORM_LAYOUT.sectionInline}px ${FORM_LAYOUT.sectionInline}px`,
+        },
         title: {
-          fontWeight: 600,
-          fontSize: FONT.sizes.md,
+          display: "flex",
+          alignItems: "center",
+          minHeight: 28,
+          fontWeight: TYPOGRAPHY.dialogTitle.fontWeight,
+          fontSize: TYPOGRAPHY.dialogTitle.fontSize,
+          lineHeight: String(TYPOGRAPHY.dialogTitle.lineHeight),
           color: COLORS.ink,
           letterSpacing: FONT.tracking.title,
+        },
+        close: {
+          alignSelf: "center",
+          marginInlineStart: "auto",
+          marginInlineEnd: 0,
         },
       },
     },
@@ -393,8 +415,9 @@ export const vijimTheme: MantineThemeOverride = createTheme({
           boxShadow: SHADOWS.lg,
         },
         title: {
-          fontWeight: 600,
-          fontSize: FONT.sizes.md,
+          fontWeight: TYPOGRAPHY.dialogTitle.fontWeight,
+          fontSize: TYPOGRAPHY.dialogTitle.fontSize,
+          lineHeight: String(TYPOGRAPHY.dialogTitle.lineHeight),
           letterSpacing: FONT.tracking.title,
         },
       },
@@ -412,14 +435,14 @@ export const vijimTheme: MantineThemeOverride = createTheme({
       },
     },
 
-    /** 与 FilterSegment 同气质：外框 + 框内白底按钮滑块 + 短 ease-out */
+    /** 与 FilterSegment 同气质：无外框，选中灰色块 + 短 ease-out */
     SegmentedControl: {
       defaultProps: { size: "sm", radius: "md", withItemsBorders: false },
       styles: {
         root: {
-          backgroundColor: COLORS.surfaceMuted,
-          border: `1px solid ${COLORS.border}`,
-          padding: 3,
+          backgroundColor: "transparent",
+          border: "none",
+          padding: 0,
           borderRadius: RADIUS.segment,
         },
         label: {
@@ -430,11 +453,11 @@ export const vijimTheme: MantineThemeOverride = createTheme({
 
         },
         indicator: {
-          backgroundColor: COLORS.surface,
+          backgroundColor: COLORS.selectedBg,
           border: "none",
           borderRadius: RADIUS.sm,
-          boxShadow: SHADOWS.xs,
-          transition: `transform ${MOTION.normal} ${MOTION.springish}, box-shadow ${MOTION.fast} ${MOTION.easeOut}`,
+          boxShadow: "none",
+          transition: `transform ${MOTION.normal} ${MOTION.springish}`,
         },
         control: {
           border: "none",

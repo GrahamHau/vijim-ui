@@ -9,8 +9,8 @@
  * - 外壳只负责：白底、浅边、圆角、可选「已选条件」底栏
  *
  * 原子：
- * - FilterSegment：二态/少态互斥切换（外框 + 框内按钮感）—— 公共/个人、画廊/列表
- * - FilterTerm：无边框分面词 —— 平台/品类等多选项
+ * - FilterSegment：二态/少态互斥切换（无外框灰选中）—— 全部可见/与我相关
+ * - FilterTerm：无边框分面词（灰选中）—— 品牌/产品等级/平台/品类
  * - FilterRow · FilterField · FilterFacet · FilterActive
  * FilterBatchBar：表格勾选批量（可选，仍独立）
  */
@@ -266,7 +266,7 @@ export function FilterField({
   );
 }
 
-// ── FilterSegment：带外框的互斥切换（像一组按钮在框里切）────────
+// ── FilterSegment：无外框互斥切换（灰选中块）────────
 
 export type FilterSegmentOption = {
   value: string;
@@ -283,8 +283,8 @@ export type FilterSegmentProps = {
 };
 
 /**
- * 二态/少态互斥切换：外面一整块框，框内像按钮切换。
- * 用于公共/个人、画廊/列表 —— **不要**和下方无边框分面词混成同一皮。
+ * 二态/少态互斥切换：无外框，选中项用灰色块。
+ * 用于全部可见/与我相关、公共/个人 —— 与分面词（FilterTerm 蓝选中）职责分开。
  */
 export function FilterSegment({
   options,
@@ -300,11 +300,10 @@ export function FilterSegment({
       wrap="nowrap"
       role="radiogroup"
       aria-label={ariaLabel}
-      p={2}
       style={{
         display: "inline-flex",
-        backgroundColor: COLORS.muted,
-        border: `1px solid ${COLORS.border}`,
+        backgroundColor: "transparent",
+        border: "none",
         borderRadius: RADIUS.segment,
         boxShadow: "none",
       }}
@@ -327,13 +326,13 @@ export function FilterSegment({
               display: "inline-flex",
               alignItems: "center",
               gap: 4,
-              minHeight: 26,
+              minHeight: 28,
               paddingInline: 12,
               borderRadius: RADIUS.sm,
               border: "none",
-              // 选中 = 白底「按钮」浮在灰框上；未选 = 透明
-              backgroundColor: selected ? COLORS.surface : "transparent",
-              color: selected ? COLORS.ink : COLORS.mutedFg,
+              // 选中 = 灰色块；未选 = 透明
+              backgroundColor: selected ? COLORS.selectedBg : "transparent",
+              color: selected ? COLORS.selectedInk : COLORS.mutedFg,
               fontSize: 13,
               fontWeight: selected ? 600 : 500,
               fontFamily: "inherit",
@@ -341,21 +340,22 @@ export function FilterSegment({
               whiteSpace: "nowrap",
               cursor: disabled ? "not-allowed" : "pointer",
               opacity: disabled ? 0.45 : 1,
-              boxShadow: selected ? SHADOWS.xs : "none",
+              boxShadow: "none",
               transition: [
                 `background-color ${MOTION.fast} ${MOTION.easeOut}`,
                 `color ${MOTION.fast} ${MOTION.easeOut}`,
-                `box-shadow ${MOTION.fast} ${MOTION.easeOut}`,
                 `transform ${MOTION.press} ${MOTION.easeOut}`,
               ].join(", "),
             }}
             onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
               if (disabled || selected) return;
+              e.currentTarget.style.backgroundColor = COLORS.muted;
               e.currentTarget.style.color = COLORS.ink2;
             }}
             onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
               press.onMouseLeave(e);
               if (disabled || selected) return;
+              e.currentTarget.style.backgroundColor = "transparent";
               e.currentTarget.style.color = COLORS.mutedFg;
             }}
             onMouseDown={press.onMouseDown}
@@ -369,8 +369,8 @@ export function FilterSegment({
                 style={{
                   fontSize: 11,
                   fontWeight: selected ? 560 : 450,
-                  color: selected ? COLORS.inkSecondary : COLORS.faint,
-                  opacity: selected ? 0.8 : 1,
+                  color: selected ? COLORS.selectedInk : COLORS.faint,
+                  opacity: selected ? 0.72 : 1,
                   marginLeft: 2,
                 }}
               >
@@ -397,8 +397,8 @@ export type FilterTermProps = {
 };
 
 /**
- * 分面词条：无外框、无描边。选中 = 浅蓝底 + 品牌蓝字。
- * 用于平台/品类/信号等多选项 —— **不要**给二态切换用（二态用 FilterSegment）。
+ * 分面词条：无外框、无描边。选中 = 灰色块。
+ * 用于品牌/产品等级/平台/品类等多选项 —— 与 FilterSegment 共用中性选中语义。
  */
 export function FilterTerm({
   label,
@@ -425,9 +425,8 @@ export function FilterTerm({
         paddingInline: 10,
         borderRadius: RADIUS.term,
         border: "none",
-        backgroundColor: selected ? COLORS.termSelectedBg : "transparent",
-        // 飞书选中：浅蓝底 + 品牌蓝字亮起，无描边
-        color: selected ? COLORS.termSelectedInk : COLORS.mutedFg,
+        backgroundColor: selected ? COLORS.selectedBg : "transparent",
+        color: selected ? COLORS.selectedInk : COLORS.mutedFg,
         fontSize: 13,
         fontWeight: selected ? 600 : 500,
         fontFamily: "inherit",
@@ -464,8 +463,7 @@ export function FilterTerm({
           style={{
             fontSize: 11,
             fontWeight: selected ? 560 : 450,
-            // 选中时数字也跟字一起亮蓝，略透明
-            color: selected ? COLORS.termSelectedInk : COLORS.faint,
+            color: selected ? COLORS.selectedInk : COLORS.faint,
             opacity: selected ? 0.72 : 1,
             marginLeft: 2,
           }}

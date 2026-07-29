@@ -37,8 +37,9 @@
 | 默认不弹 | 浮层 `springish`，无 overshoot |
 | 圆角按尺寸 | term 6 · 控件 8 · 面板 12 · 弹层 16 |
 | 阴影只表海拔 | 页面内容 xs/sm 均平面 · 浮层 md · 模态 lg；状态用灰面/边线 |
+| 字体统一 | Apple 平台优先原生系统字体；字号、字重、行高只读 [`TYPOGRAPHY.md`](./TYPOGRAPHY.md) 的语义角色 |
 | 字距归零 | 中英文标题、正文和紧凑控件统一 `letter-spacing: 0`，不靠负字距挤压容器 |
-| 选中语义 | 中性选中 / 品牌词条选中两套，不另开色 |
+| 选中语义 | 列表切换与分面词统一中性灰选中；品牌色留给主按钮与链接 |
 | 减动效 | `prefers-reduced-motion` 全局收短 |
 | 克制 | 无双层毛玻璃、无 confetti、无页面魔数动画 |
 
@@ -47,7 +48,7 @@
 ## 2. 导出白名单（刻意短）
 
 ### 主题
-`VijimProvider` · `vijimTheme` · `COLORS` · `TAG_COLORS` · `WORKFLOW_STEP_COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `FONT` · `CONTROL_HEIGHT` · `CONTROL_PADDING_X`
+`VijimProvider` · `vijimTheme` · `COLORS` · `TAG_COLORS` · `WORKFLOW_STEP_COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `FONT` · `TYPOGRAPHY` · `FORM_LAYOUT` · `CONTROL_HEIGHT` · `CONTROL_PADDING_X`
 
 ### 图标
 `Icon`（语义名白名单，业务禁止直连 Tabler）
@@ -62,12 +63,12 @@
 
 ### 筛选（唯一壳）
 `FilterBar` · `FilterBatchBar` · `FilterRow` · `FilterField`
-`FilterSegment`（二态外框）· `FilterTerm`（无边框分面）· `FilterFacet` · `FilterActive`
+`FilterSegment`（二态/少态切换，无外框灰选中）· `FilterTerm`（无边框分面，灰选中）· `FilterFacet` · `FilterActive`
 ~~`FilterToolbar`~~ 仅兼容，新代码不要用
 
 ### 浮层 / 导航
 `Modal` · `Drawer` · `Menu` · `Popover` · `Tooltip`
-`Tabs` · `SegmentedControl`（仅表单口径；列表互斥用 FilterSegment）· `Pagination`
+`Tabs` · `SegmentedControl`（表单口径；列表互斥优先 FilterSegment，选中均为无边框灰块）· `Pagination`
 
 ### 数据
 `DataTable`（列表唯一）
@@ -87,6 +88,7 @@
 几何：侧栏 246 · 品牌区 76 · 顶栏 60 · 内容区 20/22。
 业务只填导航 / 品牌 / 用户 / 顶栏标题、中部、动作槽位，**禁止**再写本地 shell CSS。
 面板内标题用 `SectionHeader contained`，内边距与下分隔线由本包负责，业务不补选择器。
+表单只用 `FormSection` · `MaterialFormGrid` · `MaterialFormField`：组件负责列数、响应式、横纵间距与辅助文字基线；业务不得再写 `.material-form-grid` / `.material-field` 布局覆盖。
 
 ### 工作画布 / 详情页（唯一层级）
 
@@ -150,8 +152,8 @@ KpiRow / AssetCard / ClickableCard / FilterChip / FilterPill /
 
 | 场景 | 用 | 别用 |
 |---|---|---|
-| 公共/个人、画廊/列表 | `FilterSegment` | FilterTerm 铺一排、SegmentedControl |
-| 平台/品类等多选项 | `FilterTerm` | 套大外框 |
+| 全部可见/与我相关、公共/个人、画廊/列表 | `FilterSegment` | FilterTerm 铺一排、SegmentedControl |
+| 品牌/产品等级/平台/品类等多选项 | `FilterTerm` | 套大外框、白底选中 |
 | 筛选可搜下拉 | `SearchableSelect` density=compact | 页面 styles 写 height |
 | 表单单选 | `Select` density=default | 原生 select、手搓 Menu |
 | 列表数据 | `DataTable` | 拼 Table、手写 grid 表 |

@@ -102,7 +102,7 @@ declare const SHADOWS: {
     readonly xl: "0 16px 40px rgba(18, 19, 23, 0.14), 0 0 0 1px rgba(18, 19, 23, 0.06)";
 };
 declare const FONT: {
-    readonly family: "\"SF Pro Text\",\"SF Pro Display\",-apple-system,BlinkMacSystemFont,\"Helvetica Neue\",\"Segoe UI\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif";
+    readonly family: "-apple-system,BlinkMacSystemFont,\"SF Pro Text\",\"SF Pro Display\",\"Helvetica Neue\",\"PingFang SC\",\"Hiragino Sans GB\",\"Segoe UI\",\"Microsoft YaHei\",Arial,sans-serif";
     readonly mono: "\"SF Mono\",\"Cascadia Code\",\"Roboto Mono\",ui-monospace,monospace";
     readonly headingWeight: "600";
     readonly bodyWeight: "400";
@@ -129,6 +129,63 @@ declare const FONT: {
         readonly title: 1.25;
         readonly body: 1.5;
         readonly dense: 1.35;
+    };
+};
+/**
+ * 语义字阶：业务按角色取值，不得在页面内另写近似字号。
+ * macOS 优先使用系统 San Francisco，中文自动回退至苹方。
+ */
+declare const TYPOGRAPHY: {
+    readonly pageTitle: {
+        readonly fontSize: "24px";
+        readonly lineHeight: 1.3;
+        readonly fontWeight: 600;
+    };
+    readonly dialogTitle: {
+        readonly fontSize: "16px";
+        readonly lineHeight: 1.35;
+        readonly fontWeight: 600;
+    };
+    readonly sectionTitle: {
+        readonly fontSize: "16px";
+        readonly lineHeight: 1.35;
+        readonly fontWeight: 600;
+    };
+    readonly body: {
+        readonly fontSize: "14px";
+        readonly lineHeight: 1.5;
+        readonly fontWeight: 400;
+    };
+    readonly label: {
+        readonly fontSize: "13px";
+        readonly lineHeight: 1.4;
+        readonly fontWeight: 500;
+    };
+    readonly supporting: {
+        readonly fontSize: "12px";
+        readonly lineHeight: 1.45;
+        readonly fontWeight: 400;
+    };
+};
+/** 表单唯一垂直节奏；组件负责响应式，业务只选择列数与密度。 */
+declare const FORM_LAYOUT: {
+    readonly sectionGap: 14;
+    readonly sectionInline: 16;
+    readonly sectionBlock: 14;
+    readonly fieldGap: 5;
+    readonly gridGap: {
+        readonly sm: {
+            readonly column: 12;
+            readonly row: 10;
+        };
+        readonly md: {
+            readonly column: 16;
+            readonly row: 14;
+        };
+        readonly lg: {
+            readonly column: 20;
+            readonly row: 18;
+        };
     };
 };
 /**
@@ -1164,8 +1221,8 @@ type FilterSegmentProps = {
     "aria-label"?: string;
 };
 /**
- * 二态/少态互斥切换：外面一整块框，框内像按钮切换。
- * 用于公共/个人、画廊/列表 —— **不要**和下方无边框分面词混成同一皮。
+ * 二态/少态互斥切换：无外框，选中项用灰色块。
+ * 用于全部可见/与我相关、公共/个人 —— 与分面词（FilterTerm 蓝选中）职责分开。
  */
 declare function FilterSegment({ options, value, onChange, disabled, "aria-label": ariaLabel, }: FilterSegmentProps): react.JSX.Element;
 type FilterTermProps = {
@@ -1178,8 +1235,8 @@ type FilterTermProps = {
     "aria-label"?: string;
 };
 /**
- * 分面词条：无外框、无描边。选中 = 浅蓝底 + 品牌蓝字。
- * 用于平台/品类/信号等多选项 —— **不要**给二态切换用（二态用 FilterSegment）。
+ * 分面词条：无外框、无描边。选中 = 灰色块。
+ * 用于品牌/产品等级/平台/品类等多选项 —— 与 FilterSegment 共用中性选中语义。
  */
 declare function FilterTerm({ label, children, count, selected, onClick, disabled, "aria-label": ariaLabel, }: FilterTermProps): react.JSX.Element;
 type FilterFacetOption = {
@@ -1471,4 +1528,4 @@ declare function ManagedDialog({ open, onOpenChange, trigger, title, description
     showCloseButton?: boolean;
 }): react.JSX.Element;
 
-export { AlertDialog, type AlertDialogProps, AppShell, type AppShellNavItem, type AppShellNavSection, type AppShellProps, Avatar, Badge$1 as Badge, type BadgeProps, BrandLockup, type BrandProduct, Button$1 as Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, Card, type CardProps, ChartCard, ChartPrimitives, type ChartTooltipContentProps, DashboardGrid, DashboardGridItem, DashboardPage, DataSection, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePicker$1 as DatePicker, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, DetailPage, Dialog$1 as Dialog, type DialogProps, Drawer, type DrawerProps, Empty, type EmptyProps, EmptyState$1 as EmptyState, ErrorState, FONT, FileInput, type FileInputProps, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FilterWorkspace, FormField$1 as FormField, type FormFieldProps, FormSection$1 as FormSection, type FormSectionProps, Grid, type GridProps, HStack, type HStackProps, Icon$1 as Icon, IconButton, type IconName, type IconProps, IconSearch, ImageGalleryUpload, type ImageGalleryUploadProps, type ImageGalleryUploadResult, InputGroup, KpiGrid, List, ListItem, type ListItemProps, ListPage, type ListProps, MOTION, Badge as MaterialBadge, Button as MaterialButton, DatePicker as MaterialDatePicker, Dialog as MaterialDialog, DialogContent as MaterialDialogContent, DialogDescription as MaterialDialogDescription, DialogFooter as MaterialDialogFooter, DialogHeader as MaterialDialogHeader, DialogTitle as MaterialDialogTitle, DialogTrigger as MaterialDialogTrigger, EmptyState as MaterialEmptyState, FormActions as MaterialFormActions, FormField as MaterialFormField, FormGrid as MaterialFormGrid, FormSection as MaterialFormSection, Icon as MaterialIcon, Input as MaterialInput, Label as MaterialLabel, ManagedDialog as MaterialManagedDialog, PageHeader as MaterialPageHeader, PageToolbar as MaterialPageToolbar, SearchField as MaterialSearchField, SearchFieldInput as MaterialSearchFieldInput, SearchableSelect as MaterialSearchableSelect, type SearchableSelectOption as MaterialSearchableSelectOption, SectionHeader as MaterialSectionHeader, SegmentedControl as MaterialSegmentedControl, Select as MaterialSelect, SelectContent as MaterialSelectContent, SelectItem as MaterialSelectItem, SelectTrigger as MaterialSelectTrigger, SelectValue as MaterialSelectValue, Switch as MaterialSwitch, Table as MaterialTable, TableBody as MaterialTableBody, TableCaption as MaterialTableCaption, TableCell as MaterialTableCell, TableFooter as MaterialTableFooter, TableHead as MaterialTableHead, TableHeader as MaterialTableHeader, TableRow as MaterialTableRow, Textarea as MaterialTextarea, Menu, MetadataList, MobileNav, Modal, type ModalProps, MultiSelector, type NavigationItem, type NavigationSection, type NotifyOptions, NumberInput, type NumberInputProps, PageCanvas, type PageCanvasProps, PageHeader$1 as PageHeader, type PageHeaderProps, PageShell, type PageShellProps, Pagination, PermissionDeniedState, Popover, ProgressBar, RADIUS, SHADOWS, SHELL_GEOMETRY, SearchInput, type SearchInputProps, SearchableSelect$1 as SearchableSelect, type SearchableSelectOption$1 as SearchableSelectOption, type SearchableSelectProps, SectionHeader$1 as SectionHeader, type SectionHeaderProps, SegmentedControl$1 as SegmentedControl, Select$1 as Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, SettingsPage, type ShellTabItem, ShellTabs, type ShellTabsProps, SideNav, Skeleton, type SkeletonProps, Slider, type Space, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Stack, type StackProps, StatCard, StatusDot, type StatusDotProps, TAG_COLORS, Table$1 as Table, type TableProps, Tabs, Tag, TextArea, type TextAreaProps, TextInput, type TextInputProps, Textarea$1 as Textarea, type TextareaProps, type Theme, ThemeProvider, Thumbnail, ToastRegion, type Tone, Tooltip, TopBar, type TopBarProps, TrendBadge, type TrendBadgeProps, UnstyledButton, type UnstyledButtonProps, VijimProvider, type VijimProviderProps, WORKFLOW_STEP_COLORS, notify, publicComponents, vijimTheme };
+export { AlertDialog, type AlertDialogProps, AppShell, type AppShellNavItem, type AppShellNavSection, type AppShellProps, Avatar, Badge$1 as Badge, type BadgeProps, BrandLockup, type BrandProduct, Button$1 as Button, type ButtonColor, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, CONTROL_HEIGHT, CONTROL_PADDING_X, Card, type CardProps, ChartCard, ChartPrimitives, type ChartTooltipContentProps, DashboardGrid, DashboardGridItem, DashboardPage, DataSection, DataTable, type DataTableColumn, type DataTableProps, DateInput, type DateInputProps, DatePicker$1 as DatePicker, DatePickerInput, type DatePickerInputProps, type DateString, DefaultThemeProvider, DetailPage, Dialog$1 as Dialog, type DialogProps, Drawer, type DrawerProps, Empty, type EmptyProps, EmptyState$1 as EmptyState, ErrorState, FONT, FORM_LAYOUT, FileInput, type FileInputProps, FilterActive, type FilterActiveItem, type FilterActiveProps, FilterBar, type FilterBarProps, FilterBatchBar, type FilterBatchBarProps, FilterFacet, type FilterFacetOption, type FilterFacetProps, FilterField, type FilterFieldProps, FilterRow, type FilterRowProps, FilterSegment, type FilterSegmentOption, type FilterSegmentProps, FilterTerm, type FilterTermProps, FilterToolbar, type FilterToolbarProps, FilterWorkspace, FormField$1 as FormField, type FormFieldProps, FormSection$1 as FormSection, type FormSectionProps, Grid, type GridProps, HStack, type HStackProps, Icon$1 as Icon, IconButton, type IconName, type IconProps, IconSearch, ImageGalleryUpload, type ImageGalleryUploadProps, type ImageGalleryUploadResult, InputGroup, KpiGrid, List, ListItem, type ListItemProps, ListPage, type ListProps, MOTION, Badge as MaterialBadge, Button as MaterialButton, DatePicker as MaterialDatePicker, Dialog as MaterialDialog, DialogContent as MaterialDialogContent, DialogDescription as MaterialDialogDescription, DialogFooter as MaterialDialogFooter, DialogHeader as MaterialDialogHeader, DialogTitle as MaterialDialogTitle, DialogTrigger as MaterialDialogTrigger, EmptyState as MaterialEmptyState, FormActions as MaterialFormActions, FormField as MaterialFormField, FormGrid as MaterialFormGrid, FormSection as MaterialFormSection, Icon as MaterialIcon, Input as MaterialInput, Label as MaterialLabel, ManagedDialog as MaterialManagedDialog, PageHeader as MaterialPageHeader, PageToolbar as MaterialPageToolbar, SearchField as MaterialSearchField, SearchFieldInput as MaterialSearchFieldInput, SearchableSelect as MaterialSearchableSelect, type SearchableSelectOption as MaterialSearchableSelectOption, SectionHeader as MaterialSectionHeader, SegmentedControl as MaterialSegmentedControl, Select as MaterialSelect, SelectContent as MaterialSelectContent, SelectItem as MaterialSelectItem, SelectTrigger as MaterialSelectTrigger, SelectValue as MaterialSelectValue, Switch as MaterialSwitch, Table as MaterialTable, TableBody as MaterialTableBody, TableCaption as MaterialTableCaption, TableCell as MaterialTableCell, TableFooter as MaterialTableFooter, TableHead as MaterialTableHead, TableHeader as MaterialTableHeader, TableRow as MaterialTableRow, Textarea as MaterialTextarea, Menu, MetadataList, MobileNav, Modal, type ModalProps, MultiSelector, type NavigationItem, type NavigationSection, type NotifyOptions, NumberInput, type NumberInputProps, PageCanvas, type PageCanvasProps, PageHeader$1 as PageHeader, type PageHeaderProps, PageShell, type PageShellProps, Pagination, PermissionDeniedState, Popover, ProgressBar, RADIUS, SHADOWS, SHELL_GEOMETRY, SearchInput, type SearchInputProps, SearchableSelect$1 as SearchableSelect, type SearchableSelectOption$1 as SearchableSelectOption, type SearchableSelectProps, SectionHeader$1 as SectionHeader, type SectionHeaderProps, SegmentedControl$1 as SegmentedControl, Select$1 as Select, type SelectDensity, type SelectOption, type SelectProps, type SelectSize, SettingsPage, type ShellTabItem, ShellTabs, type ShellTabsProps, SideNav, Skeleton, type SkeletonProps, Slider, type Space, Spinner, type SpinnerProps, SpotlightSearch, type SpotlightSearchProps, Stack, type StackProps, StatCard, StatusDot, type StatusDotProps, TAG_COLORS, TYPOGRAPHY, Table$1 as Table, type TableProps, Tabs, Tag, TextArea, type TextAreaProps, TextInput, type TextInputProps, Textarea$1 as Textarea, type TextareaProps, type Theme, ThemeProvider, Thumbnail, ToastRegion, type Tone, Tooltip, TopBar, type TopBarProps, TrendBadge, type TrendBadgeProps, UnstyledButton, type UnstyledButtonProps, VijimProvider, type VijimProviderProps, WORKFLOW_STEP_COLORS, notify, publicComponents, vijimTheme };

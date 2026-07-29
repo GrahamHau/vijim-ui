@@ -6,7 +6,7 @@ VIJIM Labs **唯一业务 UI 出口**。
 - **对内**：Mantine 9 + `vijimTheme`（**实现细节**，禁止业务直连 `@mantine/*`）
 - **迁移**：不是重画全站；点状换控件，IA / 业务流沿用现网 Studio
 
-细则与白名单：**[`SURFACE.md`](./SURFACE.md)** · 色表 **[`COLOR.md`](./COLOR.md)**
+细则与白名单：**[`SURFACE.md`](./SURFACE.md)** · 字体与表单节奏 **[`TYPOGRAPHY.md`](./TYPOGRAPHY.md)** · 色表 **[`COLOR.md`](./COLOR.md)**
 
 ## 硬规则
 
@@ -27,7 +27,7 @@ VIJIM Labs **唯一业务 UI 出口**。
 
 见 [`SURFACE.md` §2](./SURFACE.md)。常用：
 
-- 主题：`VijimProvider` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS`
+- 主题：`VijimProvider` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `TYPOGRAPHY` · `FORM_LAYOUT`
 - 录入：`Button` · `UnstyledButton`（Tree 行 / 整行选择器）· `TextInput` · `SearchInput` · `Select` · `SearchableSelect` · 日期 · `FileInput` · `ImageGalleryUpload`
 - 筛选：`FilterBar` · `FilterSegment` · `FilterTerm`
 - 表：`DataTable`

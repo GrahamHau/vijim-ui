@@ -87,7 +87,7 @@ export const SHADOWS = {
 
 export const FONT = {
   family:
-    '"SF Pro Text","SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif',
+    '-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","PingFang SC","Hiragino Sans GB","Segoe UI","Microsoft YaHei",Arial,sans-serif',
   mono: '"SF Mono","Cascadia Code","Roboto Mono",ui-monospace,monospace',
   headingWeight: "600",
   bodyWeight: "400",
@@ -114,6 +114,32 @@ export const FONT = {
     title: 1.25,
     body: 1.5,
     dense: 1.35,
+  },
+} as const;
+
+/**
+ * 语义字阶：业务按角色取值，不得在页面内另写近似字号。
+ * macOS 优先使用系统 San Francisco，中文自动回退至苹方。
+ */
+export const TYPOGRAPHY = {
+  pageTitle: { fontSize: "24px", lineHeight: 1.3, fontWeight: 600 },
+  dialogTitle: { fontSize: "16px", lineHeight: 1.35, fontWeight: 600 },
+  sectionTitle: { fontSize: "16px", lineHeight: 1.35, fontWeight: 600 },
+  body: { fontSize: "14px", lineHeight: 1.5, fontWeight: 400 },
+  label: { fontSize: "13px", lineHeight: 1.4, fontWeight: 500 },
+  supporting: { fontSize: "12px", lineHeight: 1.45, fontWeight: 400 },
+} as const;
+
+/** 表单唯一垂直节奏；组件负责响应式，业务只选择列数与密度。 */
+export const FORM_LAYOUT = {
+  sectionGap: 14,
+  sectionInline: 16,
+  sectionBlock: 14,
+  fieldGap: 5,
+  gridGap: {
+    sm: { column: 12, row: 10 },
+    md: { column: 16, row: 14 },
+    lg: { column: 20, row: 18 },
   },
 } as const;
 
@@ -564,6 +590,23 @@ export const STUDIO_CSS_VARS: Record<string, string> = {
   "--font-family-mono": FONT.mono,
   "--tracking-title": FONT.tracking.title,
   "--tracking-display": FONT.tracking.display,
+  "--type-page-title-size": TYPOGRAPHY.pageTitle.fontSize,
+  "--type-page-title-line": String(TYPOGRAPHY.pageTitle.lineHeight),
+  "--type-dialog-title-size": TYPOGRAPHY.dialogTitle.fontSize,
+  "--type-dialog-title-line": String(TYPOGRAPHY.dialogTitle.lineHeight),
+  "--type-section-title-size": TYPOGRAPHY.sectionTitle.fontSize,
+  "--type-section-title-line": String(TYPOGRAPHY.sectionTitle.lineHeight),
+  "--type-body-size": TYPOGRAPHY.body.fontSize,
+  "--type-body-line": String(TYPOGRAPHY.body.lineHeight),
+  "--type-label-size": TYPOGRAPHY.label.fontSize,
+  "--type-label-line": String(TYPOGRAPHY.label.lineHeight),
+  "--type-supporting-size": TYPOGRAPHY.supporting.fontSize,
+  "--type-supporting-line": String(TYPOGRAPHY.supporting.lineHeight),
+  "--form-section-gap": `${FORM_LAYOUT.sectionGap}px`,
+  "--form-section-inline": `${FORM_LAYOUT.sectionInline}px`,
+  "--form-field-gap": `${FORM_LAYOUT.fieldGap}px`,
+  "--form-column-gap": `${FORM_LAYOUT.gridGap.md.column}px`,
+  "--form-row-gap": `${FORM_LAYOUT.gridGap.md.row}px`,
 
   // MATERIAL 迁移兼容：旧页面布局变量只回指本包的统一间距与语义令牌。
   "--spacing-0": "0px",

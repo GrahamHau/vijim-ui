@@ -9,7 +9,8 @@
 |---|---|---|---|
 | 页面底 | `background` / `--background` | `#F7F8FA` | 壳、主区底；取样自统一视觉参考 |
 | 白面 | `surface` / `--surface` | `#FFFFFF` | 卡片、筛选壳、弹层 |
-| 灰面 | `muted` / `--muted` / `--bg-2` | `#F6F7F9` | 录入底、Segment 外框 |
+| 灰面 | `muted` / `--muted` / `--bg-2` | `#F6F7F9` | 录入底、筛选 hover 底 |
+| 中性选中 | `selectedBg` / `--state-selected-bg` | `rgba(18,19,23,0.07)` | 列表切换、FilterSegment、FilterTerm 分面选中块 |
 | 浅面 | `surface2` | `#FAFAFB` | 次级条 |
 | 流程节点边线 | `--workflow-node-card-border` | `#EEEEEE` | 节点卡 1px 边线；取样自节点卡参考 |
 | 流程节点灰阶 | `--workflow-node-card-tint` | `#F9F9F9` | 节点卡极轻底部灰阶；取样自节点卡参考 |
@@ -35,8 +36,8 @@
 | 中性选中底 | `selectedBg` | ink @ 7% |
 | 叠层 hover | `overlayHover` | ink @ 6% |
 
-词条选中：**底 = brandMuted，字 = brand**，无边框。
-不要再用 `#1456F0` 或其它「看起来像飞书」的平行蓝。
+筛选词条选中：**底 = selectedBg，字 = selectedInk**，无边框。
+品牌色只留给主按钮、链接和品牌语义强调，不再用作筛选选中块。
 
 ## 流程节点状态
 

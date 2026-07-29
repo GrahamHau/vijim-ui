@@ -15,6 +15,7 @@ import { Switch as UiSwitch } from "./layout-primitives";
 import { Table as UiTable } from "./Table";
 import { TextInput } from "./TextInput";
 import { Textarea as UiTextarea } from "./Textarea";
+import { FORM_LAYOUT, TYPOGRAPHY } from "../theme/tokens";
 import {
   Children,
   cloneElement,
@@ -237,10 +238,11 @@ export function PageHeader({
             style={{
               margin: 0,
               color: "var(--ink)",
-              fontSize: 24,
-              fontWeight: 680,
+              fontFamily: "var(--font-sans)",
+              fontSize: TYPOGRAPHY.pageTitle.fontSize,
+              fontWeight: TYPOGRAPHY.pageTitle.fontWeight,
               letterSpacing: 0,
-              lineHeight: 1.3,
+              lineHeight: TYPOGRAPHY.pageTitle.lineHeight,
               overflowWrap: "anywhere",
             }}
           >
@@ -293,17 +295,32 @@ export function SectionHeader({
         justifyContent: "space-between",
         gap: 16,
         ...(contained ? {
-          padding: "15px 18px 14px",
+          padding: `${FORM_LAYOUT.sectionBlock}px ${FORM_LAYOUT.sectionInline}px`,
           borderBottom: "1px solid var(--line)",
         } : {}),
       }}
     >
       <div style={{ minWidth: 0 }}>
-        <h2 style={{ margin: 0, color: "var(--ink)", fontSize: 18, fontWeight: 650, letterSpacing: 0, lineHeight: 1.35 }}>
+        <h2 style={{
+          margin: 0,
+          color: "var(--ink)",
+          fontFamily: "var(--font-sans)",
+          fontSize: TYPOGRAPHY.sectionTitle.fontSize,
+          fontWeight: TYPOGRAPHY.sectionTitle.fontWeight,
+          letterSpacing: 0,
+          lineHeight: TYPOGRAPHY.sectionTitle.lineHeight,
+        }}>
           {title}
         </h2>
         {description ? (
-          <p style={{ margin: "4px 0 0", color: "var(--muted-foreground)", fontSize: 13, lineHeight: 1.5 }}>
+          <p style={{
+            margin: "3px 0 0",
+            color: "var(--muted-foreground)",
+            fontFamily: "var(--font-sans)",
+            fontSize: TYPOGRAPHY.supporting.fontSize,
+            fontWeight: TYPOGRAPHY.supporting.fontWeight,
+            lineHeight: TYPOGRAPHY.supporting.lineHeight,
+          }}>
             {description}
           </p>
         ) : null}
@@ -405,15 +422,15 @@ export function FormField({
   required?: boolean;
   full?: boolean;
 }) {
+  const message = statusText ?? description;
   return (
     <div className={full ? "material-field material-field--wide" : "material-field"} data-status={status}>
       <Label {...(htmlFor ? { htmlFor } : {})}>
         {label}
         {required ? <span aria-hidden="true"> *</span> : null}
       </Label>
-      {description ? <p className="material-field-hint">{description}</p> : null}
       {children}
-      {statusText ? <p className="material-field-hint">{statusText}</p> : null}
+      {message ? <p className="material-field-hint">{message}</p> : null}
     </div>
   );
 }
@@ -427,8 +444,18 @@ export function FormGrid({
   columns?: 1 | 2 | 3;
   gap?: "sm" | "md" | "lg";
 }) {
+  const resolvedGap = FORM_LAYOUT.gridGap[gap ?? "md"];
   return (
-    <div className="material-form-grid" data-columns={columns} data-gap={gap ?? "md"}>
+    <div
+      className="material-form-grid"
+      data-columns={columns}
+      data-gap={gap ?? "md"}
+      style={{
+        "--material-form-columns": columns,
+        "--material-form-column-gap": `${resolvedGap.column}px`,
+        "--material-form-row-gap": `${resolvedGap.row}px`,
+      } as CSSProperties}
+    >
       {children}
     </div>
   );
