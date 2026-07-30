@@ -57,6 +57,7 @@
 `Button` · `UnstyledButton`（仅 Tree 行 / 整行选择器）· `TextInput`（xs/sm/md/lg 对应 28/32/40/44）· `Textarea` · `SearchInput` · `FileInput`
 `SearchInput filter` = 32px 下划线筛选；`lookup` = 40px 浅灰查找框。业务不得用全局 input CSS 覆盖。
 `Select` · `SearchableSelect`
+`Select` / `SearchableSelect` 默认不显示清空叉；只有搜索、筛选重置等明确需要清空入口的场景才显式传 `clearable`。
 `DatePickerInput` / `DateInput`（`YYYY-MM-DD | null`）
 `ImageGalleryUpload`（通用图片选择 / 粘贴 / 拖拽上传）
 `Checkbox` · `Switch`
