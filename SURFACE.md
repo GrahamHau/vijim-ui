@@ -88,6 +88,8 @@
 `AppShell` · `TopBar` · `PageShell` · `ShellTabs` · `FormSection`
 几何：侧栏 246 · 品牌区 76 · 顶栏 60 · 内容区 20/22。
 业务只填导航 / 品牌 / 用户 / 顶栏标题、中部、动作槽位，**禁止**再写本地 shell CSS。
+框架型单页应用必须通过 `AppShell.linkComponent` 传入 Next.js `Link` 等路由组件；
+普通多页应用省略该属性，继续使用原生链接。禁止为了客户端切页把导航项降级成按钮。
 面板内标题用 `SectionHeader contained`，内边距与下分隔线由本包负责，业务不补选择器。
 表单只用 `FormSection` · `MaterialFormGrid` · `MaterialFormField`：组件负责列数、响应式、横纵间距与辅助文字基线；业务不得再写 `.material-form-grid` / `.material-field` 布局覆盖。
 

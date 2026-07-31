@@ -13,7 +13,7 @@ import {
   Text,
   UnstyledButton,
 } from "@mantine/core";
-import type { MouseEvent, ReactNode } from "react";
+import type { ElementType, MouseEvent, ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 import { COLORS, FONT, RADIUS } from "../theme/tokens";
 import { Icon } from "./Icon";
@@ -183,6 +183,11 @@ export type AppShellProps = {
   brandHint?: string;
   /** 新推荐：分组导航 */
   navigation?: readonly AppShellNavSection[];
+  /**
+   * 业务框架的链接组件，例如 Next.js `Link`。
+   * 未传时保持原生 `a`；传入后保留客户端路由、预取和浏览器历史语义。
+   */
+  linkComponent?: ElementType;
   /** 兼容旧扁平导航 */
   navItems?: AppShellNavItem[];
   user?: ReactNode;
@@ -234,9 +239,11 @@ function normalizeSections(
 function NavTree({
   sections,
   onNavigate,
+  linkComponent: LinkComponent = "a",
 }: {
   sections: readonly AppShellNavSection[];
   onNavigate?: () => void;
+  linkComponent?: ElementType;
 }) {
   return (
     <div className="vj-platform-shell__nav">
@@ -268,7 +275,7 @@ function NavTree({
 
             if (item.href && !disabled) {
               return (
-                <a
+                <LinkComponent
                   key={key}
                   href={item.href}
                   className="vj-platform-shell__item"
@@ -277,7 +284,7 @@ function NavTree({
                   onClick={handle}
                 >
                   {content}
-                </a>
+                </LinkComponent>
               );
             }
 
@@ -306,6 +313,7 @@ export function AppShell({
   brand = product ? `VIJIM ${product}` : "VIJIM",
   brandHint,
   navigation,
+  linkComponent,
   navItems = [],
   user,
   footer,
@@ -445,7 +453,7 @@ export function AppShell({
     >
       <aside className="vj-platform-shell__sidebar" aria-label={`${product ?? "VIJIM"} 主导航`}>
         <div className="vj-platform-shell__brand">{brandNode}</div>
-        <NavTree sections={sections} />
+        <NavTree sections={sections} linkComponent={linkComponent} />
         {foot ? <div className="vj-platform-shell__footer">{foot}</div> : null}
       </aside>
 
@@ -478,7 +486,11 @@ export function AppShell({
               <Icon name="close" size={18} />
             </button>
           </div>
-          <NavTree sections={sections} onNavigate={() => setMobileOpen(false)} />
+          <NavTree
+            sections={sections}
+            linkComponent={linkComponent}
+            onNavigate={() => setMobileOpen(false)}
+          />
           {foot ? <div className="vj-platform-shell__footer">{foot}</div> : null}
         </aside>
       </div>

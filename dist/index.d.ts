@@ -2,7 +2,7 @@ import * as _mantine_core from '@mantine/core';
 import { MantineThemeOverride, ButtonProps as ButtonProps$1, ElementProps, TextInputProps as TextInputProps$1, TextareaProps as TextareaProps$1, SelectProps as SelectProps$1, DrawerProps as DrawerProps$1, ModalProps as ModalProps$1, MenuProps, PaginationProps, PopoverProps, SegmentedControlProps, TabsProps, TooltipProps, CardProps as CardProps$1, StackProps as StackProps$1, TableProps as TableProps$1, SkeletonProps as SkeletonProps$1, Switch as Switch$1 } from '@mantine/core';
 export { ActionIcon, Alert, Anchor, Box, Checkbox, Combobox, ComboboxProps, ComboboxStore, Divider, Group, GroupProps, MenuProps, PaginationProps, Paper, PaperProps, PopoverProps, SegmentedControlProps, SimpleGrid, Switch, TabsProps, Text, TextProps, Title, TitleProps, TooltipProps, useCombobox } from '@mantine/core';
 import * as react from 'react';
-import { ReactNode, CSSProperties, ComponentPropsWithoutRef, ChangeEventHandler, KeyboardEvent, ReactElement, MouseEventHandler, ComponentProps } from 'react';
+import { ReactNode, CSSProperties, ComponentPropsWithoutRef, ChangeEventHandler, KeyboardEvent, ElementType, ReactElement, MouseEventHandler, ComponentProps } from 'react';
 import { IconProps as IconProps$1 } from '@tabler/icons-react';
 import * as recharts_types_util_types from 'recharts/types/util/types';
 import * as recharts from 'recharts';
@@ -679,6 +679,11 @@ type AppShellProps = {
     brandHint?: string;
     /** 新推荐：分组导航 */
     navigation?: readonly AppShellNavSection[];
+    /**
+     * 业务框架的链接组件，例如 Next.js `Link`。
+     * 未传时保持原生 `a`；传入后保留客户端路由、预取和浏览器历史语义。
+     */
+    linkComponent?: ElementType;
     /** 兼容旧扁平导航 */
     navItems?: AppShellNavItem[];
     user?: ReactNode;
@@ -701,7 +706,7 @@ type AppShellProps = {
     contentSurface?: "background" | "surface";
     viewport?: "page" | "fixed";
 };
-declare function AppShell({ product, brand, brandHint, navigation, navItems, user, footer, header, headerTitle, headerTitleComponent, headerContext, headerBadge, headerBackHref, headerBackLabel, headerRight, headerCenter, headerActions, children, contentPadding, withHeader, className, contentClassName, contentSurface, viewport, }: AppShellProps): react.JSX.Element;
+declare function AppShell({ product, brand, brandHint, navigation, linkComponent, navItems, user, footer, header, headerTitle, headerTitleComponent, headerContext, headerBadge, headerBackHref, headerBackLabel, headerRight, headerCenter, headerActions, children, contentPadding, withHeader, className, contentClassName, contentSurface, viewport, }: AppShellProps): react.JSX.Element;
 type PageShellProps = {
     title: string;
     description?: string;
