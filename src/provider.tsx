@@ -10,6 +10,7 @@ import "@mantine/spotlight/styles.css";
 import { VIJIM_RUNTIME_CSS } from "./runtime-css";
 import { VIJIM_SHELL_RESPONSIVE_CSS } from "./shell-responsive-css";
 import { VIJIM_MATERIAL_COMPAT_CSS } from "./material-compat-css";
+import { VIJIM_DATA_TABLE_CSS } from "./data-table-css";
 
 import { MantineProvider, type MantineThemeOverride } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
@@ -89,7 +90,7 @@ export function VijimProvider({
       <style
         // 壳层 / 触感 / ADMIN 兼容样式；必须随 Provider 自动挂载
         dangerouslySetInnerHTML={{
-          __html: `${VIJIM_RUNTIME_CSS}\n${VIJIM_SHELL_RESPONSIVE_CSS}\n${VIJIM_MATERIAL_COMPAT_CSS}`,
+          __html: `${VIJIM_RUNTIME_CSS}\n${VIJIM_SHELL_RESPONSIVE_CSS}\n${VIJIM_MATERIAL_COMPAT_CSS}\n${VIJIM_DATA_TABLE_CSS}`,
         }}
       />
       {withModals ? <ModalsProvider>{tree}</ModalsProvider> : tree}

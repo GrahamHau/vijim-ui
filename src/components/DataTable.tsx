@@ -191,7 +191,7 @@ function ModernDataTable<T>({
                             ? "↑"
                             : header.column.getIsSorted() === "desc"
                               ? "↓"
-                              : "↕"}
+                          : ""}
                         </i>
                       </button>
                     ) : (

@@ -1314,6 +1314,68 @@ var VIJIM_MATERIAL_COMPAT_CSS = `
 }
 `;
 
+// src/data-table-css.ts
+var VIJIM_DATA_TABLE_CSS = `
+.vj-table-wrap,
+.vj-data-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+}
+
+.vj-table-wrap .vj-table th {
+  background: var(--vijim-surface-subtle, var(--surface-3, #f6f7f9));
+  color: var(--vijim-text-secondary, var(--ink-2, #3d4047));
+}
+
+.vj-table-sort {
+  appearance: none;
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vijim-2, 8px);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--duration-fast, 160ms) var(--ease-out, ease);
+}
+
+.vj-table-sort > span {
+  min-width: 0;
+}
+
+.vj-table-sort > i {
+  display: inline-grid;
+  flex: none;
+  width: 14px;
+  place-items: center;
+  color: var(--vijim-text-disabled, var(--faint, #a6aab2));
+  font-size: 0.9em;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.vj-table-sort[data-direction] > i,
+.vj-table-sort:hover,
+.vj-table-sort:focus-visible {
+  color: var(--vijim-text-primary, var(--ink, #121317));
+}
+
+.vj-table-sort:focus-visible {
+  outline: 2px solid var(--vijim-focus, rgba(51, 112, 255, 0.35));
+  outline-offset: 2px;
+}
+`;
+
 // src/provider.tsx
 import { MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
@@ -1370,7 +1432,8 @@ function VijimProvider({
         dangerouslySetInnerHTML: {
           __html: `${VIJIM_RUNTIME_CSS}
 ${VIJIM_SHELL_RESPONSIVE_CSS}
-${VIJIM_MATERIAL_COMPAT_CSS}`
+${VIJIM_MATERIAL_COMPAT_CSS}
+${VIJIM_DATA_TABLE_CSS}`
         }
       }
     ),
@@ -3703,7 +3766,7 @@ function LegacyDataTable({
           "aria-label": `${column.header}\uFF0C${direction === "asc" ? "\u5F53\u524D\u6B63\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u5012\u5E8F" : direction === "desc" ? "\u5F53\u524D\u5012\u5E8F\uFF0C\u70B9\u51FB\u6062\u590D\u9ED8\u8BA4\u6392\u5E8F" : "\u5F53\u524D\u9ED8\u8BA4\u6392\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u6B63\u5E8F"}`,
           children: [
             /* @__PURE__ */ jsx16("span", { children: column.header }),
-            /* @__PURE__ */ jsx16("i", { "aria-hidden": "true", children: direction === "asc" ? "\u2191" : direction === "desc" ? "\u2193" : "\u2195" })
+            /* @__PURE__ */ jsx16("i", { "aria-hidden": "true", children: direction === "asc" ? "\u2191" : direction === "desc" ? "\u2193" : "" })
           ]
         }
       ) }, column.key);
@@ -4401,7 +4464,7 @@ function ModernDataTable({
                       "aria-label": `${String(header.column.columnDef.header ?? header.id)}\uFF0C${header.column.getIsSorted() === "asc" ? "\u5F53\u524D\u6B63\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u5012\u5E8F" : header.column.getIsSorted() === "desc" ? "\u5F53\u524D\u5012\u5E8F\uFF0C\u70B9\u51FB\u6062\u590D\u9ED8\u8BA4\u6392\u5E8F" : "\u5F53\u524D\u9ED8\u8BA4\u6392\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u6B63\u5E8F"}`,
                       children: [
                         /* @__PURE__ */ jsx17("span", { children: flexRender(header.column.columnDef.header, header.getContext()) }),
-                        /* @__PURE__ */ jsx17("i", { "aria-hidden": "true", children: header.column.getIsSorted() === "asc" ? "\u2191" : header.column.getIsSorted() === "desc" ? "\u2193" : "\u2195" })
+                        /* @__PURE__ */ jsx17("i", { "aria-hidden": "true", children: header.column.getIsSorted() === "asc" ? "\u2191" : header.column.getIsSorted() === "desc" ? "\u2193" : "" })
                       ]
                     }
                   ) : flexRender(header.column.columnDef.header, header.getContext())
