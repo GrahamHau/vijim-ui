@@ -819,6 +819,9 @@ type LegacyDataTableColumn<Row> = {
     header: string;
     align?: "start" | "end";
     render?: (row: Row) => ReactNode;
+    /** 默认可排序；派生列用 sortValue 返回真实业务值。 */
+    sortable?: boolean;
+    sortValue?: (row: Row) => string | number | Date | null | undefined;
 };
 type LegacyDataTableProps<Row extends object> = {
     columns: readonly LegacyDataTableColumn<Row>[];
@@ -827,6 +830,8 @@ type LegacyDataTableProps<Row extends object> = {
     ariaLabel: string;
     density?: "compact" | "default";
     emptyLabel?: string;
+    /** 表格内容最小宽度；超过容器后由 DataTable 自己横向滚动。 */
+    minWidth?: number | string;
 };
 type DialogProps = {
     open: boolean;

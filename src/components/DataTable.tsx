@@ -19,6 +19,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { Table } from "./Table";
 import { Pagination } from "./Navigation";
 import { Empty } from "./Feedback";
+import { scrollWideTableOnWheel } from "../internal/table-interaction";
 import {
   LegacyDataTable,
   type LegacyDataTableColumn,
@@ -133,6 +134,8 @@ function ModernDataTable<T>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    sortDescFirst: false,
+    enableSortingRemoval: true,
     ...(pageSize
       ? { getPaginationRowModel: getPaginationRowModel() }
       : {}),
@@ -145,7 +148,12 @@ function ModernDataTable<T>({
     <div>
       {toolbar ? <div style={{ marginBottom: 12 }}>{toolbar}</div> : null}
 
-      <Table.ScrollContainer minWidth={minWidth} maxHeight={maxHeight}>
+      <Table.ScrollContainer
+        className="vj-data-table-scroll"
+        minWidth={minWidth}
+        maxHeight={maxHeight}
+        onWheel={scrollWideTableOnWheel}
+      >
         <Table
           highlightOnHover
           horizontalSpacing="md"
@@ -160,21 +168,35 @@ function ModernDataTable<T>({
                     key={header.id}
                     style={{
                       width: header.getSize() !== 150 ? header.getSize() : undefined,
-                      cursor: header.column.getCanSort() ? "pointer" : undefined,
                       userSelect: "none",
                     }}
-                    onClick={header.column.getToggleSortingHandler()}
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                    {{
-                      asc: " ↑",
-                      desc: " ↓",
-                    }[header.column.getIsSorted() as string] ?? null}
+                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                      <button
+                        type="button"
+                        className="vj-table-sort"
+                        data-direction={header.column.getIsSorted() || undefined}
+                        onClick={header.column.getToggleSortingHandler()}
+                        aria-label={`${String(header.column.columnDef.header ?? header.id)}，${
+                          header.column.getIsSorted() === "asc"
+                            ? "当前正序，点击切换倒序"
+                            : header.column.getIsSorted() === "desc"
+                              ? "当前倒序，点击恢复默认排序"
+                              : "当前默认排序，点击切换正序"
+                        }`}
+                      >
+                        <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
+                        <i aria-hidden="true">
+                          {header.column.getIsSorted() === "asc"
+                            ? "↑"
+                            : header.column.getIsSorted() === "desc"
+                              ? "↓"
+                              : "↕"}
+                        </i>
+                      </button>
+                    ) : (
+                      flexRender(header.column.columnDef.header, header.getContext())
+                    )}
                   </Table.Th>
                 ))}
               </Table.Tr>

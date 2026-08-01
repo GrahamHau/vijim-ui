@@ -2895,6 +2895,16 @@ function Spinner({ label, size = "sm" }) {
   ] }) });
 }
 
+// src/internal/table-interaction.ts
+function scrollWideTableOnWheel(event) {
+  const container = event.currentTarget;
+  if (container.scrollWidth <= container.clientWidth) return;
+  const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+  if (!delta) return;
+  event.preventDefault();
+  container.scrollBy({ left: delta, behavior: "auto" });
+}
+
 // src/components/Shell.tsx
 import {
   Box as Box2,
@@ -3370,6 +3380,7 @@ import {
   isValidElement as isValidElement2,
   useEffect as useEffect4,
   useId as useId3,
+  useMemo as useMemo4,
   useRef as useRef4,
   useState as useState5
 } from "react";
@@ -3641,12 +3652,63 @@ function LegacyDataTable({
   rowKey,
   ariaLabel,
   density = "default",
-  emptyLabel = "\u6682\u65E0\u6570\u636E"
+  emptyLabel = "\u6682\u65E0\u6570\u636E",
+  minWidth = 720
 }) {
-  return /* @__PURE__ */ jsx16("div", { className: "vj-table-wrap", children: /* @__PURE__ */ jsxs7("table", { className: "vj-table", "data-density": density, children: [
+  const [sort, setSort] = useState5(null);
+  const collator = useMemo4(
+    () => new Intl.Collator("zh-CN", { numeric: true, sensitivity: "base" }),
+    []
+  );
+  const sortedData = useMemo4(() => {
+    if (!sort) return data;
+    const column = columns.find((candidate) => candidate.key === sort.key);
+    if (!column) return data;
+    const valueAt = (row) => column.sortValue?.(row) ?? row[column.key];
+    const compare = (left, right) => {
+      const leftValue = valueAt(left);
+      const rightValue = valueAt(right);
+      const leftMissing = leftValue === null || leftValue === void 0 || leftValue === "";
+      const rightMissing = rightValue === null || rightValue === void 0 || rightValue === "";
+      if (leftMissing || rightMissing) {
+        if (leftMissing && rightMissing) return 0;
+        return leftMissing ? 1 : -1;
+      }
+      const leftComparable = leftValue instanceof Date ? leftValue.getTime() : leftValue;
+      const rightComparable = rightValue instanceof Date ? rightValue.getTime() : rightValue;
+      const result = typeof leftComparable === "number" && typeof rightComparable === "number" ? leftComparable - rightComparable : collator.compare(String(leftComparable), String(rightComparable));
+      return sort.direction === "asc" ? result : -result;
+    };
+    return data.map((row, index) => ({ row, index })).sort((left, right) => compare(left.row, right.row) || left.index - right.index).map(({ row }) => row);
+  }, [collator, columns, data, sort]);
+  const changeSort = (column) => {
+    if (column.sortable === false) return;
+    setSort((current) => {
+      if (current?.key !== column.key) return { key: column.key, direction: "asc" };
+      if (current.direction === "asc") return { key: column.key, direction: "desc" };
+      return null;
+    });
+  };
+  return /* @__PURE__ */ jsx16("div", { className: "vj-table-wrap", onWheel: scrollWideTableOnWheel, children: /* @__PURE__ */ jsxs7("table", { className: "vj-table", "data-density": density, style: { minWidth }, children: [
     /* @__PURE__ */ jsx16("caption", { children: ariaLabel }),
-    /* @__PURE__ */ jsx16("thead", { children: /* @__PURE__ */ jsx16("tr", { children: columns.map((column) => /* @__PURE__ */ jsx16("th", { scope: "col", "data-align": column.align, children: column.header }, column.key)) }) }),
-    /* @__PURE__ */ jsx16("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx16("tr", { children: /* @__PURE__ */ jsx16("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : data.map((row) => /* @__PURE__ */ jsx16("tr", { children: columns.map((column) => /* @__PURE__ */ jsx16("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
+    /* @__PURE__ */ jsx16("thead", { children: /* @__PURE__ */ jsx16("tr", { children: columns.map((column) => {
+      const direction = sort?.key === column.key ? sort.direction : null;
+      return /* @__PURE__ */ jsx16("th", { scope: "col", "data-align": column.align, children: column.sortable === false ? column.header : /* @__PURE__ */ jsxs7(
+        "button",
+        {
+          type: "button",
+          className: "vj-table-sort",
+          "data-direction": direction ?? void 0,
+          onClick: () => changeSort(column),
+          "aria-label": `${column.header}\uFF0C${direction === "asc" ? "\u5F53\u524D\u6B63\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u5012\u5E8F" : direction === "desc" ? "\u5F53\u524D\u5012\u5E8F\uFF0C\u70B9\u51FB\u6062\u590D\u9ED8\u8BA4\u6392\u5E8F" : "\u5F53\u524D\u9ED8\u8BA4\u6392\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u6B63\u5E8F"}`,
+          children: [
+            /* @__PURE__ */ jsx16("span", { children: column.header }),
+            /* @__PURE__ */ jsx16("i", { "aria-hidden": "true", children: direction === "asc" ? "\u2191" : direction === "desc" ? "\u2193" : "\u2195" })
+          ]
+        }
+      ) }, column.key);
+    }) }) }),
+    /* @__PURE__ */ jsx16("tbody", { children: data.length === 0 ? /* @__PURE__ */ jsx16("tr", { children: /* @__PURE__ */ jsx16("td", { className: "vj-table__empty", colSpan: columns.length, children: emptyLabel }) }) : sortedData.map((row) => /* @__PURE__ */ jsx16("tr", { children: columns.map((column) => /* @__PURE__ */ jsx16("td", { "data-align": column.align, children: column.render ? column.render(row) : String(row[column.key] ?? "\u2014") }, column.key)) }, String(row[rowKey]))) })
   ] }) });
 }
 function Dialog({
@@ -4299,61 +4361,74 @@ function ModernDataTable({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    sortDescFirst: false,
+    enableSortingRemoval: true,
     ...pageSize ? { getPaginationRowModel: getPaginationRowModel() } : {}
   });
   const rows = table.getRowModel().rows;
   const pageCount = table.getPageCount();
   return /* @__PURE__ */ jsxs8("div", { children: [
     toolbar ? /* @__PURE__ */ jsx17("div", { style: { marginBottom: 12 }, children: toolbar }) : null,
-    /* @__PURE__ */ jsx17(Table.ScrollContainer, { minWidth, maxHeight, children: /* @__PURE__ */ jsxs8(
-      Table,
+    /* @__PURE__ */ jsx17(
+      Table.ScrollContainer,
       {
-        highlightOnHover: true,
-        horizontalSpacing: "md",
-        verticalSpacing: "sm",
-        stickyHeader: Boolean(maxHeight),
-        children: [
-          /* @__PURE__ */ jsx17(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx17(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsxs8(
-            Table.Th,
-            {
-              style: {
-                width: header.getSize() !== 150 ? header.getSize() : void 0,
-                cursor: header.column.getCanSort() ? "pointer" : void 0,
-                userSelect: "none"
-              },
-              onClick: header.column.getToggleSortingHandler(),
-              children: [
-                header.isPlaceholder ? null : flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                ),
+        className: "vj-data-table-scroll",
+        minWidth,
+        maxHeight,
+        onWheel: scrollWideTableOnWheel,
+        children: /* @__PURE__ */ jsxs8(
+          Table,
+          {
+            highlightOnHover: true,
+            horizontalSpacing: "md",
+            verticalSpacing: "sm",
+            stickyHeader: Boolean(maxHeight),
+            children: [
+              /* @__PURE__ */ jsx17(Table.Thead, { children: table.getHeaderGroups().map((hg) => /* @__PURE__ */ jsx17(Table.Tr, { children: hg.headers.map((header) => /* @__PURE__ */ jsx17(
+                Table.Th,
                 {
-                  asc: " \u2191",
-                  desc: " \u2193"
-                }[header.column.getIsSorted()] ?? null
-              ]
-            },
-            header.id
-          )) }, hg.id)) }),
-          /* @__PURE__ */ jsx17(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx17(Table.Tr, { children: /* @__PURE__ */ jsx17(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx17(Text4, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx17(Table.Tr, { children: /* @__PURE__ */ jsx17(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx17(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx17(
-            Table.Tr,
-            {
-              "data-selected": row.getIsSelected() || void 0,
-              style: {
-                cursor: onRowClick ? "pointer" : void 0,
-                backgroundColor: row.getIsSelected() ? "rgba(51, 112, 255, 0.06)" : void 0
-              },
-              onClick: () => onRowClick?.(row.original),
-              children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx17(Table.Td, { children: flexRender(
-                cell.column.columnDef.cell,
-                cell.getContext()
-              ) }, cell.id))
-            },
-            row.id
-          )) })
-        ]
+                  style: {
+                    width: header.getSize() !== 150 ? header.getSize() : void 0,
+                    userSelect: "none"
+                  },
+                  children: header.isPlaceholder ? null : header.column.getCanSort() ? /* @__PURE__ */ jsxs8(
+                    "button",
+                    {
+                      type: "button",
+                      className: "vj-table-sort",
+                      "data-direction": header.column.getIsSorted() || void 0,
+                      onClick: header.column.getToggleSortingHandler(),
+                      "aria-label": `${String(header.column.columnDef.header ?? header.id)}\uFF0C${header.column.getIsSorted() === "asc" ? "\u5F53\u524D\u6B63\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u5012\u5E8F" : header.column.getIsSorted() === "desc" ? "\u5F53\u524D\u5012\u5E8F\uFF0C\u70B9\u51FB\u6062\u590D\u9ED8\u8BA4\u6392\u5E8F" : "\u5F53\u524D\u9ED8\u8BA4\u6392\u5E8F\uFF0C\u70B9\u51FB\u5207\u6362\u6B63\u5E8F"}`,
+                      children: [
+                        /* @__PURE__ */ jsx17("span", { children: flexRender(header.column.columnDef.header, header.getContext()) }),
+                        /* @__PURE__ */ jsx17("i", { "aria-hidden": "true", children: header.column.getIsSorted() === "asc" ? "\u2191" : header.column.getIsSorted() === "desc" ? "\u2193" : "\u2195" })
+                      ]
+                    }
+                  ) : flexRender(header.column.columnDef.header, header.getContext())
+                },
+                header.id
+              )) }, hg.id)) }),
+              /* @__PURE__ */ jsx17(Table.Tbody, { children: loading ? /* @__PURE__ */ jsx17(Table.Tr, { children: /* @__PURE__ */ jsx17(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx17(Text4, { c: "dimmed", size: "sm", ta: "center", py: "lg", children: "\u52A0\u8F7D\u4E2D\u2026" }) }) }) : rows.length === 0 ? /* @__PURE__ */ jsx17(Table.Tr, { children: /* @__PURE__ */ jsx17(Table.Td, { colSpan: cols.length, children: /* @__PURE__ */ jsx17(Empty, { title: emptyTitle, description: emptyDescription }) }) }) : rows.map((row) => /* @__PURE__ */ jsx17(
+                Table.Tr,
+                {
+                  "data-selected": row.getIsSelected() || void 0,
+                  style: {
+                    cursor: onRowClick ? "pointer" : void 0,
+                    backgroundColor: row.getIsSelected() ? "rgba(51, 112, 255, 0.06)" : void 0
+                  },
+                  onClick: () => onRowClick?.(row.original),
+                  children: row.getVisibleCells().map((cell) => /* @__PURE__ */ jsx17(Table.Td, { children: flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                  ) }, cell.id))
+                },
+                row.id
+              )) })
+            ]
+          }
+        )
       }
-    ) }),
+    ),
     pageSize && pageCount > 1 ? /* @__PURE__ */ jsxs8(Group3, { justify: "space-between", mt: "md", children: [
       /* @__PURE__ */ jsxs8(Text4, { size: "sm", c: "dimmed", children: [
         "\u5171 ",

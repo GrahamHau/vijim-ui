@@ -30,6 +30,7 @@ import {
 } from "react";
 import { FORM_LAYOUT, TYPOGRAPHY } from "../theme/tokens";
 import { Button } from "./Button";
+import { scrollWideTableOnWheel } from "../internal/table-interaction";
 
 export type Tone =
   | "neutral"
@@ -451,6 +452,9 @@ export type LegacyDataTableColumn<Row> = {
   header: string;
   align?: "start" | "end";
   render?: (row: Row) => ReactNode;
+  /** 默认可排序；派生列用 sortValue 返回真实业务值。 */
+  sortable?: boolean;
+  sortValue?: (row: Row) => string | number | Date | null | undefined;
 };
 
 export type LegacyDataTableProps<Row extends object> = {
@@ -460,6 +464,8 @@ export type LegacyDataTableProps<Row extends object> = {
   ariaLabel: string;
   density?: "compact" | "default";
   emptyLabel?: string;
+  /** 表格内容最小宽度；超过容器后由 DataTable 自己横向滚动。 */
+  minWidth?: number | string;
 };
 
 export function LegacyDataTable<Row extends object>({
@@ -469,18 +475,83 @@ export function LegacyDataTable<Row extends object>({
   ariaLabel,
   density = "default",
   emptyLabel = "暂无数据",
+  minWidth = 720,
 }: LegacyDataTableProps<Row>) {
+  const [sort, setSort] = useState<{
+    key: keyof Row & string;
+    direction: "asc" | "desc";
+  } | null>(null);
+  const collator = useMemo(
+    () => new Intl.Collator("zh-CN", { numeric: true, sensitivity: "base" }),
+    [],
+  );
+  const sortedData = useMemo(() => {
+    if (!sort) return data;
+    const column = columns.find((candidate) => candidate.key === sort.key);
+    if (!column) return data;
+    const valueAt = (row: Row) => column.sortValue?.(row) ?? row[column.key];
+    const compare = (left: Row, right: Row) => {
+      const leftValue = valueAt(left);
+      const rightValue = valueAt(right);
+      const leftMissing = leftValue === null || leftValue === undefined || leftValue === "";
+      const rightMissing = rightValue === null || rightValue === undefined || rightValue === "";
+      if (leftMissing || rightMissing) {
+        if (leftMissing && rightMissing) return 0;
+        return leftMissing ? 1 : -1;
+      }
+      const leftComparable = leftValue instanceof Date ? leftValue.getTime() : leftValue;
+      const rightComparable = rightValue instanceof Date ? rightValue.getTime() : rightValue;
+      const result = typeof leftComparable === "number" && typeof rightComparable === "number"
+        ? leftComparable - rightComparable
+        : collator.compare(String(leftComparable), String(rightComparable));
+      return sort.direction === "asc" ? result : -result;
+    };
+    return data
+      .map((row, index) => ({ row, index }))
+      .sort((left, right) => compare(left.row, right.row) || left.index - right.index)
+      .map(({ row }) => row);
+  }, [collator, columns, data, sort]);
+
+  const changeSort = (column: LegacyDataTableColumn<Row>) => {
+    if (column.sortable === false) return;
+    setSort((current) => {
+      if (current?.key !== column.key) return { key: column.key, direction: "asc" };
+      if (current.direction === "asc") return { key: column.key, direction: "desc" };
+      return null;
+    });
+  };
+
   return (
-    <div className="vj-table-wrap">
-      <table className="vj-table" data-density={density}>
+    <div className="vj-table-wrap" onWheel={scrollWideTableOnWheel}>
+      <table className="vj-table" data-density={density} style={{ minWidth }}>
         <caption>{ariaLabel}</caption>
         <thead>
           <tr>
-            {columns.map((column) => (
+            {columns.map((column) => {
+              const direction = sort?.key === column.key ? sort.direction : null;
+              return (
               <th key={column.key} scope="col" data-align={column.align}>
-                {column.header}
+                {column.sortable === false ? column.header : (
+                  <button
+                    type="button"
+                    className="vj-table-sort"
+                    data-direction={direction ?? undefined}
+                    onClick={() => changeSort(column)}
+                    aria-label={`${column.header}，${
+                      direction === "asc"
+                        ? "当前正序，点击切换倒序"
+                        : direction === "desc"
+                          ? "当前倒序，点击恢复默认排序"
+                          : "当前默认排序，点击切换正序"
+                    }`}
+                  >
+                    <span>{column.header}</span>
+                    <i aria-hidden="true">{direction === "asc" ? "↑" : direction === "desc" ? "↓" : "↕"}</i>
+                  </button>
+                )}
               </th>
-            ))}
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -491,7 +562,7 @@ export function LegacyDataTable<Row extends object>({
               </td>
             </tr>
           ) : (
-            data.map((row) => (
+            sortedData.map((row) => (
               <tr key={String(row[rowKey])}>
                 {columns.map((column) => (
                   <td key={column.key} data-align={column.align}>

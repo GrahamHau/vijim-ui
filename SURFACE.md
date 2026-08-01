@@ -72,7 +72,7 @@
 `Tabs` · `SegmentedControl`（表单口径；列表互斥优先 FilterSegment，选中均为无边框灰块）· `Pagination`
 
 ### 数据
-`DataTable`（列表唯一）
+`DataTable`（列表唯一；宽表普通滚轮与 Shift + 滚轮均横向移动；可排序列点击表头按正序、倒序、默认三态循环）
 `Table`（极少数手写表头 / 对照页；**新列表禁止**）
 `AreaChart` · `BarChart`（常规语义图仅这两种）
 `ChartPrimitives`（仅既有复杂分析图；一个受控命名空间，不向业务散落 Recharts 零件）
