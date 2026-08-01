@@ -2961,11 +2961,12 @@ function Spinner({ label, size = "sm" }) {
 // src/internal/table-interaction.ts
 function scrollWideTableOnWheel(event) {
   const container = event.currentTarget;
-  if (container.scrollWidth <= container.clientWidth) return;
+  const scrollTarget = container.querySelector("[data-scrollarea-viewport]") ?? container;
+  if (scrollTarget.scrollWidth <= scrollTarget.clientWidth) return;
   const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
   if (!delta) return;
   event.preventDefault();
-  container.scrollBy({ left: delta, behavior: "auto" });
+  scrollTarget.scrollBy({ left: delta, behavior: "auto" });
 }
 
 // src/components/Shell.tsx

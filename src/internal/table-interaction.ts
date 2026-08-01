@@ -6,7 +6,8 @@ import type { WheelEvent as ReactWheelEvent } from "react";
  */
 export function scrollWideTableOnWheel(event: ReactWheelEvent<HTMLElement>): void {
   const container = event.currentTarget;
-  if (container.scrollWidth <= container.clientWidth) return;
+  const scrollTarget = container.querySelector<HTMLElement>("[data-scrollarea-viewport]") ?? container;
+  if (scrollTarget.scrollWidth <= scrollTarget.clientWidth) return;
 
   const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
     ? event.deltaX
@@ -14,5 +15,5 @@ export function scrollWideTableOnWheel(event: ReactWheelEvent<HTMLElement>): voi
   if (!delta) return;
 
   event.preventDefault();
-  container.scrollBy({ left: delta, behavior: "auto" });
+  scrollTarget.scrollBy({ left: delta, behavior: "auto" });
 }
