@@ -546,7 +546,7 @@ export function LegacyDataTable<Row extends object>({
                     }`}
                   >
                     <span>{column.header}</span>
-                    <i aria-hidden="true">{direction === "asc" ? "↑" : direction === "desc" ? "↓" : "↕"}</i>
+                    <i aria-hidden="true">{direction === "asc" ? "↑" : direction === "desc" ? "↓" : ""}</i>
                   </button>
                 )}
               </th>
