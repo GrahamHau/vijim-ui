@@ -3120,7 +3120,8 @@ function normalizeSections(navigation, navItems) {
 }
 function NavTree({
   sections,
-  onNavigate
+  onNavigate,
+  linkComponent: LinkComponent = "a"
 }) {
   return /* @__PURE__ */ jsx15("div", { className: "vj-platform-shell__nav", children: sections.map((section, index) => /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__section", children: [
     section.label ? /* @__PURE__ */ jsx15("div", { className: "vj-platform-shell__section-label", children: section.label }) : null,
@@ -3144,7 +3145,7 @@ function NavTree({
       ] });
       if (item.href && !disabled) {
         return /* @__PURE__ */ jsx15(
-          "a",
+          LinkComponent,
           {
             href: item.href,
             className: "vj-platform-shell__item",
@@ -3177,6 +3178,7 @@ function AppShell({
   brand = product ? `VIJIM ${product}` : "VIJIM",
   brandHint,
   navigation,
+  linkComponent,
   navItems = [],
   user,
   footer,
@@ -3298,7 +3300,7 @@ function AppShell({
       children: [
         /* @__PURE__ */ jsxs6("aside", { className: "vj-platform-shell__sidebar", "aria-label": `${product ?? "VIJIM"} \u4E3B\u5BFC\u822A`, children: [
           /* @__PURE__ */ jsx15("div", { className: "vj-platform-shell__brand", children: brandNode }),
-          /* @__PURE__ */ jsx15(NavTree, { sections }),
+          /* @__PURE__ */ jsx15(NavTree, { sections, linkComponent }),
           foot ? /* @__PURE__ */ jsx15("div", { className: "vj-platform-shell__footer", children: foot }) : null
         ] }),
         /* @__PURE__ */ jsxs6("div", { className: "vj-platform-shell__drawer", "data-open": mobileOpen ? "true" : "false", children: [
@@ -3337,7 +3339,14 @@ function AppShell({
                     }
                   )
                 ] }),
-                /* @__PURE__ */ jsx15(NavTree, { sections, onNavigate: () => setMobileOpen(false) }),
+                /* @__PURE__ */ jsx15(
+                  NavTree,
+                  {
+                    sections,
+                    linkComponent,
+                    onNavigate: () => setMobileOpen(false)
+                  }
+                ),
                 foot ? /* @__PURE__ */ jsx15("div", { className: "vj-platform-shell__footer", children: foot }) : null
               ]
             }

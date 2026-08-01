@@ -23,6 +23,10 @@ VIJIM Labs **唯一业务 UI 出口**。
 挂到文档根节点；业务不再单独安装 `ColorSchemeScript` 或维护
 `data-mantine-color-scheme`。
 
+使用 Next.js、React Router 等客户端路由时，把框架链接组件传给
+`AppShell.linkComponent`。导航仍输出真实链接，同时保留客户端切页、预取与浏览器历史；
+不传时回落为原生 `a`，适用于普通多页应用。
+
 ## 导出清单（短）
 
 见 [`SURFACE.md` §2](./SURFACE.md)。常用：
@@ -39,8 +43,8 @@ VIJIM Labs **唯一业务 UI 出口**。
 cd packages/ui && npm run build
 # 子系统用 vendor tgz 时（示例）：
 cd studio/app && npm pack ../../packages/ui --pack-destination ./vendor \
-  && npm install ./vendor/vijimlabs-ui-0.2.25.tgz
-cd ../../admin && npm install ./vendor/vijimlabs-ui-0.2.25.tgz --force
+  && npm install ./vendor/vijimlabs-ui-0.2.26.tgz
+cd ../../admin && npm install ./vendor/vijimlabs-ui-0.2.26.tgz --force
 ```
 
 预览：总仓 `node scripts/dev-preview.mjs up studio`。
