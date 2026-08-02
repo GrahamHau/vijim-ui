@@ -17,8 +17,12 @@ import {
 import { Checkbox, Group, Text } from "@mantine/core";
 import { useMemo, useState, type ReactNode } from "react";
 import { Table } from "./Table";
+import { Button } from "./Button";
 import { Pagination } from "./Navigation";
+import { Popover } from "./Navigation";
 import { Empty } from "./Feedback";
+import { Icon } from "./Icon";
+import { TextInput } from "./TextInput";
 import { scrollWideTableOnWheel } from "../internal/table-interaction";
 import {
   LegacyDataTable,
@@ -54,6 +58,104 @@ export type ModernDataTableProps<T> = {
 export type DataTableProps<T extends object> =
   | ModernDataTableProps<T>
   | LegacyDataTableProps<T>;
+
+export type DataTableColumnHeaderProps = {
+  label: string;
+  sortable?: boolean;
+  sortDirection?: "asc" | "desc" | null;
+  onSort?: () => void;
+  filterValue?: string;
+  onFilterChange?: (value: string) => void;
+  filterPlaceholder?: string;
+};
+
+/**
+ * DataTable 的受控列头：供服务端排序 / 筛选表格复用统一交互。
+ * 普通 DataTable 的内建客户端排序仍由 DataTable 自己负责。
+ */
+export function DataTableColumnHeader({
+  label,
+  sortable = true,
+  sortDirection = null,
+  onSort,
+  filterValue = "",
+  onFilterChange,
+  filterPlaceholder,
+}: DataTableColumnHeaderProps) {
+  const canSort = sortable && Boolean(onSort);
+  const canFilter = Boolean(onFilterChange);
+  const filterActive = Boolean(filterValue.trim());
+  const sortLabel = sortDirection === "asc"
+    ? `${label}，当前正序，点击切换倒序`
+    : sortDirection === "desc"
+      ? `${label}，当前倒序，点击恢复默认排序`
+      : `${label}，当前默认排序，点击切换正序`;
+
+  return (
+    <div
+      className="vj-data-table-column-header"
+      data-filtered={filterActive || undefined}
+      data-sorted={sortDirection || undefined}
+    >
+      {canSort ? (
+        <button
+          type="button"
+          className="vj-table-sort vj-data-table-column-header__sort"
+          data-direction={sortDirection || undefined}
+          aria-label={sortLabel}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSort?.();
+          }}
+        >
+          <span>{label}</span>
+          <i aria-hidden="true">{sortDirection === "asc" ? "↑" : sortDirection === "desc" ? "↓" : ""}</i>
+        </button>
+      ) : (
+        <span className="vj-data-table-column-header__label">{label}</span>
+      )}
+      {canFilter ? (
+        <Popover
+          placement="end"
+          triggerLabel={`筛选${label}`}
+          trigger={(
+            <span
+              className="vj-data-table-column-header__filter-trigger"
+              data-active={filterActive || undefined}
+              aria-hidden="true"
+            >
+              <Icon name="filter" size={13} strokeWidth={1.7} />
+            </span>
+          )}
+        >
+          <div
+            className="vj-data-table-column-header__filter-popover"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <TextInput
+              size="sm"
+              value={filterValue}
+              aria-label={`筛选${label}`}
+              placeholder={filterPlaceholder ?? `筛选${label}`}
+              onChange={(value) => onFilterChange?.(value)}
+            />
+            {filterActive ? (
+              <Button
+                type="button"
+                size="xs"
+                variant="ghost"
+                color="neutral"
+                onClick={() => onFilterChange?.("")}
+              >
+                清除
+              </Button>
+            ) : null}
+          </div>
+        </Popover>
+      ) : null}
+    </div>
+  );
+}
 
 export function DataTable<T extends object>(props: DataTableProps<T>) {
   if ("rowKey" in props) {

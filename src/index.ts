@@ -84,7 +84,9 @@ export {
 // ── 表（列表唯一 DataTable） ───────────────────────────
 export {
   DataTable,
+  DataTableColumnHeader,
   type DataTableProps,
+  type DataTableColumnHeaderProps,
   type DataTableColumn,
   type ModernDataTableColumn,
   type RowSelectionState,

@@ -25,6 +25,7 @@ import {
   IconDatabase,
   IconExternalLink,
   IconFileText,
+  IconFilter,
   IconFlame,
   IconHome,
   IconInfoCircle,
@@ -86,6 +87,7 @@ export type IconName =
   | "external-link"
   | "fail"
   | "feed"
+  | "filter"
   | "flame"
   | "grid"
   | "home"
@@ -143,6 +145,7 @@ const ICONS: Record<IconName, TablerIcon> = {
   "external-link": IconExternalLink,
   fail: IconBoxOff,
   feed: IconListDetails,
+  filter: IconFilter,
   flame: IconFlame,
   grid: IconLayoutGrid,
   home: IconHome,

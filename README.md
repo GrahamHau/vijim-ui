@@ -34,7 +34,7 @@ VIJIM Labs **唯一业务 UI 出口**。
 - 主题：`VijimProvider` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `TYPOGRAPHY` · `FORM_LAYOUT`
 - 录入：`Button` · `UnstyledButton`（Tree 行 / 整行选择器）· `TextInput` · `SearchInput` · `Select` · `SearchableSelect` · 日期 · `FileInput` · `ImageGalleryUpload`
 - 筛选：`FilterBar` · `FilterSegment` · `FilterTerm`
-- 表：`DataTable`（表头三态排序；普通滚轮纵向浏览页面，触控板横移或 Shift + 滚轮横向浏览宽表；新旧数据分支共用无边框表头交互）
+- 表：`DataTable`（表头三态排序；普通滚轮纵向浏览页面，触控板横移或 Shift + 滚轮横向浏览宽表；新旧数据分支共用无边框表头交互）· `DataTableColumnHeader`（服务端排序与列筛选统一表头）
 - 浮层：`Modal` · `Drawer` · `Menu` · `Popover`
 
 ## 本地开发
