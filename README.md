@@ -34,7 +34,7 @@ VIJIM Labs **唯一业务 UI 出口**。
 - 主题：`VijimProvider` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `TYPOGRAPHY` · `FORM_LAYOUT`
 - 录入：`Button` · `UnstyledButton`（Tree 行 / 整行选择器）· `TextInput` · `SearchInput` · `Select` · `SearchableSelect` · 日期 · `FileInput` · `ImageGalleryUpload`
 - 筛选：`FilterBar` · `FilterSegment` · `FilterTerm`
-- 表：`DataTable`（表头三态排序；宽表滚轮横向浏览；新旧数据分支共用无边框表头交互）
+- 表：`DataTable`（表头三态排序；普通滚轮纵向浏览页面，触控板横移或 Shift + 滚轮横向浏览宽表；新旧数据分支共用无边框表头交互）
 - 浮层：`Modal` · `Drawer` · `Menu` · `Popover`
 
 ## 本地开发
@@ -43,8 +43,8 @@ VIJIM Labs **唯一业务 UI 出口**。
 cd packages/ui && npm run build
 # 子系统用 vendor tgz 时（示例）：
 cd studio/app && npm pack ../../packages/ui --pack-destination ./vendor \
-  && npm install ./vendor/vijimlabs-ui-0.2.26.tgz
-cd ../../admin && npm install ./vendor/vijimlabs-ui-0.2.26.tgz --force
+  && npm install ./vendor/vijimlabs-ui-0.2.27.tgz
+cd ../../admin && npm install ./vendor/vijimlabs-ui-0.2.27.tgz --force
 ```
 
 预览：总仓 `node scripts/dev-preview.mjs up studio`。

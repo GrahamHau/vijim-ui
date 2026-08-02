@@ -2963,7 +2963,8 @@ function scrollWideTableOnWheel(event) {
   const container = event.currentTarget;
   const scrollTarget = container.querySelector("[data-scrollarea-viewport]") ?? container;
   if (scrollTarget.scrollWidth <= scrollTarget.clientWidth) return;
-  const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+  const hasHorizontalGesture = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+  const delta = hasHorizontalGesture ? event.deltaX : event.shiftKey ? event.deltaY : 0;
   if (!delta) return;
   event.preventDefault();
   scrollTarget.scrollBy({ left: delta, behavior: "auto" });
