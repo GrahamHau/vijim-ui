@@ -1184,6 +1184,13 @@ var VIJIM_RUNTIME_CSS = '/* @vijimlabs/ui \u2014 \u89E6\u611F\u4E0E\u4EA4\u4E92\
 
 // src/shell-responsive-css.ts
 var VIJIM_SHELL_RESPONSIVE_CSS = `
+.vj-platform-shell__item:hover,
+.vj-platform-shell__item:focus-visible,
+.vj-sidebar__item:hover,
+.vj-sidebar__item:focus-visible {
+  text-decoration: none;
+}
+
 .vj-platform-shell__topbar-center {
   min-width: 180px;
   flex: 0 1 420px;

@@ -1,5 +1,12 @@
 /** 窄屏壳层规则随 Provider 注入，业务不再为顶栏拥挤补局部 CSS。 */
 export const VIJIM_SHELL_RESPONSIVE_CSS = `
+.vj-platform-shell__item:hover,
+.vj-platform-shell__item:focus-visible,
+.vj-sidebar__item:hover,
+.vj-sidebar__item:focus-visible {
+  text-decoration: none;
+}
+
 .vj-platform-shell__topbar-center {
   min-width: 180px;
   flex: 0 1 420px;
