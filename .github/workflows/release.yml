@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: 安装依赖
+        run: npm ci
+      - name: 校验标签与包版本
+        run: test "${GITHUB_REF_NAME}" = "v$(node -p \"require('./package.json').version\")"
+      - name: 构建安装包
+        id: pack
+        run: |
+          package_file="$(npm pack --silent)"
+          echo "package_file=${package_file}" >> "${GITHUB_OUTPUT}"
+      - name: 创建私有 Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_FILE: ${{ steps.pack.outputs.package_file }}
+        run: gh release create "${GITHUB_REF_NAME}" "${PACKAGE_FILE}" --verify-tag --generate-notes --title "${GITHUB_REF_NAME}"

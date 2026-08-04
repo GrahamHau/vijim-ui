@@ -13,7 +13,7 @@
 
 | 层 | 允许 | 禁止 |
 |---|---|---|
-| `packages/ui` 内部 | `@mantine/*`、theme、适配 | 把 Mantine 名字/API 原样推给业务 |
+| 本仓库内部 | `@mantine/*`、theme、适配 | 把 Mantine 名字/API 原样推给业务 |
 | Studio / GTM / 业务 app | 只 `import { … } from '@vijimlabs/ui'` | `@mantine/*`、`createTheme`、`MantineProvider`、直连 hooks/form/charts |
 | 迁移适配 `components/ds/*` | 可 re-export 本包，保持旧 API | 再包一层 antd / radix / 手搓皮 |
 
@@ -176,4 +176,4 @@ KpiRow / AssetCard / ClickableCard / FilterChip / FilterPill /
 1. ESLint：业务禁 `@mantine/*`、禁原生表单标签、禁并行 UI 库。
 2. 新 PR：新增组件名必须改本包 + 更新本节白名单。
 3. 合入 main 后，Studio `design-system/` 文档可后续同步；**运行时以本包为准**。
-4. 默认不上线；交付 = 构建通过 + 预览 URL +（分支上）commit/push。
+4. 默认不发布；交付 = 构建通过 + 消费者验收 + commit/push。只有版本标签会生成私有 Release 安装包。

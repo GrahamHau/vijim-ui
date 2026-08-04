@@ -3,6 +3,14 @@
   "version": "0.2.28",
   "private": true,
   "description": "VIJIM Labs 唯一业务 UI 出口。应用只 import 本包；Mantine 9 仅为包内实现，禁止业务直连。",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrahamHau/vijim-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GrahamHau/vijim-ui/issues"
+  },
+  "homepage": "https://github.com/GrahamHau/vijim-ui#readme",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -25,7 +33,9 @@
   "scripts": {
     "build": "tsup && node scripts/copy-styles.mjs",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run build",
+    "prepack": "npm run check"
   },
   "peerDependencies": {
     "react": "^19",

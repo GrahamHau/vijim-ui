@@ -1,50 +1,60 @@
 # `@vijimlabs/ui`
 
-VIJIM Labs **唯一业务 UI 出口**。
+VIJIM Labs 的唯一业务 UI 出口。
 
-- **对外**：业务 / Agent 只 `import { … } from '@vijimlabs/ui'`
-- **对内**：Mantine 9 + `vijimTheme`（**实现细节**，禁止业务直连 `@mantine/*`）
-- **迁移**：不是重画全站；点状换控件，IA / 业务流沿用现网 Studio
+本仓库由 `GrahamHau/vijimlabs` 的 `packages/ui` 保留历史抽取而来。抽取基线为总仓提交 `a5681e45d7fb784c776de189a8d19e5a1c9e50ec`；从此后的 UI 组件开发与版本发布以本仓库为准。总仓及现有六个系统的 vendor 依赖暂不改动，待后续按系统逐个切换。
 
-细则与白名单：**[`SURFACE.md`](./SURFACE.md)** · 字体与表单节奏 **[`TYPOGRAPHY.md`](./TYPOGRAPHY.md)** · 色表 **[`COLOR.md`](./COLOR.md)**
+- **对外**：业务只 `import { … } from '@vijimlabs/ui'`
+- **对内**：Mantine 9 + `vijimTheme`，Mantine 是实现细节
+- **范围**：共享组件、token、主题和交互语义，不包含业务页面与流程
+
+细则与白名单：[`SURFACE.md`](./SURFACE.md) · [`TYPOGRAPHY.md`](./TYPOGRAPHY.md) · [`COLOR.md`](./COLOR.md)
 
 ## 硬规则
 
 | 允许 | 禁止 |
 |---|---|
-| `import { Button, DataTable, FilterBar } from '@vijimlabs/ui'` | app 直连 `@mantine/*` / antd / radix / recharts |
-| 用本包 token（`COLORS` / `RADIUS` / `MOTION`…） | 页面写 hex、圆角、height、duration 魔数 |
-| 新 variant 只改本包联合类型 + theme | 复制 shadcn / 再开第二套组件库 |
-| 存量页只换控件、保留结构 | 重画整站 IA / 改业务 API |
+| `import { Button, DataTable, FilterBar } from '@vijimlabs/ui'` | 业务直连 `@mantine/*` / antd / radix / recharts |
+| 使用本包 token | 页面写 hex、圆角、height、duration 魔数 |
+| 新 variant 只改本包联合类型与主题 | 复制 shadcn 或另建第二套组件库 |
 | `VijimProvider` 包一层 | 业务自己挂 `MantineProvider` |
-| 壳层只用 `AppShell` / `TopBar` / `PageShell` | 业务自写 sidebar/topbar 布局 CSS |
-
-没有 `VijimProvider` 的区域 = 主题与触感不生效。Provider 会把平台固定的浅色方案
-挂到文档根节点；业务不再单独安装 `ColorSchemeScript` 或维护
-`data-mantine-color-scheme`。
-
-使用 Next.js、React Router 等客户端路由时，把框架链接组件传给
-`AppShell.linkComponent`。导航仍输出真实链接，同时保留客户端切页、预取与浏览器历史；
-不传时回落为原生 `a`，适用于普通多页应用。
-
-## 导出清单（短）
-
-见 [`SURFACE.md` §2](./SURFACE.md)。常用：
-
-- 主题：`VijimProvider` · `COLORS` · `RADIUS` · `MOTION` · `SHADOWS` · `TYPOGRAPHY` · `FORM_LAYOUT`
-- 录入：`Button` · `UnstyledButton`（Tree 行 / 整行选择器）· `TextInput` · `SearchInput` · `Select` · `SearchableSelect` · 日期 · `FileInput` · `ImageGalleryUpload`
-- 筛选：`FilterBar` · `FilterSegment` · `FilterTerm`
-- 表：`DataTable`（表头三态排序；普通滚轮纵向浏览页面，触控板横移或 Shift + 滚轮横向浏览宽表；新旧数据分支共用无边框表头交互）· `DataTableColumnHeader`（服务端排序与列筛选统一表头）
-- 浮层：`Modal` · `Drawer` · `Menu` · `Popover`
+| 壳层使用 `AppShell` / `TopBar` / `PageShell` | 业务自写 sidebar / topbar 壳层 |
 
 ## 本地开发
 
 ```bash
-cd packages/ui && npm run build
-# 子系统用 vendor tgz 时（示例）：
-cd studio/app && npm pack ../../packages/ui --pack-destination ./vendor \
-  && npm install ./vendor/vijimlabs-ui-0.2.28.tgz
-cd ../../admin && npm install ./vendor/vijimlabs-ui-0.2.28.tgz --force
+npm ci
+npm run check
 ```
 
-预览：总仓 `node scripts/dev-preview.mjs up studio`。
+`npm run check` 会依次执行 TypeScript 检查和生产构建。生成可供业务仓库安装的私有包：
+
+```bash
+npm pack
+```
+
+安装本地包示例：
+
+```bash
+npm install /absolute/path/vijimlabs-ui-0.2.28.tgz
+```
+
+## 发布
+
+1. 更新 `package.json` 与 `package-lock.json` 中的版本。
+2. 运行 `npm run check` 和 `npm pack --dry-run`。
+3. 合入 `main` 后创建并推送同版本标签，例如 `v0.2.29`。
+4. GitHub Actions 自动创建私有 Release，并附上 `vijimlabs-ui-0.2.29.tgz`。
+
+本包保持 `private: true`，不发布到公开 npm registry。业务系统切换到独立仓库前，继续使用各自已经锁定的 vendor `.tgz`。
+
+## 常用导出
+
+- 主题：`VijimProvider`、`COLORS`、`RADIUS`、`MOTION`、`SHADOWS`、`TYPOGRAPHY`
+- 录入：`Button`、`TextInput`、`SearchInput`、`Select`、`SearchableSelect`、日期、文件与图片上传
+- 筛选：`FilterBar`、`FilterSegment`、`FilterTerm`
+- 数据：`DataTable`、`DataTableColumnHeader`、`AreaChart`、`BarChart`
+- 浮层：`Modal`、`Drawer`、`Menu`、`Popover`
+- 壳层：`AppShell`、`TopBar`、`PageShell`、`ShellTabs`、`FormSection`
+
+完整公开面以 [`SURFACE.md`](./SURFACE.md) 为准。
