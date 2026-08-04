@@ -25,10 +25,12 @@ jobs:
         run: |
           package_version=$(node -e "process.stdout.write(require('./package.json').version)")
           test "${GITHUB_REF_NAME}" = "v${package_version}"
+      - name: 类型检查与构建
+        run: npm run check
       - name: 构建安装包
         id: pack
         run: |
-          package_file="$(npm pack --silent)"
+          package_file="$(npm pack --silent --ignore-scripts)"
           echo "package_file=${package_file}" >> "${GITHUB_OUTPUT}"
       - name: 创建私有 Release
         env:
