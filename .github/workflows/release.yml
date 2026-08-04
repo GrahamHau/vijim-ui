@@ -32,7 +32,7 @@ jobs:
         run: |
           package_file="$(npm pack --silent --ignore-scripts)"
           echo "package_file=${package_file}" >> "${GITHUB_OUTPUT}"
-      - name: 创建私有 Release
+      - name: 创建 Release
         env:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.pack.outputs.package_file }}
