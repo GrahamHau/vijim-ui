@@ -13,16 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: 配置 Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           cache: npm
       - name: 安装依赖
         run: npm ci
       - name: 校验标签与包版本
-        run: test "${GITHUB_REF_NAME}" = "v$(node -p \"require('./package.json').version\")"
+        run: |
+          package_version=$(node -e "process.stdout.write(require('./package.json').version)")
+          test "${GITHUB_REF_NAME}" = "v${package_version}"
       - name: 构建安装包
         id: pack
         run: |
